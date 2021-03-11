@@ -3,6 +3,22 @@ import App from './App.vue'
 import AWSAppSyncClient from "aws-appsync"
 import VueApollo from 'vue-apollo'
 import router from './router'
+import { domain, clientId } from "../auth_config.json";
+import { Auth0Plugin } from "./auth";
+
+
+
+Vue.use(Auth0Plugin, {
+  domain,
+  clientId,
+  onRedirectCallback: appState => {
+    router.push(
+      appState && appState.targetUrl
+        ? appState.targetUrl
+        : window.location.pathname
+    );
+  }
+});
 
 const client = new AWSAppSyncClient({
   url: 'https://emh6z2joqvcw7fcbfnd7nperv4.appsync-api.eu-west-1.amazonaws.com/graphql',

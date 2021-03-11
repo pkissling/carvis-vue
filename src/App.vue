@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div v-if="$auth.isAuthenticated" id="nav">
       <router-link to="/">List</router-link> |
       <router-link to="/add">Add</router-link>
     </div>
