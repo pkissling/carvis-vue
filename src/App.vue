@@ -1,17 +1,25 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="hydrated">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <CreateCarWizard />
+    <CarsTable />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CarsTable from './components/CarsTable.vue'
+import CreateCarWizard from './components/CreateCarWizard.vue'
 
 export default {
   name: 'App',
+  data: () => ({ hydrated: false }),
+  async mounted() {
+    await this.$apollo.provider.defaultClient.hydrated();
+    this.hydrated = true;
+  },
   components: {
-    HelloWorld
+    CreateCarWizard,
+    CarsTable
   }
 }
 </script>
