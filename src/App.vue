@@ -1,29 +1,12 @@
 <template>
-  <div id="app" v-if="hydrated">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <CreateCarWizard />
-    <CarsTable />
+  <div id="app">
+    <div id="nav">
+      <router-link to="/">List</router-link> |
+      <router-link to="/add">Add</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import CarsTable from './components/CarsTable.vue'
-import CreateCarWizard from './components/CreateCarWizard.vue'
-
-export default {
-  name: 'App',
-  data: () => ({ hydrated: false }),
-  async mounted() {
-    await this.$apollo.provider.defaultClient.hydrated();
-    this.hydrated = true;
-  },
-  components: {
-    CreateCarWizard,
-    CarsTable
-  }
-}
-</script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -31,6 +14,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
