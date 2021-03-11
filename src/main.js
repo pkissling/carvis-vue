@@ -23,10 +23,7 @@ const client = new AWSAppSyncClient({
   region: 'eu-west-1',
   auth: {
     type: 'OPENID_CONNECT',
-    jwtToken: () => {
-      console.log('auth')
-      Vue.prototype.$auth.auth0Client.getTokenSilently()
-    }
+    jwtToken: () => Vue.prototype.$auth.auth0Client.getIdTokenClaims()
   }
 },{
   defaultOptions: {
