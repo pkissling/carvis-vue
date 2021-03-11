@@ -26,16 +26,16 @@ export default {
         this.$apollo.mutate({
             mutation: CreateCar,
             variables: this.createCarObj,
-            update: (store, { data: { createCar } }) => {
-                this.$emit('create-car', createCar)
+            update: (store, { data: { carCreated } }) => {
                 const data = store.readQuery({ query: ListCars })
-                data.listCars.items.push(createCar)
+                data.listCars.items.push(carCreated)
                 store.writeQuery({ query: ListCars, data })
             },
             optimisticResponse: {
                 __typename: 'Mutation',
-                createCar: {
+                carCreated: {
                     __typename: 'Car',
+                    id: -1,
                     ...this.createCarObj
                 }
             },
