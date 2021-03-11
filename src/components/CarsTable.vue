@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>List</h1>
     <table>
       <thead>
         <th>Brand</th>
@@ -30,4 +31,8 @@ export default {
 </script>
 
 <style scoped>
+table {
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>

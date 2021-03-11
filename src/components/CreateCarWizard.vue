@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>Create car</h1>
     <input v-model="createCarObj.brand" placeholder="brand" class="input">
     <input v-model="createCarObj.color" placeholder="color" class="input">
     <button @click="createCar()" class="taskButton">Create car</button>
