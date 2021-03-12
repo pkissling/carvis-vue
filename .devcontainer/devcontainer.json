@@ -1,0 +1,40 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.163.1/containers/typescript-node
+{
+  "name": "Blumenerde",
+  "build": {
+    "dockerfile": "Dockerfile",
+    // Update 'VARIANT' to pick a Node version: 10, 12, 14
+    "args": {
+      "VARIANT": "14"
+    }
+  },
+  // "context": "..",
+  "appPort": [
+    "8080:8080"
+  ],
+  "postCreateCommand": "npm install && npm run serve",
+  "runArgs": [
+    "-v",
+    "${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh" // This is added so you can push from inside the container
+  ],
+  "extensions": [
+	"dbaeumer.vscode-eslint",
+	"apollographql.vscode-apollo",
+	"jcbuisson.vue",
+	"wix.vscode-import-cost",
+	"eg2.vscode-npm-script",
+	"trabpukcip.vscode-npm-scripts"
+],
+  "settings": {
+    "files.eol": "\n",
+    "editor.tabSize": 4,
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "files.trimTrailingWhitespace": true
+  },
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node"
+}
