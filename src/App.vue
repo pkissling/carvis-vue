@@ -1,26 +1,17 @@
 <template>
   <div id="app">
-    <div class="nav">
-      <router-link v-if="showHome" to="/">Home</router-link> |
-      <router-link v-if="showList" to="/list">List</router-link> |
-      <router-link v-if="showAdd" to="/add">Add</router-link>
-    </div>
+    <TheNavBar />
     <router-view/>
   </div>
 </template>
+
 <script>
+import TheNavBar from './components/TheNavBar.vue'
+
 export default {
   name: 'App',
-  computed: {
-    showHome() {
-      return true
-    },
-    showList() {
-      return this.$auth.isAuthenticated
-    },
-    showAdd() {
-      return this.$auth.isAuthenticated
-    }
+  components: {
+    TheNavBar
   }
 }
 </script>
@@ -32,18 +23,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-.nav {
-  padding: 30px;
-}
-
-.nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

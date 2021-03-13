@@ -19,6 +19,16 @@ const routes = [
     path: '/add',
     name: 'CreateCarWizard',
     component: () => import(/* webpackChunkName: "about" */ '../views/CreateCarWizard.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Logout.vue')
   }
 ]
 

@@ -1,18 +1,23 @@
 <template>
   <div>
     <h1>List</h1>
-    <table>
-      <thead>
-        <th>Brand</th>
-        <th>Color</th>
-      </thead>
-      <tbody>
-        <tr v-for="car in cars" :key="car.id">
-          <td> {{ car.brand }} </td>
-          <td> {{ car.color }} </td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-if="$apollo.loading">Loading...</div>
+    <div v-else>
+      <table>
+        <thead>
+          <th>ID</th>
+          <th>Brand</th>
+          <th>Color</th>
+        </thead>
+        <tbody>
+          <tr v-for="car in cars" :key="car.id">
+            <td> {{ car.id }} </td>
+            <td> {{ car.brand }} </td>
+            <td> {{ car.color }} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -24,7 +29,8 @@ export default {
   apollo: {
     cars: {
       query: () => ListCars,
-      update: data => data.listCars.items
+      update: data => data.listCars.items,
+      prefetch: true
     }
   }
 }
