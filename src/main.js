@@ -4,7 +4,7 @@ import AWSAppSyncClient from "aws-appsync"
 import VueApollo from 'vue-apollo'
 import router from './router'
 import { domain, clientId } from "../auth_config.json";
-import { Auth0Plugin } from "./auth";
+import { Auth0Plugin, getInstance } from "./auth";
 
 Vue.use(Auth0Plugin, {
   domain,
@@ -23,16 +23,24 @@ const client = new AWSAppSyncClient({
   region: 'eu-west-1',
   auth: {
     type: 'OPENID_CONNECT',
-    jwtToken: () => Vue.prototype.$auth.auth0Client.getIdTokenClaims()
+    jwtToken: async () => {
+      const instance = await getInstance()
+
+      if (!instance.isAuthenticated) {
+        await instance.loginWithRedirect()
+      }
+      const claims = await getInstance().getIdTokenClaims()
+      return claims.__raw
+    }
   }
-},{
+  },{
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network',
     }
   }
 })
-const appsyncProvider = new VueApollo({
+const apolloProvider = new VueApollo({
   defaultClient: client
 })
 Vue.config.productionTip = false
@@ -42,5 +50,5 @@ Vue.use(VueApollo)
 new Vue({
   render: h => h(App),
   router,
-  provide: appsyncProvider.provide()
+  apolloProvider
 }).$mount('#app')
