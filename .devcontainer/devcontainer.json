@@ -9,11 +9,10 @@
       "VARIANT": "14"
     }
   },
-  // "context": "..",
   "appPort": [
-    "8080:8080"
+    "3000"
   ],
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "npm install && npm run serve",
   "runArgs": [
     "-v",
     "${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh" // This is added so you can push from inside the container
