@@ -13,22 +13,12 @@ const routes = [
   {
     path: '/list',
     name: 'CarsTable',
-    component: () => import(/* webpackChunkName: "about" */ '../views/CarsTable.vue')
+    component: () => import('../views/CarsTable.vue')
   },
   {
     path: '/add',
     name: 'CreateCarWizard',
-    component: () => import(/* webpackChunkName: "about" */ '../views/CreateCarWizard.vue')
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
-  },
-  {
-    path: '/logout',
-    name: 'Logout',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Logout.vue')
+    component: () => import('../views/CreateCarWizard.vue')
   }
 ]
 
