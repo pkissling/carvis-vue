@@ -3,9 +3,10 @@ import gql from 'graphql-tag'
     query listCars {
       listCars {
         items {
-          brand
-          color
           id
+          brand
+          color,
+          mileage
         }
       }
     }

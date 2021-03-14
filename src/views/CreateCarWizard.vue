@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <h1>Hinzufügen</h1>
-    <b-form @submit="onSubmit" @reset="onReset">
+    <b-form @reset="onReset" @submit.stop.prevent="onSubmit">
       <!-- brand -->
       <b-form-group
         label="Marke:"
@@ -33,7 +33,7 @@
         label-for="optional"
       >
         <b-form-input
-          v-model="form.optional"
+          v-model="form.mileage"
         ></b-form-input>
       </b-form-group>
 
@@ -54,7 +54,7 @@ export default {
       form: {
         brand: '',
         color: '',
-        optional: ''
+        mileage: ''
       }
     }
   },
@@ -66,7 +66,7 @@ export default {
     canReset () {
       return this.form.brand ||
         this.form.color ||
-        this.form.optional
+        this.form.mileage
     }
   },
   methods: {
@@ -78,21 +78,21 @@ export default {
       this.$apollo.mutate({
         mutation: CreateCar,
         variables: this.form,
-        update: (cache, { data: { carCreated } }) => {
-          const data = cache.readQuery({ query: ListCars })
-          data.listCars.items.push(carCreated)
-          cache.writeQuery({ query: ListCars, data })
+        update: (proxy, { data: { createCar } }) => {
+          const data = proxy.readQuery({ query: ListCars })
+          data.listCars.items.push(createCar)
+          proxy.writeQuery({ query: ListCars, data })
         },
-        optimisticResponse: {
+         optimisticResponse: {
           __typename: 'Mutation',
-          carCreated: {
+          createCar: {
             __typename: 'Car',
             id: new Date(),
-            brand: this.form.brand,
-            color: this.form.color
+           ...this.form
           }
-        },
+        }
       })
+      .then(() => this.$router.push({ path: '/cars' }))
     }
   }
 }
