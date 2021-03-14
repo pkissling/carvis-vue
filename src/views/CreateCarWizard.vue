@@ -1,10 +1,46 @@
 <template>
-  <div>
-    <h1>Create car</h1>
-    <input v-model="input.brand" placeholder="brand" class="input">
-    <input v-model="input.color" placeholder="color" class="input">
-    <button @click="createCar()">Create car</button>
-  </div>
+  <b-container fluid>
+    <h1>Hinzufügen</h1>
+    <b-form @submit="onSubmit" @reset="onReset">
+      <!-- brand -->
+      <b-form-group
+        label="Marke:"
+        label-for="brand"
+        description="Eine Beschreibung was hier genau verlangt wird."
+      >
+        <b-form-input
+          v-model="form.brand"
+          placeholder="Porsche"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <!-- color -->
+      <b-form-group
+        label="Farbe:"
+        label-for="color"
+      >
+        <b-form-input
+          v-model="form.color"
+          placeholder="Rostbraun"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <!-- optional -->
+      <b-form-group
+        label="Ein optionales Feld:"
+        label-for="optional"
+      >
+        <b-form-input
+          v-model="form.optional"
+        ></b-form-input>
+      </b-form-group>
+
+      <b-button type="submit" :disabled="!canSubmit">Speichern</b-button>
+      <b-button type="reset" :disabled="!canReset" variant="light">Zurücksetzen</b-button>
+    </b-form>
+  </b-container>
 </template>
 
 <script>
@@ -15,28 +51,45 @@ export default {
   name: 'CreateCarWizard',
   data () {
     return {
-      input: {
+      form: {
         brand: '',
-        color: ''
+        color: '',
+        optional: ''
       }
     }
   },
+  computed: {
+    canSubmit () {
+      return this.form.brand &&
+        this.form.color
+    },
+    canReset () {
+      return this.form.brand ||
+        this.form.color ||
+        this.form.optional
+    }
+  },
   methods: {
-    createCar() {
+    onReset() {
+      this.form.brand = ''
+      this.form.color = ''
+    },
+    onSubmit() {
       this.$apollo.mutate({
         mutation: CreateCar,
-        variables: this.input,
-        update: (store, { data: { carCreated } }) => {
-            const data = store.readQuery({ query: ListCars })
-            data.listCars.items.push(carCreated)
-            store.writeQuery({ query: ListCars, data })
+        variables: this.form,
+        update: (cache, { data: { carCreated } }) => {
+          const data = cache.readQuery({ query: ListCars })
+          data.listCars.items.push(carCreated)
+          cache.writeQuery({ query: ListCars, data })
         },
         optimisticResponse: {
           __typename: 'Mutation',
           carCreated: {
             __typename: 'Car',
             id: new Date(),
-            ...this.createCarObj
+            brand: this.form.brand,
+            color: this.form.color
           }
         },
       })
@@ -44,6 +97,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

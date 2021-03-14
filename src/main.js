@@ -4,6 +4,7 @@ import router from './router'
 import { domain, clientId } from '../auth.config.json';
 import { Auth0Plugin } from './auth';
 import apolloProvider from './apollo';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 // auth
 Vue.use(Auth0Plugin, {
@@ -17,6 +18,12 @@ Vue.use(Auth0Plugin, {
     );
   }
 });
+
+// bootstrap
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 Vue.config.productionTip = false
 

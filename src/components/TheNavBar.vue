@@ -1,18 +1,25 @@
 <template>
-  <div class="nav">
-    <router-link v-if="showHome" to="/">Home</router-link>
-    <span v-if="showList">
-       | <router-link to="/list">List</router-link>
-    </span>
-    <span v-if="showAdd">
-      | <router-link to="/add">Add</router-link>
-    </span>
-    <span>
-      |
-      <a v-if="showLogin" @click="login()">Login</a>
-      <a v-else @click="logout()">Logout</a>
-    </span>
+  <div>
+    <b-navbar toggleable="lg" type="dark" variant="dark">
+      <b-navbar-brand :to="'/'">Blumenerde</b-navbar-brand>
 
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+      <b-collapse id="nav-collapse" is-nav>
+
+        <!-- left -->
+        <b-navbar-nav>
+          <b-nav-item v-if="showList" :to="'/cars'">Fahrzeuge</b-nav-item>
+          <b-nav-item v-if="showAdd" :to="'/add'">Hinzufügen</b-nav-item>
+        </b-navbar-nav>
+
+        <!-- right -->
+      <b-navbar-nav class="ml-auto">
+        <b-button v-if="showLogin" @click="login">Login</b-button>
+        <b-button v-else @click="logout">Logout</b-button>
+      </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
   </div>
 </template>
 
@@ -45,21 +52,5 @@ export default {
 </script>
 
 <style scoped>
-.nav {
-  padding: 30px;
-}
 
-.nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-a {
-  text-decoration: underline;
-  cursor: pointer;
-}
 </style>

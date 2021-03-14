@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import AWSAppSyncClient from 'aws-appsync'
 import VueApollo from 'vue-apollo'
-import { getInstance } from "../auth";
+import { obtainJwtToken } from '../auth/utils'
 import { url, region } from '../../appsync.config.json'
 
 Vue.use(VueApollo)
@@ -12,17 +12,10 @@ const client = new AWSAppSyncClient({
   region,
   auth: {
     type: 'OPENID_CONNECT',
-    jwtToken: async () => {
-      const instance = await getInstance()
-
-      if (!instance.isAuthenticated) {
-        await instance.loginWithRedirect()
-      }
-      const claims = await getInstance().getIdTokenClaims()
-      return claims.__raw
-    }
+    jwtToken: async () => obtainJwtToken()
   }
-  },{
+},
+  {
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network',

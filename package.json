@@ -10,9 +10,11 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.13.6",
     "aws-appsync": "^4.0.3",
+    "bootstrap": "^4.6.0",
+    "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
     "graphql-tag": "^2.11.0",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-apollo": "^3.0.7",
     "vue-router": "^3.2.0"
   },

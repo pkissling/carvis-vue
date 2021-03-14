@@ -1,24 +1,15 @@
 <template>
-  <div>
-    <h1>List</h1>
-    <div v-if="$apollo.loading">Loading...</div>
-    <div v-else>
-      <table>
-        <thead>
-          <th>ID</th>
-          <th>Brand</th>
-          <th>Color</th>
-        </thead>
-        <tbody>
-          <tr v-for="car in cars" :key="car.id">
-            <td> {{ car.id }} </td>
-            <td> {{ car.brand }} </td>
-            <td> {{ car.color }} </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <b-container fluid>
+    <h1>Fahrzeuge</h1>
+      <b-table
+        :items="this.cars"
+        :fields="this.fields"
+        striped
+        small
+        primary-key="id"
+        :busy="$apollo.loading"
+      ></b-table>
+  </b-container>
 </template>
 
 <script>
@@ -26,6 +17,15 @@ import ListCars from '../queries/ListCars'
 
 export default {
   name: 'CarsTable',
+  data() {
+    return {
+       fields: [
+          { key: 'id', sortabla: false },
+          { key: 'color', sortable: true },
+          { key: 'brand', sortable: true }
+        ]
+    }
+  },
   apollo: {
     cars: {
       query: () => ListCars,
