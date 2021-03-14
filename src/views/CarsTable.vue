@@ -22,7 +22,8 @@ export default {
        fields: [
           { key: 'id', sortabla: false },
           { key: 'color', sortable: true },
-          { key: 'brand', sortable: true }
+          { key: 'brand', sortable: true },
+          { key: 'mileage', sortable: true },
         ]
     }
   },

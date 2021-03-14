@@ -29,11 +29,12 @@
 
       <!-- optional -->
       <b-form-group
-        label="Ein optionales Feld:"
+        label="Kilometerstand"
         label-for="optional"
       >
         <b-form-input
           v-model="form.mileage"
+          type=number
         ></b-form-input>
       </b-form-group>
 
@@ -45,16 +46,15 @@
 
 <script>
 import CreateCar from '../mutations/CreateCar'
-import ListCars from '../queries/ListCars'
 
 export default {
   name: 'CreateCarWizard',
   data () {
     return {
       form: {
-        brand: '',
-        color: '',
-        mileage: ''
+        brand: null,
+        color: null,
+        mileage: null
       }
     }
   },
@@ -71,26 +71,14 @@ export default {
   },
   methods: {
     onReset() {
-      this.form.brand = ''
-      this.form.color = ''
+      this.form.brand = null
+      this.form.color = null
+      this.form.mileage = null
     },
     onSubmit() {
       this.$apollo.mutate({
         mutation: CreateCar,
-        variables: this.form,
-        update: (proxy, { data: { createCar } }) => {
-          const data = proxy.readQuery({ query: ListCars })
-          data.listCars.items.push(createCar)
-          proxy.writeQuery({ query: ListCars, data })
-        },
-         optimisticResponse: {
-          __typename: 'Mutation',
-          createCar: {
-            __typename: 'Car',
-            id: new Date(),
-           ...this.form
-          }
-        }
+        variables: this.form
       })
       .then(() => this.$router.push({ path: '/cars' }))
     }
