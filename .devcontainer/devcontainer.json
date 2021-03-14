@@ -19,12 +19,11 @@
     "${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh" // This is added so you can push from inside the container
   ],
   "extensions": [
-    "dbaeumer.vscode-eslint",
     "apollographql.vscode-apollo",
+    "dbaeumer.vscode-eslint",
+    "eg2.vscode-npm-script",
     "jcbuisson.vue",
     "wix.vscode-import-cost",
-    "eg2.vscode-npm-script",
-    "trabpukcip.vscode-npm-scripts"
   ],
   "settings": {
     "files.eol": "\n",
