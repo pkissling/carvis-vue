@@ -9,11 +9,15 @@
         primary-key="id"
         :busy="$apollo.loading"
       ></b-table>
+
+        {{ allFields }}
+
   </b-container>
 </template>
 
 <script>
 import ListCars from '../queries/ListCars'
+import ListCarFields from '../queries/ListCarFields'
 
 export default {
   name: 'CarsTable',
@@ -32,6 +36,10 @@ export default {
       query: () => ListCars,
       update: data => data.listCars.items,
       prefetch: true
+    },
+    allFields: {
+      query: () => ListCarFields,
+      update: data => data.__type.fields.map(f => f.name)
     }
   }
 }
