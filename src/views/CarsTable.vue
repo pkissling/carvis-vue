@@ -8,9 +8,16 @@
         small
         primary-key="id"
         :busy="$apollo.loading"
-      ></b-table>
+      >
+       <template #cell(action)="row">
+         <span v-if="canEdit(row.item.username)">
+            <b-button size="sm" class="mr-2">Bearbeiten</b-button>
+            <b-button size="sm" class="mr-2">Löschen</b-button>
+         </span>
+        </template>
+      </b-table>
 
-        {{ allFields }}
+      {{ allFields }}
 
   </b-container>
 </template>
@@ -27,8 +34,17 @@ export default {
         { key: 'brand', sortable: true },
         { key: 'color', sortable: true },
         { key: 'mileage', sortable: true },
-        { key: 'username', sortable: true },
+        // { key: 'username', sortable: true },
+        { key: 'action'}
       ]
+    }
+  },
+  methods: {
+    async canEdit(owner) {
+      const claims = await this.$auth.getIdTokenClaims();
+      console.log(`claims = ${claims.sub}`)
+      console.log(`owner = ${owner}`)
+      return claims.sub === owner
     }
   },
   apollo: {
