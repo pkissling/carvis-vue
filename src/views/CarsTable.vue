@@ -34,7 +34,7 @@ export default {
         { key: 'brand', sortable: true },
         { key: 'color', sortable: true },
         { key: 'mileage', sortable: true },
-        // { key: 'username', sortable: true },
+        { key: 'username', sortable: true },
         { key: 'action'}
       ]
     }
