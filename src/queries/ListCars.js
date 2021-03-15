@@ -5,8 +5,9 @@ import gql from 'graphql-tag'
         items {
           id
           brand
-          color,
+          color
           mileage
+          username
         }
       }
     }

@@ -78,7 +78,9 @@ export default {
     onSubmit() {
       this.$apollo.mutate({
         mutation: CreateCar,
-        variables: this.form
+        variables: {
+          createcarinput: this.form
+        }
       })
       .then(() => this.$router.push({ path: '/cars' }))
     }

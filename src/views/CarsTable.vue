@@ -19,12 +19,12 @@ export default {
   name: 'CarsTable',
   data() {
     return {
-       fields: [
-          { key: 'id', sortabla: false },
-          { key: 'color', sortable: true },
-          { key: 'brand', sortable: true },
-          { key: 'mileage', sortable: true },
-        ]
+      fields: [
+        { key: 'brand', sortable: true },
+        { key: 'color', sortable: true },
+        { key: 'mileage', sortable: true },
+        { key: 'username', sortable: true },
+      ]
     }
   },
   apollo: {

@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
   export default gql`
-    mutation createCar($brand: String, $color: String, $mileage: Int) {
-      createCar(input: { brand: $brand, color: $color, mileage: $mileage }) {
-        id
+    mutation createCar($createcarinput: CreateCarInput!) {
+      createCar(input: $createcarinput) {
         brand
         color
         mileage
+        username
       }
     }
 `
