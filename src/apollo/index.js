@@ -2,14 +2,14 @@ import Vue from 'vue'
 import AWSAppSyncClient from 'aws-appsync'
 import VueApollo from 'vue-apollo'
 import { obtainJwtToken } from '../auth/utils'
-import { url, region } from '../../appsync.config.json'
+import { appsyncUrl, appsyncRegion } from '../../app.config'
 
 Vue.use(VueApollo)
 
 // apollo
 const client = new AWSAppSyncClient({
-  url,
-  region,
+  url: appsyncUrl,
+  region: appsyncRegion,
   auth: {
     type: 'OPENID_CONNECT',
     jwtToken: async () => obtainJwtToken()
