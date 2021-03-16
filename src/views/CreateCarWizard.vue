@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import CreateCar from '../mutations/CreateCar'
+import CreateCar from '../apollo/mutations/CreateCar'
 
 export default {
   name: 'CreateCarWizard',

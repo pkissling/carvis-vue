@@ -6,13 +6,15 @@
         :fields="this.fields"
         striped
         small
+        hover
+        bordered
         primary-key="id"
         :busy="$apollo.loading"
       >
         <template #cell(action)="row">
          <span v-if="canEdit(row.item.username)">
-            <b-button size="sm" class="mr-2">Bearbeiten</b-button>
-            <b-button size="sm" class="mr-2">Löschen</b-button>
+            <b-button size="sm" @click="editCar(row.item.id)" class="mr-2">Bearbeiten</b-button>
+            <b-button size="sm" @click="deleteCar(row.item.id)" class="mr-2">Löschen</b-button>
          </span>
         </template>
       </b-table>
@@ -23,8 +25,9 @@
 </template>
 
 <script>
-import ListCars from '../queries/ListCars'
-import ListCarFields from '../queries/ListCarFields'
+import ListCars from '../apollo/queries/ListCars'
+import DeleteCar from '../apollo/mutations/DeleteCar'
+import ListCarFields from '../apollo/queries/ListCarFields'
 
 export default {
   name: 'CarsTable',
@@ -41,6 +44,22 @@ export default {
   methods: {
     canEdit(owner) {
       return this.$auth.user.sub === owner
+    },
+    editCar(id) {
+      this.$router.push({ path: `/cars/${id}/edit` })
+    },
+    deleteCar(id) {
+      this.$apollo.mutate({
+        mutation: DeleteCar,
+        variables: {
+          deletecarinput: { id }
+        },
+        update(cache, { data: deleteCar }) {
+          const data = cache.readQuery({ query: ListCars })
+          data.listCars.items = data.listCars.items.filter(car => car.id !== deleteCar.deleteCar.id)
+          cache.writeQuery({ query: ListCars, data })
+        }
+      })
     }
   },
   apollo: {
