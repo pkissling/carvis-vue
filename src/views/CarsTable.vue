@@ -59,13 +59,18 @@ export default {
     deleteCar(id) {
       this.$apollo.mutate({
         mutation: DeleteCar,
-        variables: {
-          deletecarinput: { id }
-        },
+        variables: { id },
         update(cache, { data: deleteCar }) {
           const data = cache.readQuery({ query: ListCars })
           data.listCars.items = data.listCars.items.filter(car => car.id !== deleteCar.deleteCar.id)
           cache.writeQuery({ query: ListCars, data })
+        },
+        optimisticResponse: {
+          __typename: "Mutation",
+          deleteCar: {
+            id,
+            __typename: "Car"
+          }
         }
       })
     }

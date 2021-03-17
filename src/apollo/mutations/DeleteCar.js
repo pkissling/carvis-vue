@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
+
 export default gql`
 
-mutation deleteCar($deletecarinput: DeleteCarInput!) {
-  deleteCar(input: $deletecarinput) {
+mutation deleteCar($id: ID!) {
+  deleteCar(id: $id) {
     id
   }
 }
