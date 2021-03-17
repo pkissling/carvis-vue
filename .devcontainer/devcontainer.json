@@ -2,20 +2,15 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.163.1/containers/typescript-node
 {
   "name": "Blumenerde",
-  "build": {
-    "dockerfile": "Dockerfile",
-    // Update 'VARIANT' to pick a Node version: 10, 12, 14
-    "args": {
-      "VARIANT": "14"
-    }
-  },
+  "dockerFile": "Dockerfile",
   "appPort": [
     "3000"
   ],
-  "postCreateCommand": "npm install",
+  "postStartCommand": "npm install",
+  "postAttachCommand": "npm run serve",
   "runArgs": [
     "-v",
-    "${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh" // This is added so you can push from inside the container
+    "${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh", // This is added so you can push from inside the container
   ],
   "extensions": [
     "apollographql.vscode-apollo",
