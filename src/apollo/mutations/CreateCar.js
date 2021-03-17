@@ -3,6 +3,7 @@ export default gql`
 
 mutation createCar($createcarinput: CreateCarInput!) {
   createCar(input: $createcarinput) {
+    id
     brand
     color
     mileage

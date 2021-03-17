@@ -10,7 +10,6 @@
       hover
       bordered
       primary-key="id"
-      :busy="$apollo.loading"
     >
       <template #cell(action)="row">
         <span v-if="canEdit(row.item.username)">
