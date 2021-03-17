@@ -10,6 +10,7 @@
       hover
       bordered
       primary-key="id"
+      @row-clicked="rowClicked"
     >
       <template #cell(action)="row">
         <span v-if="canEdit(row.item.username)">
@@ -39,7 +40,6 @@ import DeleteCar from '../apollo/mutations/DeleteCar'
 import ListCarFields from '../apollo/queries/ListCarFields'
 
 export default {
-  name: 'CarsTable',
   data() {
     return {
       deselectedFields: [],
@@ -54,6 +54,9 @@ export default {
     },
     editCar(id) {
       this.$router.push({ path: `/cars/${id}/edit` })
+    },
+    rowClicked(car) {
+      this.$router.push({ path: `/cars/${car.id}`})
     },
     deleteCar(id) {
       this.$apollo.mutate({

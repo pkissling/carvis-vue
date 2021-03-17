@@ -49,7 +49,6 @@ import CreateCar from '../apollo/mutations/CreateCar'
 import ListCars from '../apollo/queries/ListCars'
 
 export default {
-  name: 'CreateCarWizard',
   data () {
     return {
       form: {

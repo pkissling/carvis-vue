@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '../pages/Home.vue'
 import authGuard from '../auth/authGuard'
 
 Vue.use(VueRouter)
@@ -8,20 +8,29 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
     component: Home
   },
   {
     path: '/cars',
-    name: 'CarsTable',
-    component: () => import('../views/CarsTable.vue'),
+    component: () => import('../pages/CarsPage.vue'),
     beforeEnter: authGuard
   },
   {
     path: '/add',
-    name: 'CreateCarWizard',
-    component: () => import('../views/CreateCarWizard.vue'),
+    component: () => import('../pages/CreateCarPage.vue'),
     beforeEnter: authGuard
+  },
+  {
+    path: '/cars/:carId',
+    component: () => import('../pages/ViewCarPage.vue'),
+    beforeEnter: authGuard,
+    props: true
+  },
+  {
+    path: '/cars/:carId/edit',
+    component: () => import('../pages/EditCarPage.vue'),
+    beforeEnter: authGuard,
+    props: true
   }
 ]
 
