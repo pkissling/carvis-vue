@@ -11,6 +11,7 @@
 <script>
 import UpdateCar from '../apollo/mutations/UpdateCar'
 import GetCar from '../apollo/queries/GetCar'
+import ListCars from '../apollo/queries/ListCars'
 import CarDetailForm from '../components/CarDetailForm'
 
 export default {
@@ -43,6 +44,19 @@ export default {
         mutation: UpdateCar,
         variables: {
           updatecarinput: car
+        },
+        update(cache, { data: updateCar }) {
+          const data = cache.readQuery({ query: ListCars })
+          data.listCars.items = data.listCars.items.filter(car => car.id !== updateCar.updateCar.id)
+          data.listCars.items = [...data.listCars.items, updateCar.updateCar]
+          cache.writeQuery({ query: ListCars, data })
+        },
+        optimisticResponse: {
+          __typename: "Mutation",
+          updateCar: {
+            __typename: "Car",
+            ...car
+          }
         }
       })
       .then(() => this.$router.push({ path: '/' }))
