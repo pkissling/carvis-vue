@@ -1,18 +1,17 @@
 <template>
-  <b-container fluid>
+  <v-container>
     <h1>Bearbeiten</h1>
     <CarDetailForm
       :car="this.car"
       @submit="updateCar(car)"
     />
-  </b-container>
+  </v-container>
 </template>
 
 <script>
-import UpdateCar from '../apollo/mutations/UpdateCar'
 import GetCar from '../apollo/queries/GetCar'
-import ListCars from '../apollo/queries/ListCars'
 import CarDetailForm from '../components/CarDetailForm'
+import carService from '../service/car-service'
 
 export default {
   components: {
@@ -35,31 +34,8 @@ export default {
   },
   methods: {
     updateCar(car) {
-      // remove fields which are not part of the schema. (_type)
-      // otherwise apollo will refuse the update
-      Object.keys(car)
-        .filter(attr => attr.startsWith('__typename'))
-        .forEach(attr => delete car[attr])
-      this.$apollo.mutate({
-        mutation: UpdateCar,
-        variables: {
-          updatecarinput: car
-        },
-        update(cache, { data: updateCar }) {
-          const data = cache.readQuery({ query: ListCars })
-          data.listCars.items = data.listCars.items.filter(car => car.id !== updateCar.updateCar.id)
-          data.listCars.items = [...data.listCars.items, updateCar.updateCar]
-          cache.writeQuery({ query: ListCars, data })
-        },
-        optimisticResponse: {
-          __typename: "Mutation",
-          updateCar: {
-            __typename: "Car",
-            ...car
-          }
-        }
-      })
-      .then(() => this.$router.push({ path: '/' }))
+      carService.updateCar(car)
+        .then(() => this.$router.push({ path: '/' }))
     }
   }
 }

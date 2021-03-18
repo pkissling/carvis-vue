@@ -1,8 +1,8 @@
-import { getInstance } from "../auth";
+import { getAuthInstance } from "../auth";
 
 export const obtainJwtToken = async () => {
 
-  const authService = getInstance();
+  const authService = getAuthInstance();
 
   // If loading has already finished, check our auth state using `onLoaded()`
   if (!authService.loading) {
@@ -18,7 +18,7 @@ export const obtainJwtToken = async () => {
 }
 
 const onLoaded = async () => {
-  const authService = getInstance();
+  const authService = getAuthInstance();
 
   if (authService.isAuthenticated) {
     // Return token if authenticated

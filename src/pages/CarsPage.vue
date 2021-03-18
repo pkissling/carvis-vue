@@ -1,101 +1,101 @@
 <template>
-  <div>
-    <b-container fluid>
+  <v-container>
+    <h1>Fahrzeuge</h1>
+    <v-data-table
+      :headers="this.headers"
+      :items="this.cars"
+      :items-per-page="20"
+      :loading="loading"
+      class="elevation-5"
+    >
+      <template v-slot:item.controls="props">
+        <div v-if="canEdit(props.item)">
+          <v-icon @click="editCar(props.item)">mdi-pencil</v-icon>
+          <v-icon @click="triggerDeleteCar(props.item)">mdi-delete</v-icon>
+        </div>
+      </template>
+    </v-data-table>
 
-      <h1>Fahrzeuge</h1>
-      <b-table
-        :items="this.cars"
-        :fields="this.fields"
-        striped
-        small
-        hover
-        bordered
-        primary-key="id"
-        @row-clicked="rowClicked"
-      >
-        <template #cell(actions)="row">
-          <span v-if="canEdit(row.item.username)">
-            <b-button size="sm" @click="editCar(row.item.id)" class="mr-2">Bearbeiten</b-button>
-            <b-button size="sm" @click="deleteCar(row.item.id)" class="mr-2">Löschen</b-button>
-          </span>
-        </template>
-      </b-table>
-    </b-container>
+    <FloatingButton
+      :loading="loading"
+      @create-clicked="createCar"
+    />
 
-     <fab :actions="fab.actions"
-        :main-icon="fab.mainIcon"
-        :bg-color="fab.bgColor"
-        @create="createCar"
-    ></fab>
-  </div>
-
+    <DeleteModal
+      :car="carToDelete"
+      @delete="deleteCar"
+      @cancel="carToDelete = null"
+    />
+  </v-container>
 </template>
 
 <script>
 import ListCars from '../apollo/queries/ListCars'
-import DeleteCar from '../apollo/mutations/DeleteCar'
-import fab from 'vue-fab'
+import FloatingButton from '../components/FloatingButton'
+import DeleteModal from '../modals/DeleteModal'
+import carService from '../service/car-service'
 
 export default {
   components: {
-    fab
+    FloatingButton,
+    DeleteModal
   },
   data () {
     return {
-      fields: [
-        'brand',
-        'color',
-        'mileage',
-        'actions'
-      ],
-      fab: {
-        mainIcon: 'more_vert',
-        actions: [
-          {
-            name: 'delete',
-            icon: 'delete'
-          },
-          {
-            name: 'edit',
-            icon: 'mode'
-          },
-          {
-            name: 'create',
-            icon: 'add'
-          },
-        ]
-      }
+      carToDelete: null,
+      allHeaders: [
+        {
+          text: 'Marke',
+          align: 'start',
+          sortable: true,
+          value: 'brand',
+        },
+        {
+          text: 'Farbe',
+          align: 'start',
+          sortable: true,
+          value: 'color',
+        },
+        {
+          text: 'Kilometerstand',
+          align: 'start',
+          sortable: true,
+          value: 'mileage',
+        },
+        {
+          text: 'Besitzer',
+          align: 'start',
+          sortable: true,
+          value: 'username',
+        },
+        {
+          text: 'Bearbeiten',
+          value: 'controls',
+          sortable: false
+        }
+      ]
     }
   },
   methods: {
-    canEdit(owner) {
-      return this.$auth.user.sub === owner
+    canEdit(car) {
+      if (!car) return false
+      return this.$auth.user.sub === car.username
     },
-    editCar(id) {
-      this.$router.push({ path: `/${id}/edit` })
+    editCar(car) {
+      this.$router.push({ path: `/${car.id}/edit` })
     },
-    rowClicked(car) {
+    viewCar(car) {
       this.$router.push({ path: `/${car.id}`})
     },
-    deleteCar(id) {
-      this.$apollo.mutate({
-        mutation: DeleteCar,
-        variables: { id },
-        update(cache, { data: deleteCar }) {
-          const data = cache.readQuery({ query: ListCars })
-          data.listCars.items = data.listCars.items.filter(car => car.id !== deleteCar.deleteCar.id)
-          cache.writeQuery({ query: ListCars, data })
-        },
-        optimisticResponse: {
-          __typename: "Mutation",
-          deleteCar: {
-            id,
-            __typename: "Car"
-          }
-        }
-      })
+    triggerDeleteCar(car) {
+      this.carToDelete = car
     },
-    createCar(){
+    deleteCar(car) {
+      this.carToDelete = null
+      carService.deleteCar(car)
+        .then(() => this.carToDelete = null)
+    },
+    createCar () {
       this.$router.push({ path: '/add' })
     }
   },
@@ -104,6 +104,16 @@ export default {
       query: () => ListCars,
       update: data => data.listCars.items,
       prefetch: true
+    }
+  },
+  computed: {
+    loading () {
+      return this.$apollo.loading || this.$auth.loading
+    },
+    headers () {
+      if (!this.cars) return []
+      const canEdit = this.cars.map(car => car.username).some(username => username === this.$auth.user.sub)
+      return canEdit ? this.allHeaders : this.allHeaders.filter(header => header.value !== 'controls')
     }
   }
 }

@@ -1,11 +1,11 @@
 <template>
-  <b-container fluid>
+  <v-container>
     <h1>Anzeigen</h1>
     <CarDetailForm
       :car="this.car"
-      :viewOnly="true"
+      :readOnly="true"
     />
-  </b-container>
+  </v-container>
 </template>
 
 <script>

@@ -7,7 +7,7 @@ import { appsyncUrl, appsyncRegion } from '../../app.config'
 Vue.use(VueApollo)
 
 // apollo
-const client = new AWSAppSyncClient({
+export const apolloClient = new AWSAppSyncClient({
   url: appsyncUrl,
   region: appsyncRegion,
   auth: {
@@ -23,7 +23,7 @@ const client = new AWSAppSyncClient({
   }
 })
 const apolloProvider = new VueApollo({
-  defaultClient: client
+  defaultClient: apolloClient
 })
 
 export default apolloProvider
