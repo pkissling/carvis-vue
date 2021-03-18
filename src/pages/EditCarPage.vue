@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import UpdateCar from '../apollo/mutations/UpdateCar'
 import GetCar from '../apollo/queries/GetCar'
 import CarDetailForm from '../components/CarDetailForm'
 
@@ -33,7 +34,20 @@ export default {
   },
   methods: {
     updateCar(car) {
-      console.log(`TODO update car ${car.id}`)
+      this.$apollo.mutate({
+        mutation: UpdateCar,
+        variables: {
+          updatecarinput: {
+            // TODO remove unknown fields
+            id: car.id,
+            brand: car.brand,
+            color: car.color,
+            username: car.username,
+            mileage: car.mileage
+          }
+        }
+      })
+      .then(() => this.$router.push({ path: '/cars' }))
     }
   }
 }
