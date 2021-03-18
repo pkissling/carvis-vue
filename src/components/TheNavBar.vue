@@ -6,18 +6,11 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-
-        <!-- left -->
-        <b-navbar-nav>
-          <b-nav-item v-if="showList" :to="'/'">Fahrzeuge</b-nav-item>
-          <b-nav-item v-if="showAdd" :to="'/add'">Hinzufügen</b-nav-item>
-        </b-navbar-nav>
-
         <!-- right -->
-      <b-navbar-nav class="ml-auto">
-        <b-button v-if="showLogin" @click="login">Login</b-button>
-        <b-button v-else @click="logout">Logout</b-button>
-      </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-button v-if="showLogin" @click="login">Login</b-button>
+          <b-button v-else @click="logout">Logout</b-button>
+        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
   </div>

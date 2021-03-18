@@ -1,32 +1,45 @@
 <template>
-  <b-container fluid>
+  <div>
+    <b-container fluid>
 
-    <h1>Fahrzeuge</h1>
-    <b-table
-      :items="this.cars"
-      :fields="this.fields"
-      striped
-      small
-      hover
-      bordered
-      primary-key="id"
-      @row-clicked="rowClicked"
-    >
-      <template #cell(actions)="row">
-        <span v-if="canEdit(row.item.username)">
-          <b-button size="sm" @click="editCar(row.item.id)" class="mr-2">Bearbeiten</b-button>
-          <b-button size="sm" @click="deleteCar(row.item.id)" class="mr-2">Löschen</b-button>
-        </span>
-      </template>
-    </b-table>
-  </b-container>
+      <h1>Fahrzeuge</h1>
+      <b-table
+        :items="this.cars"
+        :fields="this.fields"
+        striped
+        small
+        hover
+        bordered
+        primary-key="id"
+        @row-clicked="rowClicked"
+      >
+        <template #cell(actions)="row">
+          <span v-if="canEdit(row.item.username)">
+            <b-button size="sm" @click="editCar(row.item.id)" class="mr-2">Bearbeiten</b-button>
+            <b-button size="sm" @click="deleteCar(row.item.id)" class="mr-2">Löschen</b-button>
+          </span>
+        </template>
+      </b-table>
+    </b-container>
+
+     <fab :actions="fab.actions"
+        :main-icon="fab.mainIcon"
+        :bg-color="fab.bgColor"
+        @create="createCar"
+    ></fab>
+  </div>
+
 </template>
 
 <script>
 import ListCars from '../apollo/queries/ListCars'
 import DeleteCar from '../apollo/mutations/DeleteCar'
+import fab from 'vue-fab'
 
 export default {
+  components: {
+    fab
+  },
   data () {
     return {
       fields: [
@@ -34,7 +47,24 @@ export default {
         'color',
         'mileage',
         'actions'
-      ]
+      ],
+      fab: {
+        mainIcon: 'more_vert',
+        actions: [
+          {
+            name: 'delete',
+            icon: 'delete'
+          },
+          {
+            name: 'edit',
+            icon: 'mode'
+          },
+          {
+            name: 'create',
+            icon: 'add'
+          },
+        ]
+      }
     }
   },
   methods: {
@@ -64,6 +94,9 @@ export default {
           }
         }
       })
+    },
+    createCar(){
+      this.$router.push({ path: '/add' })
     }
   },
   apollo: {
