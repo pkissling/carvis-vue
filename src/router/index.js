@@ -13,19 +13,16 @@ const routes = [
   },
   {
     path: '/add',
-    component: () => import('../pages/CreateCarPage.vue'),
-    beforeEnter: authGuard
+    component: () => import('../pages/CreateCarPage.vue')
   },
   {
     path: '/:carId',
     component: () => import('../pages/ViewCarPage.vue'),
-    beforeEnter: authGuard,
     props: true
   },
   {
     path: '/:carId/edit',
     component: () => import('../pages/EditCarPage.vue'),
-    beforeEnter: authGuard,
     props: true
   }
 ]
@@ -34,6 +31,10 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  authGuard(to, from, next)
 })
 
 export default router
