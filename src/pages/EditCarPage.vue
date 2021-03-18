@@ -34,17 +34,15 @@ export default {
   },
   methods: {
     updateCar(car) {
+      // remove fields which are not part of the schema. (_type)
+      // otherwise apollo will refuse the update
+      Object.keys(car)
+        .filter(attr => attr.startsWith('__typename'))
+        .forEach(attr => delete car[attr])
       this.$apollo.mutate({
         mutation: UpdateCar,
         variables: {
-          updatecarinput: {
-            // TODO remove unknown fields
-            id: car.id,
-            brand: car.brand,
-            color: car.color,
-            username: car.username,
-            mileage: car.mileage
-          }
+          updatecarinput: car
         }
       })
       .then(() => this.$router.push({ path: '/cars' }))
