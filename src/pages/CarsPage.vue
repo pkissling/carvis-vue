@@ -4,7 +4,7 @@
     <h1>Fahrzeuge</h1>
     <b-table
       :items="this.cars"
-      :fields="this.filteredFields"
+      :fields="this.fields"
       striped
       small
       hover
@@ -12,39 +12,28 @@
       primary-key="id"
       @row-clicked="rowClicked"
     >
-      <template #cell(action)="row">
+      <template #cell(actions)="row">
         <span v-if="canEdit(row.item.username)">
           <b-button size="sm" @click="editCar(row.item.id)" class="mr-2">Bearbeiten</b-button>
           <b-button size="sm" @click="deleteCar(row.item.id)" class="mr-2">Löschen</b-button>
         </span>
       </template>
     </b-table>
-
-    <h2>Filters</h2>
-    <b-form-group>
-      <b-form-checkbox v-for="field in fields"
-        :key="field"
-        v-model="deselectedFields"
-        :value="field"
-        inline
-      >
-        {{ field }}
-      </b-form-checkbox>
-    </b-form-group>
   </b-container>
 </template>
 
 <script>
 import ListCars from '../apollo/queries/ListCars'
 import DeleteCar from '../apollo/mutations/DeleteCar'
-import ListCarFields from '../apollo/queries/ListCarFields'
 
 export default {
-  data() {
+  data () {
     return {
-      deselectedFields: [],
-      mandatoryFields: [
-        'action'
+      fields: [
+        'brand',
+        'color',
+        'mileage',
+        'actions'
       ]
     }
   },
@@ -82,27 +71,7 @@ export default {
       query: () => ListCars,
       update: data => data.listCars.items,
       prefetch: true
-    },
-    fields: {
-      query: () => ListCarFields,
-      update: data => data.__type.fields.map(f => f.name)
-    }
-  },
-  computed: {
-    filteredFields() {
-      if (!this.fields) {
-        return []
-      }
-      const filteredFields = this.fields.filter(f => !this.deselectedFields.includes(f))
-      return [...filteredFields, 'action' ]
     }
   }
 }
 </script>
-
-<style scoped>
-table {
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>

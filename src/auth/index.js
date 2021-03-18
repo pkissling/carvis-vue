@@ -29,7 +29,7 @@ export const useAuth0 = ({
         auth0Client: null,
         popupOpen: false,
         error: null
-      };
+      }
     },
     methods: {
       /** Authenticates the user using a popup window */
