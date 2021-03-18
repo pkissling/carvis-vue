@@ -1,18 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../pages/Home.vue'
 import authGuard from '../auth/authGuard'
+import CarsPage from '../pages/CarsPage'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    component: Home
-  },
-  {
-    path: '/cars',
-    component: () => import('../pages/CarsPage.vue'),
+    component: CarsPage,
     beforeEnter: authGuard
   },
   {
@@ -21,13 +17,13 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: '/cars/:carId',
+    path: '/:carId',
     component: () => import('../pages/ViewCarPage.vue'),
     beforeEnter: authGuard,
     props: true
   },
   {
-    path: '/cars/:carId/edit',
+    path: '/:carId/edit',
     component: () => import('../pages/EditCarPage.vue'),
     beforeEnter: authGuard,
     props: true

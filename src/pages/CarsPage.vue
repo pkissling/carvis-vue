@@ -53,10 +53,10 @@ export default {
       return this.$auth.user.sub === owner
     },
     editCar(id) {
-      this.$router.push({ path: `/cars/${id}/edit` })
+      this.$router.push({ path: `/${id}/edit` })
     },
     rowClicked(car) {
-      this.$router.push({ path: `/cars/${car.id}`})
+      this.$router.push({ path: `/${car.id}`})
     },
     deleteCar(id) {
       this.$apollo.mutate({

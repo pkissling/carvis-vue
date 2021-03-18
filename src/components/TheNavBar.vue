@@ -9,7 +9,7 @@
 
         <!-- left -->
         <b-navbar-nav>
-          <b-nav-item v-if="showList" :to="'/cars'">Fahrzeuge</b-nav-item>
+          <b-nav-item v-if="showList" :to="'/'">Fahrzeuge</b-nav-item>
           <b-nav-item v-if="showAdd" :to="'/add'">Hinzufügen</b-nav-item>
         </b-navbar-nav>
 

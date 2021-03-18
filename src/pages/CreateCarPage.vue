@@ -63,7 +63,7 @@ export default {
           }
         }
       })
-      .then(() => this.$router.push({ path: '/cars' }))
+      .then(() => this.$router.push({ path: '/' }))
     }
   }
 }

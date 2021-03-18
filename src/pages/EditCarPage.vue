@@ -45,7 +45,7 @@ export default {
           updatecarinput: car
         }
       })
-      .then(() => this.$router.push({ path: '/cars' }))
+      .then(() => this.$router.push({ path: '/' }))
     }
   }
 }
