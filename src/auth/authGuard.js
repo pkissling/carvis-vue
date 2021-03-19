@@ -1,7 +1,7 @@
-import { getInstance } from "./index";
+import { getAuthInstance } from "./index";
 
 export default (to, from, next) => {
-  const authService = getInstance();
+  const authService = getAuthInstance();
 
   const fn = () => {
     // If the user is authenticated, continue with the route

@@ -1,79 +1,66 @@
 <template>
   <div v-if="this.car">
-    <b-form @reset="onReset" @submit.stop.prevent="onSubmit">
-      <fieldset :disabled="this.viewOnly">
-        <!-- brand -->
-        <b-form-group
-          label="Marke:"
-          label-for="brand"
-          description="Eine Beschreibung was hier genau verlangt wird."
-        >
-          <b-form-input
-            v-model="car.brand"
-            placeholder="Porsche"
-            required
-          ></b-form-input>
-        </b-form-group>
+    <v-form
+      @submit.stop.prevent="onSubmit"
+      @reset="onReset"
+      :disabled="this.readOnly"
+      ref="form"
+    >
+      <v-text-field
+        v-model="car.brand"
+        label="Marke"
+        required
+      ></v-text-field>
 
-        <!-- color -->
-        <b-form-group
-          label="Farbe:"
-          label-for="color"
-        >
-          <b-form-input
-            v-model="car.color"
-            placeholder="Rostbraun"
-            required
-          ></b-form-input>
-        </b-form-group>
+      <v-text-field
+        v-model="car.color"
+        label="Farbe"
+        required
+      ></v-text-field>
 
-        <!-- optional -->
-        <b-form-group
-          label="Kilometerstand"
-          label-for="optional"
-        >
-          <b-form-input
-            v-model="car.mileage"
-            type=number
-          ></b-form-input>
-        </b-form-group>
-      </fieldset>
+      <v-text-field
+        v-model="car.mileage"
+        type=number
+        label="Kilometerstand"
+      ></v-text-field>
 
-      <div v-if="!viewOnly">
-        <b-button type="submit" :disabled="!canSubmit">Speichern</b-button>
-        <b-button type="reset" :disabled="!canReset" variant="light">Zurücksetzen</b-button>
-      </div>
-    </b-form>
+      <div v-if="!readOnly">
+        <v-btn
+          class="mr-4"
+          type="submit"
+          color="primary"
+          :disabled="!canSubmit"
+        >
+          Hinzufügen
+        </v-btn>
+        <v-btn type="reset">
+          Zurücksetzen
+        </v-btn>
+        </div>
+    </v-form>
   </div>
 </template>
-
 <script>
 export default {
   props: [
     'car',
-    'viewOnly'
+    'readOnly'
   ],
-  computed: {
-    canSubmit () {
-      return this.car.brand &&
-        this.car.color
-    },
-    canReset () {
-      return !this.car.brand ||
-        this.car.color ||
-        this.car.mileage
-    }
-  },
   methods: {
     onSubmit() {
       this.$emit('submit', this.car)
     },
-    onReset() {
+    onReset () {
       // TODO how to set all childs to null?
       // also consider nested attributes
       this.car.brand = null
       this.car.color = null
       this.car.mileage = null
+    }
+  },
+  computed: {
+    canSubmit () {
+      return this.car.brand && this.car.color
     }
   }
 }

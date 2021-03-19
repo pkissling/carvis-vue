@@ -9,7 +9,7 @@ const DEFAULT_REDIRECT_CALLBACK = () => {
 let instance;
 
 /** Returns the current instance of the SDK */
-export const getInstance = () => instance;
+export const getAuthInstance = () => instance;
 
 /** Creates an instance of the Auth0 SDK. If one has already been created, it returns that instance */
 export const useAuth0 = ({
