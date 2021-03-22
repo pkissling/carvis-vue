@@ -6,9 +6,29 @@ query listCars {
     items {
       id
       brand
-      color
+      type
+      modelSeries
+      modelYear
+      modelDetails
+      bodyType
+      capacity
+      horsePower
+      transmission
+      countryOfOrigin
+      colorExterior
+      colorExteriorManufacturer
+      colorAndMaterialInterior
       mileage
-      username
+      vin
+      additionalEquipment
+      condition
+      shortDescription
+      description
+      price
+      ads
+      ownerUsername
+      createdAt
+      updatedAt
     }
   }
 }
