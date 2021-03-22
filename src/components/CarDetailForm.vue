@@ -33,19 +33,47 @@
         >
           Hinzufügen
         </v-btn>
-        <v-btn type="reset">
+        <v-btn
+          class="mr-4"
+          type="reset"
+        >
           Zurücksetzen
         </v-btn>
-        </div>
+        <v-btn
+          class="mr-4"
+          color="red"
+          @click="triggerDeleteCar"
+        >
+          Fahrzeug löschen
+        </v-btn>
+      </div>
+
+      <DeleteModal
+        v-if="showCarDeletionPopup"
+        :subject="car.brand"
+        @delete="deleteCar"
+        @cancel="showCarDeletionPopup = false"
+      />
     </v-form>
   </div>
 </template>
 <script>
+import carService from '../service/car-service'
+import DeleteModal from '../modals/DeleteModal'
+
 export default {
+  components: {
+    DeleteModal
+  },
   props: [
     'car',
     'readOnly'
   ],
+  data: () => {
+    return {
+      showCarDeletionPopup: false
+    }
+  },
   methods: {
     onSubmit() {
       this.$emit('submit', this.car)
@@ -56,6 +84,14 @@ export default {
       this.car.brand = null
       this.car.color = null
       this.car.mileage = null
+    },
+    triggerDeleteCar() {
+      this.showCarDeletionPopup = true
+    },
+    deleteCar() {
+      this.showCarDeletionPopup = false
+      carService.deleteCar(this.car)
+        .then(() => this.$router.push({ path: '/' }))
     }
   },
   computed: {

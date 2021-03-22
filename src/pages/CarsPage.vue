@@ -1,49 +1,51 @@
 <template>
   <v-container>
-    <h1>Fahrzeuge</h1>
-    <v-data-table
-      :headers="this.headers"
-      :items="this.cars"
-      :items-per-page="20"
-      :loading="loading"
-      class="elevation-5"
-    >
-      <template v-slot:item.controls="props">
-        <div v-if="canEdit(props.item)">
-          <v-icon @click="editCar(props.item)">mdi-pencil</v-icon>
-          <v-icon @click="triggerDeleteCar(props.item)">mdi-delete</v-icon>
-        </div>
-      </template>
-    </v-data-table>
+    <v-card>
+      <v-card-title>
+        Fahrzeuge
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Suchen"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
 
-    <FloatingButton
-      :loading="loading"
-      @create-clicked="createCar"
-    />
+      <v-data-table
+        :headers="this.headers"
+        :items="this.cars"
+        :items-per-page="20"
+        :loading="loading"
+        :mobile-breakpoint="0"
+        :search="search"
+        @click:row="viewCar"
+        class="elevation-5"
+        dense
+      >
+      </v-data-table>
 
-    <DeleteModal
-      :car="carToDelete"
-      @delete="deleteCar"
-      @cancel="carToDelete = null"
-    />
+      <FloatingButton
+        :loading="loading"
+        @create-clicked="createCar"
+      />
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import ListCars from '../apollo/queries/ListCars'
 import FloatingButton from '../components/FloatingButton'
-import DeleteModal from '../modals/DeleteModal'
-import carService from '../service/car-service'
 
 export default {
   components: {
-    FloatingButton,
-    DeleteModal
+    FloatingButton
   },
   data () {
     return {
-      carToDelete: null,
-      allHeaders: [
+      search: '',
+      headers: [
         {
           text: 'Marke',
           align: 'start',
@@ -61,39 +63,17 @@ export default {
           align: 'start',
           sortable: true,
           value: 'mileage',
-        },
-        {
-          text: 'Besitzer',
-          align: 'start',
-          sortable: true,
-          value: 'username',
-        },
-        {
-          text: 'Bearbeiten',
-          value: 'controls',
-          sortable: false
         }
       ]
     }
   },
   methods: {
-    canEdit(car) {
-      if (!car) return false
-      return this.$auth.user.sub === car.username
-    },
-    editCar(car) {
-      this.$router.push({ path: `/${car.id}/edit` })
-    },
-    viewCar(car) {
-      this.$router.push({ path: `/${car.id}`})
-    },
-    triggerDeleteCar(car) {
-      this.carToDelete = car
-    },
-    deleteCar(car) {
-      this.carToDelete = null
-      carService.deleteCar(car)
-        .then(() => this.carToDelete = null)
+    viewCar (car) {
+      if (car.username !== this.$auth.user.sub) {
+        this.$router.push({ path: `/${car.id}`})
+      } else {
+        this.$router.push({ path: `/${car.id}/edit`})
+      }
     },
     createCar () {
       this.$router.push({ path: '/add' })
@@ -109,11 +89,6 @@ export default {
   computed: {
     loading () {
       return this.$apollo.loading || this.$auth.loading
-    },
-    headers () {
-      if (!this.cars) return []
-      const canEdit = this.cars.map(car => car.username).some(username => username === this.$auth.user.sub)
-      return canEdit ? this.allHeaders : this.allHeaders.filter(header => header.value !== 'controls')
     }
   }
 }

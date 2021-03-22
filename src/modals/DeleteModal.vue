@@ -1,6 +1,6 @@
 <template>
   <v-row
-    v-if="this.car"
+    v-if="this.subject"
     justify="center"
   >
     <v-dialog
@@ -10,7 +10,7 @@
     >
       <v-card>
         <v-card-title class="headline">
-          {{ car.brand }} wirklich löschen?
+          {{ subject }} wirklich löschen?
         </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -36,7 +36,7 @@
 <script>
 export default {
   props: [
-    'car'
+    'subject'
   ],
   data () {
     return {

@@ -25,7 +25,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn 
+      <v-btn
         v-if="showLogin"
         :loading="$auth.loading"
         dark
