@@ -1,4 +1,4 @@
-# blumenerde
+# carvis-vue
 
 ## Project setup
 ```
