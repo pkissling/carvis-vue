@@ -107,7 +107,8 @@
             ></TextField>
             <TextField
               v-model="car.mileage"
-              label="Laufleistung in KM"
+              label="Laufleistung"
+              type=number
               suffix="km"
             ></TextField>
           </v-row>
