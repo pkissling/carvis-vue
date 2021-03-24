@@ -1,36 +1,31 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-title>
-        Fahrzeuge
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Suchen"
-          single-line
-          hide-details
-        ></v-text-field>
-      </v-card-title>
+    <span class="text-h2">Fahrzeuge</span>
+    <v-text-field
+      v-model="search"
+      prepend-icon="mdi-magnify"
+      placeholder="Porsche Carrera"
+      class="my-12"
+      outlined
+      clearable
+    ></v-text-field>
 
-      <v-data-table
-        :headers="this.headers"
-        :items="this.cars"
-        :items-per-page="20"
-        :loading="loading"
-        :mobile-breakpoint="0"
-        :search="search"
-        @click:row="viewCar"
-        class="elevation-5"
-        dense
-      >
-      </v-data-table>
+  <v-data-table
+    :headers="this.headers"
+    :items="this.cars"
+    :items-per-page="20"
+    :loading="loading"
+    :mobile-breakpoint="0"
+    :search="search"
+    @click:row="viewCar"
+    class="elevation-5"
+  >
+  </v-data-table>
 
-      <FloatingButton
-        :loading="loading"
-        @create-clicked="createCar"
-      />
-    </v-card>
+  <FloatingButton
+    :loading="loading"
+    @create-clicked="createCar"
+  />
   </v-container>
 </template>
 
@@ -53,27 +48,41 @@ export default {
           value: 'brand',
         },
         {
-          text: 'Farbe',
+          text: 'Typ',
           align: 'start',
           sortable: true,
-          value: 'color',
+          value: 'type',
         },
         {
-          text: 'Kilometerstand',
+          text: 'Modellreihe',
           align: 'start',
           sortable: true,
-          value: 'mileage',
+          value: 'modelSeries',
+        },
+        {
+          text: 'Modelljahr',
+          align: 'start',
+          sortable: true,
+          value: 'modelYear',
+        },
+        {
+          text: 'Außenfarbe',
+          align: 'start',
+          sortable: true,
+          value: 'colorExterior',
+        },
+        {
+          text: 'Author',
+          align: 'start',
+          sortable: true,
+          value: 'ownerUsername',
         }
       ]
     }
   },
   methods: {
     viewCar (car) {
-      if (car.username !== this.$auth.user.sub) {
-        this.$router.push({ path: `/${car.id}`})
-      } else {
-        this.$router.push({ path: `/${car.id}/edit`})
-      }
+      this.$router.push({ path: `/${car.id}`})
     },
     createCar () {
       this.$router.push({ path: '/add' })

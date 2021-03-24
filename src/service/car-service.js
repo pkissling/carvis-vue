@@ -38,7 +38,9 @@ export default class CarService {
         createCar: {
           id: 'optimistic' + new Date().getTime(),
           __typename: "Car",
-          username: getAuthInstance().user.sub,
+          ownerUsername: getAuthInstance().user.sub,
+          createdAt: new Date(),
+          updatedAt: new Date(),
           ...car
         }
       }
@@ -67,6 +69,9 @@ export default class CarService {
         __typename: "Mutation",
         updateCar: {
           __typename: "Car",
+          ownerUsername: getAuthInstance().user.sub,
+          createdAt: new Date(),
+          updatedAt: new Date(),
           ...car
         }
       }

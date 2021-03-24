@@ -5,9 +5,29 @@ mutation updateCar($updatecarinput: UpdateCarInput!) {
   updateCar(input: $updatecarinput) {
     id
     brand
-    color
+    type
+    modelSeries
+    modelYear
+    modelDetails
+    bodyType
+    capacity
+    horsePower
+    transmission
+    countryOfOrigin
+    colorExterior
+    colorExteriorManufacturer
+    colorAndMaterialInterior
     mileage
-    username
+    vin
+    additionalEquipment
+    condition
+    shortDescription
+    description
+    price
+    ads
+    createdAt
+    updatedAt
+    ownerUsername
   }
 }
 `

@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <h1>Anzeigen</h1>
+    <span class="text-h2">{{ title }}</span>
     <CarDetailForm
       :car="this.car"
-      :readOnly="true"
+      @submit="updateCar"
     />
   </v-container>
 </template>
@@ -11,6 +11,7 @@
 <script>
 import GetCar from '../apollo/queries/GetCar'
 import CarDetailForm from '../components/CarDetailForm'
+import carService from '../service/car-service'
 
 export default {
   components: {
@@ -29,6 +30,20 @@ export default {
         }
       },
       prefetch: true
+    }
+  },
+  methods: {
+    updateCar (car) {
+      carService.updateCar(car)
+        .then(() => this.$router.push({ path: '/' }))
+    }
+  },
+  computed: {
+    canEdit () {
+      return this.car && this.car.ownerUsername === this.$auth.user.sub
+    },
+    title () {
+      return this.canEdit ? 'Fahrzeug bearbeiten' : 'Fahrzeug anzeigen'
     }
   }
 }

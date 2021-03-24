@@ -17,12 +17,7 @@ const routes = [
   },
   {
     path: '/:carId',
-    component: () => import('../pages/ViewCarPage.vue'),
-    props: true
-  },
-  {
-    path: '/:carId/edit',
-    component: () => import('../pages/EditCarPage.vue'),
+    component: () => import('../pages/CarDetailPage.vue'),
     props: true
   }
 ]

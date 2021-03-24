@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit('delete', this.car)
+      this.$emit('submit', this.car)
     },
     cancel () {
       this.$emit('cancel')

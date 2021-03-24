@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>Hinzufügen</h1>
+    <span class="text-h2">Fahrzeug hinzufügen</span>
     <CarDetailForm
       :car="this.car"
       @submit="createCar"
@@ -23,8 +23,6 @@ export default {
   },
   methods: {
     createCar(car) {
-      // eslint-disable-next-line no-debugger
-      debugger
       carService.createCar(car)
         .then(() => this.$router.push({ path: '/' }))
     }
