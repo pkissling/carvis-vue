@@ -10,6 +10,7 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.13.6",
     "@mdi/font": "^5.9.55",
+    "apollo-link-error": "^1.1.13",
     "aws-appsync": "^4.0.3",
     "core-js": "^3.6.5",
     "graphql-tag": "^2.11.0",
