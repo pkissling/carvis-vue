@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     rules () {
-      return this.required === '' ? [ v => !!v || 'Pflichtfeld' ] : []
+      return this.required ? [ v => !!v || 'Pflichtfeld' ] : []
     },
     _items () {
       return this.allowUserInput ? [...this.items, 'Andere' ] : this.items

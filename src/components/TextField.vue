@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     rules () {
-      return this.required === '' ? [ v => !!v || 'Pflichtfeld' ] : []
+      return this.required ? [ v => !!v || 'Pflichtfeld' ] : []
     }
   }
 }
