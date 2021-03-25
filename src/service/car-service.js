@@ -4,6 +4,7 @@ import DeleteCar from '../apollo/mutations/DeleteCar'
 import ListCars from '../apollo/queries/ListCars'
 import { apolloClient } from '../apollo'
 import { getAuthInstance } from "../auth";
+import userService from '../service/user-service'
 
 export default class CarService {
 
@@ -38,7 +39,7 @@ export default class CarService {
         createCar: {
           id: 'optimistic' + new Date().getTime(),
           __typename: "Car",
-          ownerUsername: getAuthInstance().user.sub,
+          ownerUsername: userService.getUsername(),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           ...car
@@ -69,7 +70,7 @@ export default class CarService {
         __typename: "Mutation",
         updateCar: {
           __typename: "Car",
-          ownerUsername: getAuthInstance().user.sub,
+          ownerUsername: userService.getUsername(),
           updatedAt: new Date().toISOString(),
           ...car
         }

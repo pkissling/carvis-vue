@@ -6,7 +6,7 @@ import { obtainJwtToken } from '../auth/utils'
 import { appsyncUrl, appsyncRegion } from '../../app.config'
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
-import store from '../store/index'
+import notificationService from '../service/notification-service'
 
 
 Vue.use(VueApollo)
@@ -14,11 +14,11 @@ Vue.use(VueApollo)
 const errorLink = onError(({ networkError, graphQLErrors }) => {
   if (graphQLErrors) {
     const errorMessages = graphQLErrors.map(({ message, locations, path }) => `Message: ${message}, Location: ${locations}, Path: ${path}`)
-    store.dispatch('notifications/error', 'Es ist ein Fehler aufgetreten: ' + errorMessages)
+    notificationService.error('Es ist ein Fehler aufgetreten: ' + errorMessages)
   }
 
   if (networkError) {
-    store.dispatch('notifications/error', 'Es gibt Netzwerkprobleme: ' + networkError)
+    notificationService.error('Es gibt Netzwerkprobleme: ' + networkError)
   }
 })
 

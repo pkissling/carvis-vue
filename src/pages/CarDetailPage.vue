@@ -12,6 +12,7 @@
 import GetCar from '../apollo/queries/GetCar'
 import CarDetailForm from '../components/CarDetailForm'
 import carService from '../service/car-service'
+import userService from '../service/user-service'
 
 export default {
   components: {
@@ -37,7 +38,7 @@ export default {
   },
   computed: {
     canEdit () {
-      return this.car && this.car.ownerUsername === this.$auth.user.sub
+      return this.car && this.car.ownerUsername === userService.getUsername()
     },
     title () {
       return this.canEdit ? 'Fahrzeug bearbeiten' : 'Fahrzeug anzeigen'

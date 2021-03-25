@@ -219,6 +219,7 @@
 </template>
 <script>
 import carService from '../service/car-service'
+import userService from '../service/user-service'
 import DeleteModal from '../modals/DeleteModal'
 import TextField from './TextField'
 import Dropdown from './Dropdown'
@@ -276,7 +277,7 @@ export default {
       if (this.car.id === undefined) {
         return false
       }
-      if (this.car.ownerUsername === this.$auth.user.sub) {
+      if (this.car.ownerUsername === userService.getUsername()) {
         return false
       }
       return true
