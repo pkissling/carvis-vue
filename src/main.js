@@ -5,6 +5,7 @@ import { auth0Domain, auth0ClientId } from '../app.config';
 import { Auth0Plugin } from './auth';
 import apolloProvider from './apollo';
 import vuetify from './plugins/vuetify';
+import store from './store'
 
 // auth
 Vue.use(Auth0Plugin, {
@@ -18,11 +19,13 @@ Vue.use(Auth0Plugin, {
     );
   }
 });
+
 Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
   router,
   vuetify,
+  store,
   apolloProvider
 }).$mount('#app')
