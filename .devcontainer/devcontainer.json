@@ -6,7 +6,7 @@
   "appPort": [
     "3000"
   ],
-  "postStartCommand": "yarn install",
+  "postCreateCommand": "yarn install",
   "postAttachCommand": "yarn run serve",
   "runArgs": [
     "-v",
