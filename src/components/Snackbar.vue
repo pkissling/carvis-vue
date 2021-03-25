@@ -1,7 +1,26 @@
 <template>
-  <v-snackbar v-model="show" :color="color">
+  <v-snackbar
+    v-model="show"
+    :color="color"
+    :timeout="timeout"
+    @click="show = false"
+    outlined
+    bottom
+    transition="scale-transition"
+    elevation="24"
+  >
     {{ message }}
-    <v-btn text @click="show = false">Close</v-btn>
+
+    <template v-slot:action="{ attrs }">
+      <v-btn
+        icon
+        v-bind="attrs"
+        :color="color"
+        @click="show = false"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </template>
   </v-snackbar>
 </template>
 
@@ -11,7 +30,8 @@ export default {
     return {
       show: false,
       message: '',
-      color: ''
+      color: '',
+      timeout: 5000
     }
   },
 

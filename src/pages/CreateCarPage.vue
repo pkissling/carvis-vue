@@ -25,6 +25,8 @@ export default {
     createCar(car) {
       carService.createCar(car)
         .then(() => this.$router.push({ path: '/' }))
+        .then(() => this.$store.dispatch('notifications/success', 'Fahrzeug erfolgreich hinzugefügt.'))
+        .catch(() => this.$store.dispatch('notifications/error', 'Fehler'))
     }
   }
 }
