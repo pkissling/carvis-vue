@@ -26,6 +26,7 @@ query getCar($id: ID!) {
     price
     ads
     ownerUsername
+    ownerName
     createdAt
     updatedAt
   }

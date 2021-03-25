@@ -11,6 +11,15 @@ export default class UserService {
     return user.sub
   }
 
+  static getName() {
+    const user = getAuthInstance().user
+    if (user === undefined) {
+      return undefined
+    }
+
+    return user.name
+  }
+
   static isAdmin() {
     const user = getAuthInstance().user
     if (user === undefined) {

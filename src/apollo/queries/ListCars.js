@@ -27,6 +27,7 @@ query listCars {
       price
       ads
       ownerUsername
+      ownerName
       createdAt
       updatedAt
     }

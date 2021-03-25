@@ -40,6 +40,7 @@ export default class CarService {
           id: 'optimistic' + new Date().getTime(),
           __typename: "Car",
           ownerUsername: userService.getUsername(),
+          ownerName: userService.getName(),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           ...car
@@ -71,6 +72,7 @@ export default class CarService {
         updateCar: {
           __typename: "Car",
           ownerUsername: userService.getUsername(),
+          ownerName: userService.getName(),
           updatedAt: new Date().toISOString(),
           ...car
         }

@@ -26,6 +26,7 @@ mutation createCar($createcarinput: CreateCarInput!) {
     price
     ads
     ownerUsername
+    ownerName
     createdAt
     updatedAt
   }

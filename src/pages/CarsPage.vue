@@ -71,10 +71,10 @@ export default {
           value: 'colorExterior',
         },
         {
-          text: 'Author',
+          text: 'Besitzer',
           align: 'start',
           sortable: true,
-          value: 'ownerUsername',
+          value: 'ownerName',
         }
       ]
     }
