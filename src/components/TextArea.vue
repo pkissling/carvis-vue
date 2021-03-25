@@ -1,23 +1,32 @@
 <template>
   <v-col>
     <v-textarea
-      @input="$emit('input', $event)"
       :value="value"
       :label="label"
       :rules="rules"
       dense
       outlined
-    ></v-textarea>
+      @input="$emit('input', $event)"
+    />
   </v-col>
 </template>
 
 <script>
 export default {
-  props: [
-    'value',
-    'label',
-    'required',
-  ],
+  props: {
+    value: {
+      type: String,
+      default: ''
+    },
+    required: {
+      type: Boolean,
+      default: false
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+  },
   computed: {
     rules () {
       return this.required === '' ? [ v => !!v || 'Pflichtfeld' ] : []

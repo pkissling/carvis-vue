@@ -1,7 +1,6 @@
 <template>
   <v-col>
     <v-text-field
-      @input="$emit('input', $event)"
       :value="value"
       :label="label"
       :hint="hint"
@@ -11,21 +10,47 @@
       :counter="counter"
       dense
       outlined
-    ></v-text-field>
+      @input="$emit('input', $event)"
+    />
   </v-col>
 </template>
 
 <script>
 export default {
-  props: [
-    'value',
-    'label',
-    'hint',
-    'required',
-    'type',
-    'suffix',
-    'counter'
-  ],
+  props: {
+    value: {
+      type: [ String, Number ],
+      default: null
+    },
+    items: {
+      type: Array,
+      default: () => []
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    hint: {
+      type: String,
+      default: ''
+    },
+    required: {
+      type: Boolean,
+      default: false
+    },
+    type: {
+      type: String,
+      default: ''
+    },
+    suffix: {
+      type: String,
+      default: ''
+    },
+    counter: {
+      type: Number,
+      default: null
+    }
+  },
   computed: {
     rules () {
       return this.required === '' ? [ v => !!v || 'Pflichtfeld' ] : []

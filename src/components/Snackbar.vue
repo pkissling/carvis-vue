@@ -3,11 +3,11 @@
     v-model="show"
     :color="color"
     :timeout="timeout"
-    @click="show = false"
     outlined
     bottom
     transition="scale-transition"
     elevation="24"
+    @click="show = false"
   >
     {{ message }}
 

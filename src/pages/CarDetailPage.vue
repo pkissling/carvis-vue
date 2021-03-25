@@ -2,7 +2,7 @@
   <v-container>
     <span class="text-h2">{{ title }}</span>
     <CarDetailForm
-      :car="this.car"
+      :car="car"
       @submit="updateCar"
     />
   </v-container>
@@ -17,9 +17,12 @@ export default {
   components: {
     CarDetailForm
   },
-  props: [
-    'carId'
-  ],
+  props: {
+    carId: {
+      type: String,
+      default: null
+    }
+  },
   apollo: {
     car: {
       query: () => GetCar,
@@ -32,18 +35,18 @@ export default {
       prefetch: true
     }
   },
-  methods: {
-    updateCar (car) {
-      carService.updateCar(car)
-        .then(() => this.$router.push({ path: '/' }))
-    }
-  },
   computed: {
     canEdit () {
       return this.car && this.car.ownerUsername === this.$auth.user.sub
     },
     title () {
       return this.canEdit ? 'Fahrzeug bearbeiten' : 'Fahrzeug anzeigen'
+    }
+  },
+  methods: {
+    updateCar (car) {
+      carService.updateCar(car)
+        .then(() => this.$router.push({ path: '/' }))
     }
   }
 }

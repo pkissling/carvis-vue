@@ -1,7 +1,6 @@
 <template>
   <v-col>
     <v-select
-      @input="$emit('input', $event)"
       :value="value"
       :label="label"
       :hint="hint"
@@ -9,22 +8,33 @@
       :items="_items"
       dense
       outlined
-    ></v-select>
+      @input="$emit('input', $event)"
+    />
   </v-col>
 </template>
 
 <script>
 export default {
-  props: [
-    'value',
-    'items',
-    'label',
-    'hint',
-    'required'
-  ],
-  created() {
-    if (this.items) {
-      this.items.sort()
+  props: {
+    value: {
+      type: String,
+      default: ''
+    },
+    items: {
+      type: Array,
+      default: () => []
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    hint: {
+      type: String,
+      default: ''
+    },
+    required: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -33,6 +43,11 @@ export default {
     },
     _items () {
       return this.allowUserInput ? [...this.items, 'Andere' ] : this.items
+    }
+  },
+  created() {
+    if (this.items) {
+      this.items.sort()
     }
   }
 }

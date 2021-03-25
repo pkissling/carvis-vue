@@ -2,8 +2,8 @@
   <v-app>
     <TheNavBar />
     <v-main>
-      <router-view/>
-      <Snackbar/>
+      <router-view />
+      <Snackbar />
     </v-main>
   </v-app>
 </template>

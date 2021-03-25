@@ -1,6 +1,6 @@
 <template>
   <v-row
-    v-if="this.subject"
+    v-if="subject"
     justify="center"
   >
     <v-dialog
@@ -13,7 +13,7 @@
           {{ subject }} wirklich löschen?
         </v-card-title>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             text
             @click="cancel"
@@ -35,9 +35,13 @@
 
 <script>
 export default {
-  props: [
-    'subject'
-  ],
+  props: {
+    subject: {
+      type: String,
+      default: ''
+    }
+  }
+  ,
   data () {
     return {
       dialog: true,

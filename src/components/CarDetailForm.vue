@@ -1,22 +1,21 @@
 <template>
-  <div v-if="this.car">
+  <div v-if="car">
     <v-card
-      :readOnly="readOnly"
+      :read-only="readOnly"
       :loading="loading"
       class="my-12"
     >
       <template slot="progress">
-        <v-progress-linear indeterminate
-        ></v-progress-linear>
+        <v-progress-linear indeterminate />
       </template>
 
       <v-form
-        class="form"
         ref="form"
+        v-model="valid"
+        class="form"
+        :disabled="readOnly"
         @submit.stop.prevent="onSubmit"
         @reset="onReset"
-        v-model="valid"
-        :disabled="readOnly"
       >
         <v-card-text>
           <v-row>
@@ -31,7 +30,7 @@
               label="Typ"
               hint="Beispiel: 911, Bus, 5er"
               required
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
@@ -40,13 +39,13 @@
               label="Modellreihe"
               hint="Beispiel: 964, T2, E34"
               required
-            ></TextField>
+            />
             <TextField
               v-model="car.modelYear"
               label="Modelljahr"
               hint="Beispiel: 1990"
               required
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
@@ -55,62 +54,62 @@
               label="Modellspezifikation"
               hint="Beispiel: RSR Recreation, Carrera RS, Carrera 4"
               required
-            ></TextField>
+            />
             <TextField
               v-model="car.bodyType"
               label="Karosserie"
               hint="Beispiel: Coupe, Targa, Cabrio"
               required
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
             <TextField
               v-model="car.capacity"
-              type=number
+              type="number"
               label="Hubraum"
               hint="Beispiel: 2500"
               suffix="ccm"
               required
-            ></TextField>
+            />
             <TextField
               v-model="car.transmission"
               label="Getriebe"
               hint="Beispiel: Automatik, 4Gang, 5Gang"
               required
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
             <TextField
               v-model="car.horsePower"
-              type=number
+              type="number"
               label="Leistung in PS"
               suffix="PS"
-              @input="psChanged"
               required
-            ></TextField>
+              @input="psChanged"
+            />
             <TextField
               v-model="kw"
-              type=number
+              type="number"
               label="Leistung in KW"
               suffix="KW"
-              @input="kwChanged"
               required
-            ></TextField>
+              @input="kwChanged"
+            />
           </v-row>
 
           <v-row>
             <TextField
               v-model="car.countryOfOrigin"
               label="Auslieferungsland"
-            ></TextField>
+            />
             <TextField
               v-model="car.mileage"
               label="Laufleistung"
-              type=number
+              type="number"
               suffix="km"
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
@@ -118,12 +117,12 @@
               v-model="car.colorExterior"
               label="Außenfarbe"
               required
-            ></TextField>
+            />
             <TextField
               v-model="car.colorExteriorManufacturer"
               label="Hersteller Farbbezeichnung"
               required
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
@@ -131,45 +130,45 @@
               v-model="car.colorAndMaterialInterior"
               label="Innenfarbe"
               required
-            ></TextField>
+            />
             <TextField
               v-model="car.vin"
               label="Fahrgestellnummer"
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
             <TextField
               v-model="car.additionalEquipment"
               label="Mehr-Ausstattung"
-            ></TextField>
+            />
             <Dropdown
-              :items="options.conditions"
               v-model="car.condition"
+              :items="options.conditions"
               label="Zustand"
               required
-            ></Dropdown>
+            />
           </v-row>
 
           <v-row>
             <TextField
               v-model="car.price"
               label="Preis in Euro"
-              type=number
+              type="number"
               suffix="Euro"
               required
               outlined
-            ></TextField>
-            <v-col></v-col>
+            />
+            <v-col />
           </v-row>
 
           <v-row>
             <TextField
               v-model="car.shortDescription"
               label="Eine Kurzbeschreibung mit den wichtigsten Merkmalen"
-              counter=100
+              :counter="100"
               required
-            ></TextField>
+            />
           </v-row>
 
           <v-row>
@@ -177,16 +176,16 @@
               v-model="car.description"
               label="Detailbeschreibung"
               outlined
-            ></TextArea>
+            />
           </v-row>
         </v-card-text>
 
         <div v-if="!readOnly">
-          <v-divider></v-divider>
+          <v-divider />
           <v-card-actions>
             <v-btn
               color="primary"
-              type=submit
+              type="submit"
             >
               <span v-if="car.id">
                 Fahrzeug speichern
@@ -200,8 +199,8 @@
             </v-btn>
             <v-btn
               v-if="car.id"
-              @click="showCarDeletionModal = true"
               color="error"
+              @click="showCarDeletionModal = true"
             >
               Fahrzeug löschen
             </v-btn>
@@ -232,9 +231,12 @@ export default {
     Dropdown,
     TextArea
   },
-  props: [
-    'car'
-  ],
+  props: {
+    car: {
+      type: Object,
+      default: null
+    }
+  },
   data: () => {
     return {
       showCarDeletionModal: false,
@@ -266,6 +268,23 @@ export default {
       }
     }
   },
+  computed: {
+    loading () {
+      return this.$apollo.loading || this.$auth.loading
+    },
+    readOnly () {
+      if (this.car.id === undefined) {
+        return false
+      }
+      if (this.car.ownerUsername === this.$auth.user.sub) {
+        return false
+      }
+      return true
+    },
+    deleteModalSubject () {
+      return `${this.car.brand} ${this.car.type}`
+    }
+  },
   methods: {
     onSubmit () {
       this.$refs.form.validate()
@@ -292,23 +311,6 @@ export default {
         this.car.horsePower = null
       }
       this.car.horsePower = Math.round(kw / 0.73549875)
-    }
-  },
-  computed: {
-    loading () {
-      return this.$apollo.loading || this.$auth.loading
-    },
-    readOnly () {
-      if (this.car.id === undefined) {
-        return false
-      }
-      if (this.car.ownerUsername === this.$auth.user.sub) {
-        return false
-      }
-      return true
-    },
-    deleteModalSubject () {
-      return `${this.car.brand} ${this.car.type}`
     }
   }
 }

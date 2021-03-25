@@ -7,13 +7,13 @@
   >
     <template v-slot:activator>
       <v-btn
-        @click="createClicked"
         :loading="loading"
         color="primary"
         fab
+        @click="createClicked"
       >
         <v-icon>
-         mdi-plus
+          mdi-plus
         </v-icon>
       </v-btn>
     </template>
@@ -22,9 +22,12 @@
 
 <script>
 export default {
-  props: [
-    'loading',
-  ],
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       expanded: false

@@ -8,24 +8,23 @@
       class="my-12"
       outlined
       clearable
-    ></v-text-field>
+    />
 
-  <v-data-table
-    :headers="this.headers"
-    :items="this.cars"
-    :items-per-page="20"
-    :loading="loading"
-    :mobile-breakpoint="0"
-    :search="search"
-    @click:row="viewCar"
-    class="elevation-5"
-  >
-  </v-data-table>
+    <v-data-table
+      :headers="headers"
+      :items="cars"
+      :items-per-page="20"
+      :loading="loading"
+      :mobile-breakpoint="0"
+      :search="search"
+      class="elevation-5"
+      @click:row="viewCar"
+    />
 
-  <FloatingButton
-    :loading="loading"
-    @create-clicked="createCar"
-  />
+    <FloatingButton
+      :loading="loading"
+      @create-clicked="createCar"
+    />
   </v-container>
 </template>
 
@@ -80,6 +79,11 @@ export default {
       ]
     }
   },
+  computed: {
+    loading () {
+      return this.$apollo.loading || this.$auth.loading
+    }
+  },
   methods: {
     viewCar (car) {
       this.$router.push({ path: `/${car.id}`})
@@ -93,11 +97,6 @@ export default {
       query: () => ListCars,
       update: data => data.listCars ? data.listCars.items : [],
       prefetch: true
-    }
-  },
-  computed: {
-    loading () {
-      return this.$apollo.loading || this.$auth.loading
     }
   }
 }
