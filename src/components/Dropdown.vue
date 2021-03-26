@@ -5,7 +5,7 @@
       :label="label"
       :hint="hint"
       :rules="rules"
-      :items="_items"
+      :items="items"
       dense
       outlined
       @input="$emit('input', $event)"
@@ -41,14 +41,6 @@ export default {
     rules () {
       return this.required ? [ v => !!v || 'Pflichtfeld' ] : []
     },
-    _items () {
-      return this.allowUserInput ? [...this.items, 'Andere' ] : this.items
-    }
-  },
-  created() {
-    if (this.items) {
-      this.items.sort()
-    }
   }
 }
 </script>
