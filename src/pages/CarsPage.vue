@@ -151,8 +151,16 @@ export default {
           return rtf.format(-Math.floor(elapsed/msPerHour), 'hours');
       }
 
+      else if (elapsed < msPerMonth) {
+        return rtf.format(-Math.floor(elapsed/msPerDay), 'days');
+      }
+
+      else if (elapsed < msPerYear) {
+        return rtf.format(-Math.floor(elapsed/msPerMonth), 'months');
+      }
+
       else {
-          return new Date(timestamp).toLocaleDateString(locale);
+          return new Date(timestamp).toLocaleDateString("de");
       }
 }
   },
