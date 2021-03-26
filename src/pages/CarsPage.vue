@@ -71,7 +71,7 @@ export default {
           value: 'colorExterior',
         },
         {
-          text: 'Besitzer',
+          text: 'Erstellt durch',
           align: 'start',
           value: 'ownerName',
         },

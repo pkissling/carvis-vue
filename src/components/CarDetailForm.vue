@@ -171,7 +171,10 @@
                 label="Geschaltete Anzeigen"
                 chips
                 outlined
-                @change="appendAd"
+                clearable
+                deletable-chips
+                @change="onAdsChange"
+                @update:search-input="onAdsSearchInput"
               />
             </v-col>
           </v-row>
@@ -263,6 +266,7 @@ export default {
       showCarDeletionModal: false,
       valid: true,
       ads: [],
+      lastInput: null,
       options: {
         colors: [
           "Beige",
@@ -310,6 +314,13 @@ export default {
       return this.car.horsePower ? Math.round(this.car.horsePower * 0.73549875) : null
     }
   },
+  watch: {
+    'car.ads' () {
+      if (this.ads.length === 0 && this.car.ads) {
+        this.ads = [...this.car.ads]
+      }
+    }
+  },
   methods: {
     onSubmit () {
       this.$refs.form.validate()
@@ -333,11 +344,20 @@ export default {
       }
       this.car.horsePower = Math.round(kw / 0.73549875)
     },
-    appendAd(ad) {
+    onAdsChange(ad) {
       const newAd = ad.find(i => !this.ads.includes(i))
       if (newAd) {
         this.ads.push(newAd)
       }
+    },
+    onAdsSearchInput(input) {
+      if (!this.ads || !input) {
+        return
+      }
+
+      if (this.lastInput) this.ads = this.ads.filter(ad => ad !== this.lastInput)
+      this.lastInput = input
+      this.ads.push(input)
     }
   }
 }
