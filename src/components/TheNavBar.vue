@@ -1,14 +1,16 @@
 <template>
   <v-app-bar app>
     <div class="d-flex align-center">
-      <v-img
-        alt="Vuetify Logo"
-        class="shrink mr-2"
-        contain
-        src="@/assets/images/logo_250px.png"
-        transition="scale-transition"
-        width="100"
-      />
+      <router-link to="/">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="@/assets/images/logo_250px.png"
+          transition="scale-transition"
+          width="100"
+        />
+      </router-link>
     </div>
 
     <v-spacer />
@@ -49,6 +51,9 @@ export default {
     },
     logout () {
       this.$auth.logout()
+    },
+    onImageClick() {
+      this.$router.push({ path: '/'})
     }
   }
 }
