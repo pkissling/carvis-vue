@@ -17,12 +17,15 @@
       :loading="loading"
       :mobile-breakpoint="0"
       :search="searchTerm"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
       class="elevation-5"
       @click:row="viewCar"
     />
 
     <FloatingButton
       :loading="loading"
+      :show="showFloatingButton"
       @create-clicked="createCar"
     />
   </v-container>
@@ -38,6 +41,10 @@ export default {
   },
   data () {
     return {
+      lastScrollTop: 0,
+      sortBy: 'updatedAt',
+      sortDesc: true,
+      showFloatingButton: true,
       searchTerm: '',
       headers: [
         {
@@ -75,6 +82,11 @@ export default {
           align: 'start',
           sortable: true,
           value: 'ownerName',
+        },
+        {
+          text: 'Letzte Änderung',
+          sortable: true,
+          value: 'updatedAt'
         }
       ]
     }
@@ -84,12 +96,27 @@ export default {
       return this.$apollo.loading || this.$auth.loading
     }
   },
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   methods: {
     viewCar (car) {
       this.$router.push({ path: `/${car.id}`})
     },
     createCar () {
       this.$router.push({ path: '/add' })
+    },
+    handleScroll (event) {
+      var st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
+      if (st > this.lastScrollTop){
+          this.showFloatingButton = false
+      } else {
+          this.showFloatingButton = true
+      }
+      this.lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
     }
   },
   apollo: {
