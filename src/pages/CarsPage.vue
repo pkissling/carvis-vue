@@ -12,20 +12,18 @@
 
     <v-data-table
       :headers="headers"
-      :items="cars"
+      :items="_cars"
       :items-per-page="20"
       :loading="loading"
       :mobile-breakpoint="0"
       :search="searchTerm"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
       class="elevation-5"
       @click:row="viewCar"
     />
 
     <FloatingButton
       :loading="loading"
-      :show="showFloatingButton"
+      :show="floatingButton.show"
       @create-clicked="createCar"
     />
   </v-container>
@@ -41,52 +39,46 @@ export default {
   },
   data () {
     return {
-      lastScrollTop: 0,
-      sortBy: 'updatedAt',
-      sortDesc: true,
-      showFloatingButton: true,
+      floatingButton: {
+        show: true,
+        lastScrollTop: 0,
+      },
       searchTerm: '',
       headers: [
         {
           text: 'Marke',
           align: 'start',
-          sortable: true,
           value: 'brand',
         },
         {
           text: 'Typ',
           align: 'start',
-          sortable: true,
           value: 'type',
         },
         {
           text: 'Modellreihe',
           align: 'start',
-          sortable: true,
           value: 'modelSeries',
         },
         {
           text: 'Modelljahr',
           align: 'start',
-          sortable: true,
           value: 'modelYear',
         },
         {
           text: 'Außenfarbe',
           align: 'start',
-          sortable: true,
           value: 'colorExterior',
         },
         {
           text: 'Besitzer',
           align: 'start',
-          sortable: true,
           value: 'ownerName',
         },
         {
-          text: 'Letzte Änderung',
-          sortable: true,
-          value: 'updatedAt'
+          text: 'Zuletzt geändert',
+          sortable: false,
+          value: 'lastChanged'
         }
       ]
     }
@@ -94,6 +86,21 @@ export default {
   computed: {
     loading () {
       return this.$apollo.loading || this.$auth.loading
+    },
+    _cars () {
+      if (!this.cars) {
+        return []
+      }
+
+      return this.cars
+        .map(car => {
+          const lastChanged = this.timeDifference(car.updatedAt)
+          return {
+            lastChanged,
+            ...car
+          }
+        })
+        .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt))
     }
   },
   created () {
@@ -110,14 +117,44 @@ export default {
       this.$router.push({ path: '/add' })
     },
     handleScroll (event) {
-      var st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
-      if (st > this.lastScrollTop){
-          this.showFloatingButton = false
+      var st = window.pageYOffset || document.documentElement.scrollTop
+      if (st > this.floatingButton.lastScrollTop) {
+          this.floatingButton.show = false
       } else {
-          this.showFloatingButton = true
+          this.floatingButton.show = true
       }
-      this.lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
-    }
+      this.floatingButton.lastScrollTop = st <= 0 ? 0 : st
+    },
+    timeDifference(updatedAt) {
+
+      const msPerMinute = 60 * 1000;
+      const msPerHour = msPerMinute * 60;
+      const msPerDay = msPerHour * 24;
+      const msPerMonth = msPerDay * 30;
+      const msPerYear = msPerDay * 365;
+
+      const current = Date.now();
+      const timestamp = Date.parse(updatedAt)
+      const elapsed = current - timestamp;
+
+      const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
+
+      if (elapsed < msPerMinute) {
+          return rtf.format(-Math.floor(elapsed/1000), 'seconds');
+      }
+
+      else if (elapsed < msPerHour) {
+          return rtf.format(-Math.floor(elapsed/msPerMinute), 'minutes');
+      }
+
+      else if (elapsed < msPerDay) {
+          return rtf.format(-Math.floor(elapsed/msPerHour), 'hours');
+      }
+
+      else {
+          return new Date(timestamp).toLocaleDateString(locale);
+      }
+}
   },
   apollo: {
     cars: {
