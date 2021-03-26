@@ -112,8 +112,9 @@
           </v-row>
 
           <v-row>
-            <TextField
+            <Dropdown
               v-model="car.colorExterior"
+              :items="options.colors"
               label="Außenfarbe"
               required
             />
@@ -179,32 +180,39 @@
           </v-row>
         </v-card-text>
 
-        <div v-if="!readOnly">
+        <v-flex v-if="!readOnly">
           <v-divider />
-          <v-card-actions>
+          <v-card-actions class="d-block d-sm-flex">
             <v-btn
               color="primary"
               type="submit"
             >
               <span v-if="car.id">
-                Fahrzeug speichern
+                Speichern
               </span>
               <span v-else>
-                Fahrzeug hinzufügen
+                Hinzufügen
               </span>
             </v-btn>
-            <v-btn @click="onReset">
-              Formular zurücksetzen
+            <v-btn
+              depressed
+              @click="onReset"
+            >
+              Zurücksetzen
             </v-btn>
+
+            <v-spacer />
+
             <v-btn
               v-if="car.id"
               color="error"
+              text
               @click="showCarDeletionModal = true"
             >
-              Fahrzeug löschen
+              Löschen
             </v-btn>
           </v-card-actions>
-        </div>
+        </v-flex>
       </v-form>
     </v-card>
 
@@ -243,6 +251,7 @@ export default {
       valid: true,
       options: {
         colors: [
+          "Braun",
           "Weiß",
           "Schwarz",
           "Silber",
@@ -255,7 +264,6 @@ export default {
           "Gold",
           "Orange",
           "Beige",
-          "Braun"
         ],
         conditions: [
           "Original",
@@ -292,6 +300,8 @@ export default {
       this.$refs.form.validate()
       if (this.valid) {
         this.$emit('submit', this.car)
+      } else {
+        this.$vuetify.goTo(0)
       }
     },
     onReset () {
