@@ -163,6 +163,19 @@
           </v-row>
 
           <v-row>
+            <v-col>
+              <v-combobox
+                v-model="car.ads"
+                :items="ads"
+                multiple
+                label="Geschaltete Anzeigen"
+                chips
+                outlined
+                @change="appendAd"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
             <TextField
               v-model="car.shortDescription"
               label="Eine Kurzbeschreibung mit den wichtigsten Merkmalen"
@@ -249,21 +262,23 @@ export default {
     return {
       showCarDeletionModal: false,
       valid: true,
+      ads: [],
       options: {
         colors: [
-          "Braun",
-          "Weiß",
-          "Schwarz",
-          "Silber",
-          "Grau",
-          "Rot",
-          "Grün",
+          "Beige",
           "Blau",
-          "Violett",
+          "Braun",
           "Gelb",
           "Gold",
+          "Grau",
+          "Grün",
           "Orange",
-          "Beige",
+          "Rot",
+          "Schwarz",
+          "Silber",
+          "Violett",
+          "Weiß",
+          "Andere"
         ],
         conditions: [
           "Original",
@@ -317,6 +332,12 @@ export default {
         this.car.horsePower = null
       }
       this.car.horsePower = Math.round(kw / 0.73549875)
+    },
+    appendAd(ad) {
+      const newAd = ad.find(i => !this.ads.includes(i))
+      if (newAd) {
+        this.ads.push(newAd)
+      }
     }
   }
 }

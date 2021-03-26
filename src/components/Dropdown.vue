@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <v-select
+    <v-combobox
       :value="value"
       :label="label"
       :hint="hint"
