@@ -2,7 +2,7 @@
   <v-container>
     <span class="text-h2">Fahrzeuge</span>
     <v-text-field
-      v-model="search"
+      v-model="searchTerm"
       prepend-icon="mdi-magnify"
       placeholder="Porsche Carrera"
       class="my-12"
@@ -16,7 +16,7 @@
       :items-per-page="20"
       :loading="loading"
       :mobile-breakpoint="0"
-      :search="search"
+      :search="searchTerm"
       class="elevation-5"
       @click:row="viewCar"
     />
@@ -38,7 +38,7 @@ export default {
   },
   data () {
     return {
-      search: '',
+      searchTerm: '',
       headers: [
         {
           text: 'Marke',
