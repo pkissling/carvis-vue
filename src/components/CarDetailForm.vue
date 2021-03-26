@@ -84,18 +84,17 @@
             <TextField
               v-model="car.horsePower"
               type="number"
-              label="Leistung in PS"
+              label="Leistung"
               suffix="PS"
               required
-              @input="psChanged"
             />
             <TextField
-              v-model="kw"
+              :value="kilowatts"
               type="number"
-              label="Leistung in KW"
+              label="Leistung"
               suffix="KW"
               required
-              @input="kwChanged"
+              @input="kilowattsChanged"
             />
           </v-row>
 
@@ -242,7 +241,6 @@ export default {
     return {
       showCarDeletionModal: false,
       valid: true,
-      kw: null,
       options: {
         colors: [
           "Weiß",
@@ -284,6 +282,9 @@ export default {
     },
     deleteModalSubject () {
       return `${this.car.brand} ${this.car.type}`
+    },
+    kilowatts() {
+      return this.car.horsePower ? Math.round(this.car.horsePower * 0.73549875) : null
     }
   },
   methods: {
@@ -301,13 +302,7 @@ export default {
       carService.deleteCar(this.car)
         .then(() => this.$router.push({ path: '/' }))
     },
-    psChanged(ps) {
-      if (!ps) {
-        return
-      }
-      this.kw = Math.round(ps * 0.73549875)
-    },
-    kwChanged(kw) {
+    kilowattsChanged(kw) {
       if (!kw) {
         this.car.horsePower = null
       }

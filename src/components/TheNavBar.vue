@@ -23,12 +23,13 @@
     >
       Login
     </v-btn>
-    <v-btn v-else
-           dark
-           elevation="2"
-           :loading="$auth.loading"
-           color="accent"
-           @click="logout"
+    <v-btn
+      v-else
+      dark
+      elevation="2"
+      :loading="$auth.loading"
+      color="accent"
+      @click="logout"
     >
       Logout
     </v-btn>
