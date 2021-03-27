@@ -10,11 +10,14 @@ const routes = [
   {
     path: '/',
     component: CarsPage,
-    beforeEnter: authGuard
   },
   {
     path: '/add',
     component: () => import('../pages/CreateCarPage.vue')
+  },
+  {
+    path: '/forbidden',
+    component: () => import('../pages/ForbiddenPage.vue'),
   },
   {
     path: '/:carId',
@@ -41,7 +44,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  authGuard(to, from, next)
+  if (to.path === '/forbidden') next()
+  else authGuard(to, from, next)
 })
 
 export default router

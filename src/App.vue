@@ -2,6 +2,7 @@
   <v-app>
     <TheNavBar />
     <v-main>
+      <div class="spacer" />
       <router-view />
       <Snackbar />
     </v-main>
@@ -19,3 +20,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.spacer {
+  padding-top: 50px;
+}
+</style>

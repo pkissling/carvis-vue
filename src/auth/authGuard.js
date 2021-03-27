@@ -1,4 +1,6 @@
+import router from "../router";
 import { getAuthInstance } from "./index";
+import userService from '../service/user-service'
 
 export default (to, from, next) => {
   const authService = getAuthInstance();
@@ -6,7 +8,11 @@ export default (to, from, next) => {
   const fn = () => {
     // If the user is authenticated, continue with the route
     if (authService.isAuthenticated) {
-      return next();
+      if (userService.isUser() || userService.isAdmin()) {
+        return next();
+      } else {
+        return next({ path: '/forbidden' })
+      }
     }
 
     // Otherwise, log in
