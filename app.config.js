@@ -10,3 +10,5 @@ export const appsyncRegion = 'eu-west-1'
 
 export const auth0Domain = 'carvis.eu.auth0.com'
 export const auth0ClientId = 'ukQnXHJoRrZwGf85Uh4Jpk8V932GsfKt'
+ 
+halloo
