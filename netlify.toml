@@ -1,3 +1,6 @@
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
