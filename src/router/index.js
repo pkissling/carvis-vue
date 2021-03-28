@@ -12,7 +12,7 @@ const routes = [
     component: CarsPage,
   },
   {
-    path: '/add',
+    path: '/cars/add',
     component: () => import('../pages/CreateCarPage.vue')
   },
   {
@@ -20,7 +20,7 @@ const routes = [
     component: () => import('../pages/ForbiddenPage.vue'),
   },
   {
-    path: '/:carId',
+    path: '/cars/:carId',
     component: () => import('../pages/CarDetailPage.vue'),
     props: true
   }

@@ -111,10 +111,10 @@ export default {
   },
   methods: {
     viewCar (car) {
-      this.$router.push({ path: `/${car.id}`})
+      this.$router.push({ path: `/cars/${car.id}`})
     },
     createCar () {
-      this.$router.push({ path: '/add' })
+      this.$router.push({ path: '/cars/add' })
     },
     handleScroll (event) {
       var st = window.pageYOffset || document.documentElement.scrollTop
