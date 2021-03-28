@@ -1,6 +1,6 @@
 export const appsyncUrl = () => {
   if(process.env.NODE_ENV === 'development') {
-    return 'https://zwqrh673bfcljlo7pirkaqapdy.appsync-api.eu-west-1.amazonaws.com/graphql'
+    return 'https://fnh2bjixzbfafjf6v3xv3c25bq.appsync-api.eu-west-1.amazonaws.com/graphql'
   } else {
     return 'https://p5nldcfbbbhr3ejxiy7gxgy7yi.appsync-api.eu-west-1.amazonaws.com/graphql'
   }
