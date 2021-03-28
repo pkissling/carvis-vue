@@ -156,7 +156,6 @@
               label="Preis in Euro"
               type="number"
               suffix="Euro"
-              required
               outlined
             />
             <v-col />
