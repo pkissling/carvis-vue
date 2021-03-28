@@ -23,6 +23,10 @@ const routes = [
     path: '/cars/:carId',
     component: () => import('../pages/CarDetailPage.vue'),
     props: true
+  },
+  {
+    path: '*',
+    component: () => import('../pages/NotFoundPage.vue'),
   }
 ]
 
