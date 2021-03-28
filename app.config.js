@@ -8,5 +8,5 @@ export const appsyncUrl = () => {
 
 export const appsyncRegion = 'eu-west-1'
 
-export const auth0Domain = 'blumenerd.eu.auth0.com'
-export const auth0ClientId = 'S2yHjIXzCcEGctf6EZpiaXFBNCEc8Hgp'
+export const auth0Domain = 'carvis.eu.auth0.com'
+export const auth0ClientId = 'ukQnXHJoRrZwGf85Uh4Jpk8V932GsfKt'
