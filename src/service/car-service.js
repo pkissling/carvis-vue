@@ -3,7 +3,6 @@ import UpdateCar from '../apollo/mutations/UpdateCar'
 import DeleteCar from '../apollo/mutations/DeleteCar'
 import ListCars from '../apollo/queries/ListCars'
 import { apolloClient } from '../apollo'
-import { getAuthInstance } from "../auth";
 import userService from '../service/user-service'
 
 export default class CarService {
@@ -28,7 +27,7 @@ export default class CarService {
           // add optimistic response to data
           data.listCars.items = [...data.listCars.items, createCar.createCar]
         } else {
-          // replace actual response with optimistic response
+          // replace with optimistic response with actual response
           data.listCars.items = data.listCars.items.filter(car => !car.id.startsWith('optimistic'))
           data.listCars.items = [...data.listCars.items, createCar.createCar]
         }

@@ -4,20 +4,12 @@ export default class UserService {
 
   static getUsername() {
     const user = this.getUser()
-    if (!user) {
-      return undefined
-    }
-
-    return user.sub
+    return user ? user.sub : undefined
   }
 
   static getName() {
     const user = this.getUser()
-    if (!user) {
-      return undefined
-    }
-
-    return user.name
+    return user ? user.name : undefined
   }
 
   static isAdmin() {
@@ -33,16 +25,16 @@ export default class UserService {
   }
 
   static hasRole(requiredRole) {
+    if (!requiredRole) {
+      return false
+    }
+
     const user = this.getUser()
     if (!user) {
       return false
     }
 
-    const roles = user['https://carvis.cloud/roles']
-    if (!roles) {
-      return false
-    }
-
+    const roles = user['https://carvis.cloud/roles'] || []
     return roles.some(role => role === requiredRole)
   }
 }
