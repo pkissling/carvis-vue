@@ -23,7 +23,7 @@
       :loading="$auth.loading"
       dark
       elevation="2"
-      color="primary"
+      color="accent"
       @click="login"
     >
       Login
