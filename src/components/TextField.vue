@@ -10,7 +10,7 @@
       :counter="counter"
       dense
       outlined
-      @input="$emit('input', $event)"
+      @input="onInput"
     />
   </v-col>
 </template>
@@ -54,6 +54,15 @@ export default {
   computed: {
     rules () {
       return this.required ? [ v => !!v || 'Pflichtfeld' ] : []
+    }
+  },
+  methods: {
+    onInput (input) {
+      if (input === '') {
+        this.$emit('input', null)
+      } else {
+        this.$emit('input', input)
+      }
     }
   }
 }
