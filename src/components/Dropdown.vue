@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <v-combobox
+    <v-autocomplete
       :value="value"
       :label="label"
       :hint="hint"
@@ -8,6 +8,7 @@
       :items="items"
       dense
       outlined
+      auto-select-first
       @input="$emit('input', $event)"
     />
   </v-col>
