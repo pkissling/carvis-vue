@@ -13,6 +13,7 @@ import GetCar from '../apollo/queries/GetCar'
 import CarDetailForm from '../components/CarDetailForm'
 import carService from '../service/car-service'
 import userService from '../service/user-service'
+import router from '../router'
 
 export default {
   components: {
@@ -27,7 +28,14 @@ export default {
   apollo: {
     car: {
       query: () => GetCar,
-      update: data => data.getCar,
+      update: data => {
+        const car = data.getCar
+        if (car) {
+          return car
+        } else {
+          router.push({ name: 'NotFound' })
+        }
+      },
       variables () {
         return {
           id: this.carId,
