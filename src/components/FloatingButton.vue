@@ -29,20 +29,29 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    },
-    show: {
-      type: Boolean,
-      default: true
     }
   },
   data () {
     return {
-      expanded: false
+      expanded: false,
+      show: true,
+      lastScrollTop: 0
     }
+  },
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     createClicked () {
       this.$emit('create-clicked')
+    },
+    handleScroll (event) {
+      var st = window.pageYOffset || document.documentElement.scrollTop
+      this.show = st > this.lastScrollTop
+      this.lastScrollTop = st <= 0 ? 0 : st
     }
   }
 }
