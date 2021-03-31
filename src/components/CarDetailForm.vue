@@ -99,19 +99,6 @@
           </v-row>
 
           <v-row>
-            <TextField
-              v-model="car.countryOfOrigin"
-              label="Auslieferungsland"
-            />
-            <TextField
-              v-model="car.mileage"
-              label="Laufleistung"
-              type="number"
-              suffix="km"
-            />
-          </v-row>
-
-          <v-row>
             <Dropdown
               v-model="car.colorExterior"
               :items="options.colors"
@@ -131,22 +118,24 @@
               label="Innenfarbe"
               required
             />
-            <TextField
-              v-model="car.vin"
-              label="Fahrgestellnummer"
-            />
-          </v-row>
-
-          <v-row>
-            <TextField
-              v-model="car.additionalEquipment"
-              label="Mehr-Ausstattung"
-            />
             <Dropdown
               v-model="car.condition"
               :items="options.conditions"
               label="Zustand"
               required
+            />
+          </v-row>
+
+          <v-row>
+            <TextField
+              v-model="car.countryOfOrigin"
+              label="Auslieferungsland"
+            />
+            <TextField
+              v-model="car.mileage"
+              label="Laufleistung"
+              type="number"
+              suffix="km"
             />
           </v-row>
 
@@ -158,7 +147,17 @@
               suffix="Euro"
               outlined
             />
-            <v-col />
+            <TextField
+              v-model="car.vin"
+              label="Fahrgestellnummer"
+            />
+          </v-row>
+
+          <v-row>
+            <TextField
+              v-model="car.additionalEquipment"
+              label="Mehr-Ausstattung"
+            />
           </v-row>
 
           <v-row>
