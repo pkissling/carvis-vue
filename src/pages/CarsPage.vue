@@ -72,7 +72,7 @@ export default {
           value: 'ownerName',
         },
         {
-          text: 'Zuletzt geändert',
+          text: 'Zuletzt aktualisiert',
           sortable: false,
           value: 'lastChanged'
         }
