@@ -192,6 +192,14 @@
               outlined
             />
           </v-row>
+
+          <v-row>
+            <v-col>
+              <ImageUpload
+                v-model="car.images"
+              />
+            </v-col>
+          </v-row>
         </v-card-text>
 
         <v-flex v-if="!readOnly">
@@ -245,13 +253,15 @@ import DeleteModal from '../modals/DeleteModal'
 import TextField from './TextField'
 import Dropdown from './Dropdown'
 import TextArea from './TextArea'
+import ImageUpload from './ImageUpload'
 
 export default {
   components: {
     DeleteModal,
     TextField,
     Dropdown,
-    TextArea
+    TextArea,
+    ImageUpload
   },
   props: {
     car: {
@@ -261,6 +271,7 @@ export default {
   },
   data: () => {
     return {
+      images: [],
       showCarDeletionModal: false,
       valid: true,
       ads: [],
