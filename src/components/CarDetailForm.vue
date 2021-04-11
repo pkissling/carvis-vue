@@ -19,9 +19,9 @@
       >
         <v-card-text>
           <v-row>
-            <ImagePreview
+            <CarPreview
               v-model="car.images"
-              class="imagePreview"
+              class="carPreview"
             />
           </v-row>
 
@@ -261,7 +261,7 @@ import TextField from './TextField'
 import Dropdown from './Dropdown'
 import TextArea from './TextArea'
 import ImageUpload from './ImageUpload'
-import ImagePreview from './ImagePreview'
+import CarPreview from './CarPreview'
 
 export default {
   components: {
@@ -270,7 +270,7 @@ export default {
     Dropdown,
     TextArea,
     ImageUpload,
-    ImagePreview
+    CarPreview
   },
   props: {
     car: {
@@ -389,7 +389,7 @@ export default {
   padding-bottom: 0px;
 }
 
-.imagePreview {
+.carPreview {
   padding-bottom: 20px
 }
 </style>

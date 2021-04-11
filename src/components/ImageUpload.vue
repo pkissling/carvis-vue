@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-slide-group
-      v-model="selectedImage"
       class="pa-4"
       show-arrows
       center-active
@@ -30,6 +29,18 @@
                 class="text-right pa-2"
                 v-on="on"
               >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="primary"
+                    />
+                  </v-row>
+                </template>
                 <v-btn
                   v-if="index === 0"
                   icon
@@ -110,10 +121,8 @@ export default {
   },
   data () {
     return {
-      loading: false,
       images: [],
       imagePreview: null,
-      selectedImage: null
     }
   },
   async created () {
@@ -121,10 +130,8 @@ export default {
       return
     }
 
-    this.loading = true
     this.enrichImages(this.value)
       .then(images => this.images = images)
-      .finally(() => this.loading = false)
   },
   methods: {
     async onChange (files) {
@@ -133,7 +140,6 @@ export default {
         return
       }
 
-      this.loading = true
       const uploadPromises = files.map(file => imageService.uploadImage(file))
       Promise.all(uploadPromises)
         .then(imageIds => {
@@ -143,7 +149,6 @@ export default {
             .then(images => this.images.push(...images))
 
         })
-        .finally(() => this.loading = false)
     },
     async enrichImages(imageIds) {
       return Promise.all(imageIds.map(id => this.enrichImageSrc(id)))
@@ -156,21 +161,16 @@ export default {
       this.images = this.images.filter(image => image !== deleteImage)
       this.$emit('input', this.images.map(image => image.id));
     },
-    previewImage(image) {
-      this.imagePreview = image
-    },
     useImageAsThumbnail(image) {
       this.images = [image, ...this.images.filter(i => i !== image)]
     },
     imageUp(image) {
       const from = this.images.indexOf(image)
       this.moveImage(image, from, from - 1)
-      this.selectedImage--
     },
     imageDown(image) {
       const from = this.images.indexOf(image)
       this.moveImage(image, from, from + 1)
-      this.selectedImage++
     },
     moveImage(image, from, to) {
       this.images.splice(from, 1);
@@ -179,11 +179,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.img {
-  margin: 10px;
-}
-</style>
-
-

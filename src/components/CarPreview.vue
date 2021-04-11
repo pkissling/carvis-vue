@@ -3,7 +3,6 @@
     <v-carousel
       cycle
       hide-delimiter-background
-      show-arrows-on-hover
     >
       <v-carousel-item
         v-for="(image, i) in images"
@@ -21,7 +20,7 @@
             >
               <v-progress-circular
                 indeterminate
-                color="grey lighten-5"
+                color="primary"
               />
             </v-row>
           </template>
@@ -61,6 +60,7 @@ export default {
   },
   async created () {
 
+    this.images = this.value
     if (!this.value) {
       this.images = []
     }
