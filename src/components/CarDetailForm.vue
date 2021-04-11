@@ -201,9 +201,11 @@
           </v-row>
 
           <v-row>
-            <ImageUpload
-              v-model="car.images"
-            />
+            <v-col>
+              <ImageUpload
+                v-model="car.images"
+              />
+            </v-col>
           </v-row>
         </v-card-text>
 
@@ -278,7 +280,6 @@ export default {
   },
   data: () => {
     return {
-      images: [],
       showCarDeletionModal: false,
       valid: true,
       ads: [],
