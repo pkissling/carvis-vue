@@ -1,43 +1,23 @@
 <template>
-  <v-file-input
-    multiple
-    small-chips
-    clearable
-    prepend-icon="mdi-camera"
-    truncate-length="15"
-    accept="image/*"
-    outlined
-    :value="uploadedImages"
-    :loading="loading"
-    @change="onChange"
-  />
+  <v-col>
+    <v-file-input
+      multiple
+      small-chips
+      counter
+      clearable
+      truncate-length="15"
+      accept="image/*"
+      outlined
+      prepend-icon=""
+      label="Fahrzeugbilder"
+      :value="uploadedImages"
+      :loading="loading"
+      @change="onChange"
+    />
+  </v-col>
 </template>
 
 <script>
-
-//  <template v-slot:selection="{ index, name }">
-    //   <v-img
-    //     :src="src(index, name)"
-    //     :lazy-src="layzSrc(index)"
-    //     max-width="100"
-    //     max-height="100"
-    //   >
-    //     <template
-    //       v-slot:placeholder
-    //     >
-    //       <v-row
-    //         class="fill-height ma-0"
-    //         align="center"
-    //         justify="center"
-    //       >
-    //         <v-progress-circular
-    //           indeterminate
-    //           color="grey lighten-5"
-    //         />
-    //       </v-row>
-    //     </template>
-    //   </v-img>
-    // </template>
 import imageService from '../service/image-service'
 
 export default {
@@ -63,8 +43,9 @@ export default {
       this.loading = true
       const uploadPromises = files.map(file => imageService.uploadImage(file))
       Promise.all(uploadPromises)
-        .then(ids => {
-          this.$emit('input', ids.concat(this.value))
+        .then(imageIds => {
+          const input = this.value ? [ ...imageIds, ...this.value] : imageIds
+          this.$emit('input', input)
           this.uploadedImages.push(...files)
         })
         .finally(() => this.loading = false)

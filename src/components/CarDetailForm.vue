@@ -19,6 +19,13 @@
       >
         <v-card-text>
           <v-row>
+            <ImagePreview
+              v-model="car.images"
+              class="imagePreview"
+            />
+          </v-row>
+
+          <v-row>
             <TextField
               v-model="car.brand"
               label="Fahrzeughersteller"
@@ -194,11 +201,9 @@
           </v-row>
 
           <v-row>
-            <v-col>
-              <ImageUpload
-                v-model="car.images"
-              />
-            </v-col>
+            <ImageUpload
+              v-model="car.images"
+            />
           </v-row>
         </v-card-text>
 
@@ -254,6 +259,7 @@ import TextField from './TextField'
 import Dropdown from './Dropdown'
 import TextArea from './TextArea'
 import ImageUpload from './ImageUpload'
+import ImagePreview from './ImagePreview'
 
 export default {
   components: {
@@ -261,7 +267,8 @@ export default {
     TextField,
     Dropdown,
     TextArea,
-    ImageUpload
+    ImageUpload,
+    ImagePreview
   },
   props: {
     car: {
@@ -379,5 +386,9 @@ export default {
 .col {
   padding-top: 0px;
   padding-bottom: 0px;
+}
+
+.imagePreview {
+  padding-bottom: 20px
 }
 </style>

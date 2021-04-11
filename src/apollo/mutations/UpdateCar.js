@@ -25,6 +25,7 @@ mutation updateCar($updatecarinput: UpdateCarInput!) {
     description
     price
     ads
+    images
     ownerUsername
     ownerName
     createdAt
