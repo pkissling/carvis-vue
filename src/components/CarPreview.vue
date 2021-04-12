@@ -16,15 +16,26 @@
         <v-img
           contain
           :src="image.src"
+          @click.stop="imagePreview=image"
         />
       </v-carousel-item>
     </v-carousel>
+
+    <ImagePreviewModal
+      v-if="imagePreview"
+      :image="imagePreview"
+      @cancel="imagePreview = null"
+    />
   </v-col>
 </template>
 <script>
 import imageService from '../service/image-service'
+import ImagePreviewModal from '../modals/ImagePreviewModal.vue'
 
 export default {
+  components: {
+    ImagePreviewModal
+  },
   props: {
     value: {
       type: Array,
@@ -34,7 +45,8 @@ export default {
   data () {
     return {
       images: [],
-      loading: false
+      loading: false,
+      imagePreview: null
     }
   },
   watch: {
