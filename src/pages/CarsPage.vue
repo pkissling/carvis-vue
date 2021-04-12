@@ -21,30 +21,10 @@
       @click:row="viewCar"
     >
       <template v-slot:item.preview="{ item }">
-        <v-avatar color="grey lighten-1">
-          <v-img
-            v-if="item.preview"
-            :src="previewImages.find(img => img.id === item.preview)"
-          >
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                />
-              </v-row>
-            </template>
-          </v-img>
-          <v-icon v-else
-                  color="primary"
-          >
-            mdi-car
-          </v-icon>
-        </v-avatar>
+        <CarThumbnail
+          :car-thumbnails="carThumbnails"
+          :image-id="item.preview"
+        />
       </template>
     </v-data-table>
 
@@ -59,16 +39,18 @@
 import ListCars from '../apollo/queries/ListCars'
 import imageService from '../service/image-service'
 import FloatingButton from '../components/FloatingButton'
+import CarThumbnail from '../components/CarThumbnail'
 import { relativeTimeDifference } from '../utilities/time'
 
 export default {
   components: {
+    CarThumbnail,
     FloatingButton
   },
   data () {
     return {
       searchTerm: '',
-      previewImages: [],
+      carThumbnails: [],
       headers: [
         {
           sortable: false,
@@ -120,8 +102,8 @@ export default {
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
           const preview = car.images ? car.images[0] : null
-          if (preview && !this.previewImages.map(p => p.id).includes(preview)) {
-            this.previewImages.push( { id: preview, loading: true, src: null })
+          if (preview && !this.carThumbnails.map(p => p.id).includes(preview)) {
+            this.carThumbnails.push( { id: preview, loading: true, src: null })
           }
           return {
             preview,
@@ -133,10 +115,10 @@ export default {
     }
   },
   watch: {
-    previewImages(previewImages) {
-      previewImages.filter(preview => preview.loading)
-        .map(preview => preview.id)
-        .map(previewImageId => this.resolveImageUrl(previewImageId))
+    carThumbnails(carThumbnails) {
+      carThumbnails.filter(thumbnail => thumbnail.loading)
+        .map(thumbnail => thumbnail.id)
+        .map(thumbnailImageId => this.resolveImageUrl(thumbnailImageId))
     }
   },
   methods: {
@@ -146,10 +128,10 @@ export default {
     createCar () {
       this.$router.push({ path: '/cars/add' })
     },
-    async resolveImageUrl (imageId) {
-      return imageService.fetchImageUrl(imageId, 50)
-        .then(url => { return { id: imageId, src: url, loading: false }})
-        .then(resolvedImage => this.previewImages = [ resolvedImage, ...this.previewImages.filter(img => img.id !== resolvedImage.id)])
+    async resolveImageUrl (thumbnailImageId) {
+      return imageService.fetchImageUrl(thumbnailImageId, 50)
+        .then(url => { return { id: thumbnailImageId, src: url, loading: false }})
+        .then(thumbnail => this.carThumbnails = [ thumbnail, ...this.carThumbnails.filter(img => img.id !== thumbnail.id)])
     },
   },
   apollo: {
