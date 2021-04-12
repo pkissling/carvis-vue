@@ -147,7 +147,6 @@ export default {
           this.$emit('input', input)
           this.enrichImages(imageIds)
             .then(images => this.images.push(...images))
-
         })
     },
     async enrichImages(imageIds) {
@@ -163,6 +162,7 @@ export default {
     },
     useImageAsThumbnail(image) {
       this.images = [image, ...this.images.filter(i => i !== image)]
+      this.$emit('input', this.images.map(image => image.id));
     },
     imageUp(image) {
       const from = this.images.indexOf(image)
@@ -175,6 +175,7 @@ export default {
     moveImage(image, from, to) {
       this.images.splice(from, 1);
       this.images.splice(to, 0, image)
+      this.$emit('input', this.images.map(image => image.id));
     }
   }
 }

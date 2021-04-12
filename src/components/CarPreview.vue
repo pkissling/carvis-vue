@@ -1,30 +1,22 @@
 <template>
-  <v-col v-if="images.length > 0">
+  <v-col>
+    <v-skeleton-loader
+      v-if="loading"
+      type="image"
+    />
     <v-carousel
+      v-else
       cycle
       hide-delimiter-background
     >
       <v-carousel-item
-        v-for="(image, i) in images"
-        :key="i"
+        v-for="image in images"
+        :key="image.id"
       >
         <v-img
           contain
-          :src="image"
-        >
-          <template v-slot:placeholder>
-            <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
-              <v-progress-circular
-                indeterminate
-                color="primary"
-              />
-            </v-row>
-          </template>
-        </v-img>
+          :src="image.src"
+        />
       </v-carousel-item>
     </v-carousel>
   </v-col>
@@ -42,11 +34,7 @@ export default {
   data () {
     return {
       images: [],
-      attrs: {
-        class: 'mb-6',
-        boilerplate: true,
-        elevation: 2
-      }
+      loading: false
     }
   },
   watch: {
@@ -59,14 +47,21 @@ export default {
     }
   },
   async created () {
-
-    this.images = this.value
     if (!this.value) {
       this.images = []
+      return
     }
 
-    Promise.all(this.value.map(id => imageService.fetchImageUrl(id)))
-        .then(images => this.images = images)
+    this.loading = true
+    Promise.all(this.value.map(imageId => this.resolveImageUrl(imageId)))
+      .finally(() => this.loading = false)
+  },
+  methods: {
+    async resolveImageUrl (imageId) {
+      return imageService.fetchImageUrl(imageId)
+        .then(url => { return { id: imageId, src: url }})
+        .then(image => this.images = [ image, ...this.images.filter(img => img.id !== imageId)])
+    }
   }
 }
 </script>

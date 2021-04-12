@@ -136,7 +136,7 @@ export default {
   },
   apollo: {
     cars: {
-      query: () => ListCars,
+      query: ListCars,
       update: data => data.listCars ? data.listCars.items : [],
       prefetch: true
     }

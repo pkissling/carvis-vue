@@ -20,6 +20,7 @@ export default class ImageService {
   }
 
   static async fetchImageUrl(imageId, size) {
+    // TODO check size param everywhere!
     return fetchImageUrl(imageId, size)
   }
 }

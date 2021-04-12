@@ -2,6 +2,7 @@ import CreateCar from '../apollo/mutations/CreateCar'
 import UpdateCar from '../apollo/mutations/UpdateCar'
 import DeleteCar from '../apollo/mutations/DeleteCar'
 import ListCars from '../apollo/queries/ListCars'
+import GetCar from '../apollo/queries/GetCar'
 import { apolloClient } from '../apollo'
 import userService from '../service/user-service'
 
@@ -94,6 +95,23 @@ export default class CarService {
           id: car.id,
           __typename: "Car"
         }
+      }
+    })
+  }
+
+  static async getCar(carId) {
+    if (!carId) {
+      throw new Error('carId not provided')
+    }
+    return apolloClient.query({
+      query: GetCar,
+      variables: { id: carId },
+      prefetch: true
+    }).then(data => {
+      if (data.data && data.data.getCar) {
+        return data.data.getCar
+      } else {
+        throw new Error('car with carId not found')
       }
     })
   }
