@@ -1,12 +1,14 @@
 <template>
-  <v-row
-    justify="center"
-  >
+  <v-row justify="center">
     <v-dialog
       v-model="dialog"
-      @click:outside="onClickOutside"
+      max-width="80vh"
+      max-height="80vh"
+      @input="$emit('cancel')"
     >
       <v-img
+        max-width="80vh"
+        max-height="80vh"
         contain
         :src="src"
         :lazy-src="image.src"
