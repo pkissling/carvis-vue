@@ -11,9 +11,8 @@
         v-slot="{ active, toggle }"
       >
         <v-card
-          color="grey lighten-1"
           class="ma-4"
-          height="200"
+          elevation="7"
           width="200"
           @click="toggle"
         >
@@ -21,12 +20,15 @@
             top
           >
             <template v-slot:activator="{ on, attrs }">
+              <v-divider />
+              <v-card-title>
+                {{ index === 0 ? 'Titelbild' : 'Galleriebild ' + index }}
+              </v-card-title>
               <v-img
+                width="200"
                 height="200"
-                max-width="200"
                 :src="image.src"
                 v-bind="attrs"
-                class="text-right pa-2"
                 v-on="on"
               >
                 <template v-slot:placeholder>
@@ -41,13 +43,6 @@
                     />
                   </v-row>
                 </template>
-                <v-btn
-                  v-if="index === 0"
-                  icon
-                  color="primary"
-                >
-                  <v-icon>mdi-star</v-icon>
-                </v-btn>
               </v-img>
             </template>
 
