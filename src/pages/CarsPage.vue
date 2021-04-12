@@ -19,7 +19,34 @@
       :search="searchTerm"
       class="elevation-5"
       @click:row="viewCar"
-    />
+    >
+      <template v-slot:item.preview="{ item }">
+        <v-avatar color="grey lighten-1">
+          <v-img
+            v-if="item.preview"
+            :src="previewImages.find(img => img.id === item.preview)"
+          >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                />
+              </v-row>
+            </template>
+          </v-img>
+          <v-icon v-else
+                  color="primary"
+          >
+            mdi-car
+          </v-icon>
+        </v-avatar>
+      </template>
+    </v-data-table>
 
     <FloatingButton
       :loading="loading"
@@ -30,6 +57,7 @@
 
 <script>
 import ListCars from '../apollo/queries/ListCars'
+import imageService from '../service/image-service'
 import FloatingButton from '../components/FloatingButton'
 import { relativeTimeDifference } from '../utilities/time'
 
@@ -40,10 +68,14 @@ export default {
   data () {
     return {
       searchTerm: '',
+      previewImages: [],
       headers: [
         {
+          sortable: false,
+          value: 'preview'
+        },
+        {
           text: 'Marke',
-          align: 'start',
           value: 'brand',
         },
         {
@@ -53,22 +85,18 @@ export default {
         },
         {
           text: 'Modellreihe',
-          align: 'start',
           value: 'modelSeries',
         },
         {
           text: 'Modelljahr',
-          align: 'start',
           value: 'modelYear',
         },
         {
           text: 'Außenfarbe',
-          align: 'start',
           value: 'colorExterior',
         },
         {
           text: 'Erstellt durch',
-          align: 'start',
           value: 'ownerName',
         },
         {
@@ -91,12 +119,24 @@ export default {
       return this.cars
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
+          const preview = car.images ? car.images[0] : null
+          if (preview && !this.previewImages.map(p => p.id).includes(preview)) {
+            this.previewImages.push( { id: preview, loading: true, src: null })
+          }
           return {
+            preview,
             lastChanged,
             ...car
           }
         })
         .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+    }
+  },
+  watch: {
+    previewImages(previewImages) {
+      previewImages.filter(preview => preview.loading)
+        .map(preview => preview.id)
+        .map(previewImageId => this.resolveImageUrl(previewImageId))
     }
   },
   methods: {
@@ -105,7 +145,12 @@ export default {
     },
     createCar () {
       this.$router.push({ path: '/cars/add' })
-    }
+    },
+    async resolveImageUrl (imageId) {
+      return imageService.fetchImageUrl(imageId, 50)
+        .then(url => { return { id: imageId, src: url, loading: false }})
+        .then(resolvedImage => this.previewImages = [ resolvedImage, ...this.previewImages.filter(img => img.id !== resolvedImage.id)])
+    },
   },
   apollo: {
     cars: {
