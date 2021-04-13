@@ -104,7 +104,7 @@
       </v-slide-item>
     </v-slide-group>
 
-    <ImagePreviewModal
+    <FullscreenImageModal
       v-if="imagePreview"
       :image="imagePreview"
       @cancel="onCancel"
@@ -114,11 +114,11 @@
 
 <script>
 import imageService from '../service/image-service'
-import ImagePreviewModal from '../modals/ImagePreviewModal'
+import FullscreenImageModal from '../modals/FullscreenImageModal'
 
 export default {
   components: {
-    ImagePreviewModal
+    FullscreenImageModal
   },
   props: {
     value: {

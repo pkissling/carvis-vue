@@ -12,15 +12,19 @@
       />
 
       <CarDataCard
+        id="car-data-card"
         v-model="car"
       />
 
       <ImageUploadCard
+        v-if="!readOnly"
         v-model="car.images"
       />
 
       <ActionsCard
+        v-if="!readOnly"
         :car-id="car.id"
+        @delete="showCarDeletionModal = true"
       />
 
       <DeleteModal
@@ -84,7 +88,7 @@ export default {
       if (this.valid) {
         this.$emit('submit', this.car)
       } else {
-        this.$vuetify.goTo(0)
+        this.$vuetify.goTo('#car-data-card')
       }
     },
     deleteCar() {

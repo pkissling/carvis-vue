@@ -5,8 +5,8 @@
   >
     <v-dialog
       v-model="dialog"
-      persistent
       max-width="400"
+      @input="cancel"
     >
       <v-card>
         <v-card-title class="headline">

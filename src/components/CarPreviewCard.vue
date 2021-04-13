@@ -1,6 +1,6 @@
 <template>
   <v-card
-    v-if="value"
+    v-if="value && value.length > 0"
     :loading="loading"
     class="my-12"
   >
@@ -22,14 +22,13 @@
           :key="image.id"
         >
           <v-img
-            contain
             :src="image.src"
             @click.stop="imagePreview=image"
           />
         </v-carousel-item>
       </v-carousel>
 
-      <ImagePreviewModal
+      <FullscreenImageModal
         v-if="imagePreview"
         :image="imagePreview"
         @cancel="imagePreview = null"
@@ -39,11 +38,11 @@
 </template>
 <script>
 import imageService from '../service/image-service'
-import ImagePreviewModal from '../modals/ImagePreviewModal.vue'
+import FullscreenImageModal from '../modals/FullscreenImageModal.vue'
 
 export default {
   components: {
-    ImagePreviewModal
+    FullscreenImageModal
   },
   props: {
     value: {
@@ -54,7 +53,7 @@ export default {
   data () {
     return {
       images: [],
-      loading: false,
+      loading: false, // TODO
       imagePreview: null
     }
   },

@@ -5,7 +5,7 @@
     <template slot="progress">
       <v-progress-linear indeterminate />
     </template>
-    <v-card-title class="text-h4">
+    <v-card-title class="text-h4 title">
       Fahrzeugdaten
     </v-card-title>
 
@@ -278,5 +278,9 @@ export default {
 .col {
   padding-top: 0px;
   padding-bottom: 0px;
+}
+
+.title {
+  margin-bottom: 16px;
 }
 </style>

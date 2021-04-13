@@ -19,7 +19,7 @@
         v-if="carId"
         color="error"
         text
-        @click="showCarDeletionModal = true"
+        @click="$emit('delete')"
       >
         Löschen
       </v-btn>
