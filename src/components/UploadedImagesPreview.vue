@@ -61,45 +61,14 @@
             </v-btn>
           </v-card-actions>
           <v-expand-transition>
-            <div v-show="editImage">
-              <v-divider />
-
-              <v-list>
-                <v-list-item
-                  v-if="index !== 0"
-                  @click="useImageAsThumbnail(image)"
-                >
-                  <v-list-item-icon>
-                    <v-icon>mdi-star</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-title>Als Titelbild</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="deleteImage(image)">
-                  <v-list-item-icon>
-                    <v-icon>mdi-delete</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-title>Löschen</v-list-item-title>
-                </v-list-item>
-                <v-list-item
-                  v-if="index > 1"
-                  @click="imageUp(image)"
-                >
-                  <v-list-item-icon>
-                    <v-icon>mdi-arrow-left</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-title>Nach vorne</v-list-item-title>
-                </v-list-item>
-                <v-list-item
-                  v-if="index !== 0 && index !== images.length - 1"
-                  @click="imageDown(image)"
-                >
-                  <v-list-item-icon>
-                    <v-icon>mdi-arrow-right</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-title>Nach hinten</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </div>
+            <EditImageExpansionSlot
+              v-show="editImage"
+              :index="index"
+              :image="image"
+              :images="value"
+              :image-count="value.length"
+              @input="onEditImage"
+            />
           </v-expand-transition>
         </v-card>
       </v-slide-item>
@@ -114,12 +83,13 @@
 </template>
 
 <script>
-import imageService from '../service/image-service'
 import FullscreenImageModal from '../modals/FullscreenImageModal'
+import EditImageExpansionSlot from './EditImageExpansionSlot'
 
 export default {
   components: {
-    FullscreenImageModal
+    FullscreenImageModal,
+    EditImageExpansionSlot
   },
   props: {
     value: {
@@ -129,7 +99,6 @@ export default {
   },
   data () {
     return {
-      images: [],
       imagePreview: null,
       editImage: false,
       selectedImageIndex: -1
@@ -140,39 +109,11 @@ export default {
       if (index === -1) {
         this.imagePreview = null
       } else {
-        this.imagePreview = this.images[index]
+        this.imagePreview = this.value[index]
       }
     },
   },
   methods: {
-    async enrichImages(imageIds) {
-      return Promise.all(imageIds.map(id => this.enrichImageSrc(id)))
-    },
-    async enrichImageSrc(imageId) {
-      return imageService.fetchImageUrl(imageId, 200)
-        .then(url => { return { id: imageId, src: url}})
-    },
-    deleteImage(deleteImage) {
-      this.images = this.images.filter(image => image !== deleteImage)
-      this.$emit('input', this.images.map(image => image.id));
-    },
-    useImageAsThumbnail(image) {
-      this.images = [image, ...this.images.filter(i => i !== image)]
-      this.$emit('input', this.images.map(image => image.id));
-    },
-    imageUp(image) {
-      const from = this.images.indexOf(image)
-      this.moveImage(image, from, from - 1)
-    },
-    imageDown(image) {
-      const from = this.images.indexOf(image)
-      this.moveImage(image, from, from + 1)
-    },
-    moveImage(image, from, to) {
-      this.images.splice(from, 1);
-      this.images.splice(to, 0, image)
-      this.$emit('input', this.images.map(image => image.id));
-    },
     toggleMenu(index) {
       if (this.editImage === -1) {
         this.editImage = index
@@ -183,6 +124,9 @@ export default {
     onCancel() {
       this.editImage = null
       this.selectedImageIndex = -1
+    },
+    onEditImage(images) {
+      this.$emit('input', images)
     }
   }
 }
