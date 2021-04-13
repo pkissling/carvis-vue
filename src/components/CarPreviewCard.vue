@@ -1,32 +1,41 @@
 <template>
-  <v-col>
-    <v-skeleton-loader
-      v-if="loading"
-      type="image"
-    />
-    <v-carousel
-      v-else
-      cycle
-      hide-delimiter-background
-    >
-      <v-carousel-item
-        v-for="image in images"
-        :key="image.id"
+  <v-card
+    v-if="value"
+    :loading="loading"
+    class="my-12"
+  >
+    <v-card-title class="text-h4">
+      Fahrzeugbilder
+    </v-card-title>
+    <v-col>
+      <v-skeleton-loader
+        v-if="loading"
+        type="image"
+      />
+      <v-carousel
+        v-else
+        cycle
+        hide-delimiter-background
       >
-        <v-img
-          contain
-          :src="image.src"
-          @click.stop="imagePreview=image"
-        />
-      </v-carousel-item>
-    </v-carousel>
+        <v-carousel-item
+          v-for="image in images"
+          :key="image.id"
+        >
+          <v-img
+            contain
+            :src="image.src"
+            @click.stop="imagePreview=image"
+          />
+        </v-carousel-item>
+      </v-carousel>
 
-    <ImagePreviewModal
-      v-if="imagePreview"
-      :image="imagePreview"
-      @cancel="imagePreview = null"
-    />
-  </v-col>
+      <ImagePreviewModal
+        v-if="imagePreview"
+        :image="imagePreview"
+        @cancel="imagePreview = null"
+      />
+    </v-col>
+  </v-card>
 </template>
 <script>
 import imageService from '../service/image-service'
