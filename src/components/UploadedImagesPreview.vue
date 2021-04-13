@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-slide-group
-      v-model="selectedImageIndex"
       class="pa-4"
       show-arrows
       center-active
@@ -9,7 +8,6 @@
       <v-slide-item
         v-for="(image, index) in value"
         :key="image.id"
-        v-slot="{ active, toggle }"
       >
         <v-card
           class="ma-4"
@@ -17,7 +15,10 @@
           width="200"
           outlined
         >
-          <div @click="toggle">
+          <div
+            class="clickable"
+            @click.prevent="fullScreenImage = image"
+          >
             <v-card-title>
               {{ index === 0 ? 'Titelbild' : 'Galleriebild ' + index }}
             </v-card-title>
@@ -75,9 +76,9 @@
     </v-slide-group>
 
     <FullscreenImageModal
-      v-if="imagePreview"
-      :image="imagePreview"
-      @cancel="onCancel"
+      v-if="fullScreenImage"
+      :image="fullScreenImage"
+      @cancel="fullScreenImage = null"
     />
   </div>
 </template>
@@ -99,35 +100,20 @@ export default {
   },
   data () {
     return {
-      imagePreview: null,
+      fullScreenImage: null,
       editImage: false,
-      selectedImageIndex: -1
     }
   },
-  watch: {
-    selectedImageIndex(index) {
-      if (index === -1) {
-        this.imagePreview = null
-      } else {
-        this.imagePreview = this.value[index]
-      }
-    },
-  },
   methods: {
-    toggleMenu(index) {
-      if (this.editImage === -1) {
-        this.editImage = index
-      } else {
-        this.editImage = -1
-      }
-    },
-    onCancel() {
-      this.editImage = null
-      this.selectedImageIndex = -1
-    },
     onEditImage(images) {
       this.$emit('input', images)
     }
   }
 }
 </script>
+
+<style scoped>
+.clickable {
+  cursor: pointer
+}
+</style>

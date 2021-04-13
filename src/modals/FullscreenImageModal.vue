@@ -47,7 +47,7 @@ export default {
       src: null
     }
   },
-  async created() {
+  async created () {
     imageService.fetchImageUrl(this.image.id)
       .then(url => this.src = url)
   },

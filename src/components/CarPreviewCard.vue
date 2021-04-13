@@ -22,6 +22,7 @@
           :key="image.id"
         >
           <v-img
+            class="clickable"
             :src="image.src"
             @click.stop="imagePreview=image"
           />
@@ -85,3 +86,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.clickable {
+  cursor: pointer
+}
+</style>
