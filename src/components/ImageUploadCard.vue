@@ -8,18 +8,20 @@
     </v-card-title>
     <v-card-text>
       <UploadedImagesPreview
-        v-model="value"
+        v-model="images"
       />
       <v-row>
         <v-col>
           <v-file-input
             :value="images"
+            accept="image/*"
             multiple
             outlined
-            clearable
-            label="Bilder hinzufügen..."
+            :clearable="clearable"
+            label="Fahrzeugbilder"
+            :placeholder="placeholder"
             truncate-length="10"
-            @change="onFileUpload"
+            @change="onImageUpload"
           />
         </v-col>
       </v-row>
@@ -44,18 +46,47 @@ export default {
   data () {
     return {
       images: [],
-      loading: false
+      imageUploadQueue: [],
+      loading: false,
+      clearable: false
+    }
+  },
+  computed: {
+    placeholder () {
+      return this.images ? 'Fahrzeugbilder hinzufügen...' : 'Weitere Fahrzeugbilder hinzufügen...'
     }
   },
   methods: {
-    async onFileUpload(files) {
-      this.loading = true
-
-      // 1 populate to internal with lazy-src
-      // 2 start upload
-      // on finish, replace internal image with url & emit input
-      Promise.all(files.map(file => imageService.uploadImage(file)))
-        .then(ids => this.$emit('input', [...this.value, ...ids]))
+    async onImageUpload(images) {
+      images.filter(image => !image.processed)
+        .map(image => this.processUploadedImage(image))
+    },
+    createPreview(imageId, file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          resolve({
+            id: imageId,
+            lazySrc: reader.result,
+            processed: true
+          })
+        };
+        reader.readAsDataURL(file)
+      })
+    },
+    async processUploadedImage(file) {
+      const imageId = file.name + file.lastModified
+      this.createPreview(imageId, file)
+        .then(previewImage => {
+          this.images = [...this.images.filter(image => image !== file), previewImage]
+          this.uploadImage(previewImage.id, file)
+        })
+    },
+    async uploadImage(previewImageId, file) {
+      imageService.uploadImage(file)
+        .then(uploadedImageId => imageService.fetchImageUrl(uploadedImageId, 200)
+          .then(imageUrl => this.images = [ ...this.images.filter(i => i.id !== previewImageId), { id: uploadedImageId, src: imageUrl, processed: true } ])
+        )
     }
   }
 }

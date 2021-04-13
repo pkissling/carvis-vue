@@ -7,7 +7,7 @@
       center-active
     >
       <v-slide-item
-        v-for="(image, index) in images"
+        v-for="(image, index) in value"
         :key="image.id"
         v-slot="{ active, toggle }"
       >
@@ -26,6 +26,7 @@
               width="200"
               height="200"
               :src="image.src"
+              :lazy-src="image.lazySrc"
             >
               <template v-slot:placeholder>
                 <v-row
@@ -142,35 +143,8 @@ export default {
         this.imagePreview = this.images[index]
       }
     },
-    value(newVal) {
-     this.enrichImages(newVal)
-      .then(images => this.images = images)
-    }
-  },
-  async created () {
-    if (!this.value) {
-      return
-    }
-
-    this.enrichImages(this.value)
-      .then(images => this.images = images)
   },
   methods: {
-    // async onChange (files) {
-    //   const unchanged = this.images.length === files.length && this.images.every((v, i) => v === files[i]);
-    //   if (unchanged) {
-    //     return
-    //   }
-
-    //   const uploadPromises = files.map(file => imageService.uploadImage(file))
-    //   Promise.all(uploadPromises)
-    //     .then(imageIds => {
-    //       const input = this.value ? [ ...imageIds, ...this.value] : imageIds
-    //       this.$emit('input', input)
-    //       this.enrichImages(imageIds)
-    //         .then(images => this.images.push(...images))
-    //     })
-    // },
     async enrichImages(imageIds) {
       return Promise.all(imageIds.map(id => this.enrichImageSrc(id)))
     },
