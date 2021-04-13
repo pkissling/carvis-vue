@@ -17,8 +17,9 @@
     "dbaeumer.vscode-eslint",
     "eg2.vscode-npm-script",
     "jcbuisson.vue",
-    "wix.vscode-import-cost",
-  ],
+    "octref.vetur",
+    "wix.vscode-import-cost"
+],
   "settings": {
     "files.eol": "\n",
     "editor.tabSize": 2,
