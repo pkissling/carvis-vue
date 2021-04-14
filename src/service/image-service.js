@@ -19,13 +19,16 @@ export default class ImageService {
     return uploadFile(file.url)
   }
 
+  // TODO cache urls and check if the presigned url is still valid
   static async fetchImageUrl(imageId, size) {
+    console.log('HTTP: GET ' + imageId, size)
     // TODO check size param everywhere!
     // TODO cache!
 
     const width = size ? size / 2 : 1000
     const height = Math.round(width / 2)
     const id = Math.floor(Math.random() * 100) + 1
+    await new Promise(resolve => setTimeout(resolve, 2000))
     return `https://picsum.photos/${width}/${height}?image=${id}`
     return fetchImageUrl(imageId, size)
   }

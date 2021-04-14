@@ -51,10 +51,16 @@ export default {
   },
   watch: {
     images(newVal) {
+      // only emit imageIds which were uploaded
       const imageIds = newVal
         .filter(image => image.id)
+        .filter(image => !image.uploading)
         .map(image => image.id)
-      this.$emit('input', imageIds)
+
+      // only emit imageIds if value has changed
+      if (JSON.stringify(imageIds) !== JSON.stringify(this.value)) {
+        this.$emit('input', imageIds)
+      }
     }
   },
   created() {
@@ -86,7 +92,8 @@ export default {
           resolve({
             id: imageId,
             lazySrc: reader.result,
-            processed: true
+            processed: true,
+            uploading: true
           })
         }
         reader.readAsDataURL(file)

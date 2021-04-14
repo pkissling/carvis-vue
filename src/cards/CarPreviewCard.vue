@@ -1,37 +1,44 @@
 <template>
-  <v-card class="my-12">
+  <v-card
+    :loading="loading"
+    class="my-12"
+  >
     <v-card-title class="text-h4">
       Fahrzeugbilder
     </v-card-title>
-    <v-col>
-      <!-- TODO lazy src / dummy loader? -->
-      <PreviewImage
-        v-if="images.length === 0"
-        :src="require('@/assets/images/car_dummy.jpg')"
-        :lazy-src="require('@/assets/images/car_dummy.jpg')"
-        not-clickable
+    <v-card-text>
+      <v-skeleton-loader
+        v-if="loading"
+        type="image"
       />
       <div v-else>
-        <v-skeleton-loader
-          v-if="loading"
-          type="image"
+        <!-- TODO lazy src -->
+        <PreviewImage
+          v-if="!images.length && !loading"
+          src="require('@/assets/images/car_dummy_highres.jpg')"
+          :lazy-src="require('@/assets/images/car_dummy_lowres.jpg')"
+          height="500"
+          not-clickable
         />
-        <v-carousel
-          v-else
-          cycle
-          hide-delimiter-background
-        >
-          <v-carousel-item
-            v-for="image in images"
-            :key="image.id"
+        <!-- TODO height? -->
+        <div v-else>
+          <v-carousel
+            height="500"
+            cycle
+            hide-delimiter-background
           >
-            <PreviewImage
-              :image="image"
-            />
-          </v-carousel-item>
-        </v-carousel>
+            <v-carousel-item
+              v-for="image in images"
+              :key="image.id"
+            >
+              <PreviewImage
+                :image="image"
+              />
+            </v-carousel-item>
+          </v-carousel>
+        </div>
       </div>
-    </v-col>
+    </v-card-text>
   </v-card>
 </template>
 <script>
@@ -56,12 +63,26 @@ export default {
     }
   },
   watch: {
-    async value(newVal) {
-      if (!newVal) {
+    async value(newImageIds) {
+      if (!newImageIds) {
+        this.images = []
         return
       }
-      Promise.all(newVal.map(id => imageService.fetchImageUrl(id)))
-        .then(images => this.images = images)
+
+      const loadedImageIds = this.images.map(image => image.id)
+      const removedImages = loadedImageIds.filter(loaded => !newImageIds.includes(loaded))
+      const addedImages = newImageIds.filter(loaded => !loadedImageIds.includes(loaded))
+
+      if (removedImages.length) {
+        this.images = this.images.filter(image => !removedImages.includes(image.id))
+      }
+
+      if (addedImages.length) {
+        await Promise.all(addedImages.map(imageId => this.resolveImageUrl(imageId)))
+      }
+
+      // ensure sorting of images
+      this.images = newImageIds.map(imageId => this.images.find(image => image.id === imageId))
     }
   },
   async created () {
@@ -82,9 +103,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.clickable {
-  cursor: pointer
-}
-</style>

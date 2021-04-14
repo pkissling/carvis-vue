@@ -78,9 +78,8 @@ export default {
   computed: {
     _src() {
       if (this.error) {
-        // TODO 1: smaller res?
-        // TODO 2: dedicated placeholder for not found?
-        return require("@/assets/images/car_dummy.jpg")
+        // TODO: dedicated placeholder for not found?
+        return require("@/assets/images/car_dummy_highres.jpg")
       }
 
       if (this.src) {
@@ -90,6 +89,10 @@ export default {
       return this.image ? this.image.src : null
     },
     _lazySrc() {
+      if (this.error) {
+        return require("@/assets/images/car_dummy_lowres.jpg")
+      }
+
       return this.image ? this.image.lazySrc : null
     }
   },
