@@ -13,13 +13,12 @@
       <v-row>
         <v-col>
           <v-file-input
+            v-bind:clearable="false"
             :value="images"
             accept="image/*"
             multiple
             outlined
-            :clearable="clearable"
             label="Fahrzeugbilder"
-            :placeholder="placeholder"
             truncate-length="10"
             @change="onImageUpload"
           />
@@ -50,9 +49,12 @@ export default {
       clearable: false
     }
   },
-  computed: {
-    placeholder () {
-      return this.images ? 'Fahrzeugbilder hinzufügen...' : 'Weitere Fahrzeugbilder hinzufügen...'
+  watch: {
+    images(newVal) {
+      const imageIds = newVal
+        .filter(image => image.id)
+        .map(image => image.id)
+      this.$emit('input', imageIds)
     }
   },
   created() {
