@@ -56,12 +56,7 @@ export default {
       return
     }
     imageService.fetchImageUrl(this.imageId)
-      .then(url => this.src = url )
-  },
-  methods: {
-    onClickOutside () {
-      this.$emit('cancel')
-    }
+      .then(url => this.src = url)
   }
 }
 </script>
