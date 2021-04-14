@@ -7,7 +7,7 @@
       Fahrzeugbilder
     </v-card-title>
     <v-card-text>
-      <UploadedImagesPreview
+      <EditImages
         v-model="images"
       />
       <v-row>
@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import UploadedImagesPreview from '../components/UploadedImagesPreview'
+import EditImages from '../components/EditImages'
 import imageService from '../service/image-service'
 
 export default {
   components: {
-    UploadedImagesPreview
+    EditImages
   },
   props: {
     value: {
