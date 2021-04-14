@@ -40,10 +40,10 @@
 import carService from '../service/car-service'
 import userService from '../service/user-service'
 import DeleteModal from '../modals/DeleteModal'
-import CarPreviewCard from './CarPreviewCard'
-import ImageUploadCard from './ImageUploadCard'
-import CarDataCard from './CarDataCard'
-import ActionsCard from './ActionsCard'
+import CarPreviewCard from '../cards/CarPreviewCard'
+import ImageUploadCard from '../cards/ImageUploadCard'
+import CarDataCard from '../cards/CarDataCard'
+import ActionsCard from '../cards/ActionsCard'
 
 export default {
   components: {

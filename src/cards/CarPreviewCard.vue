@@ -36,7 +36,7 @@
 </template>
 <script>
 import imageService from '../service/image-service'
-import PreviewImage from './PreviewImage'
+import PreviewImage from '../components/PreviewImage'
 
 export default {
   components: {

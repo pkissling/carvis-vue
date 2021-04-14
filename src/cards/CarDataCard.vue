@@ -189,9 +189,9 @@
 </template>
 
 <script>
-import TextField from './TextField'
-import Dropdown from './Dropdown'
-import TextArea from './TextArea'
+import TextField from '../fields/TextField'
+import Dropdown from '../fields/Dropdown'
+import TextArea from '../fields/TextArea'
 
 export default {
   components: {

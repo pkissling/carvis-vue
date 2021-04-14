@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import UploadedImagesPreview from './UploadedImagesPreview'
+import UploadedImagesPreview from '../components/UploadedImagesPreview'
 import imageService from '../service/image-service'
 
 export default {
