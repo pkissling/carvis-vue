@@ -32,6 +32,7 @@
               :key="image.id"
             >
               <PreviewImage
+                height="500"
                 :image="image"
               />
             </v-carousel-item>
