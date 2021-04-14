@@ -6,7 +6,7 @@
       :src="_src"
       :lazy-src="_lazySrc"
       :contain="contain"
-      :class="{ 'clickable': !notClickable }"
+      :class="{ 'clickable': _clickable }"
       @click="onClick"
       @error="error = true"
     >
@@ -94,10 +94,21 @@ export default {
       }
 
       return this.image ? this.image.lazySrc : null
+    },
+    _clickable() {
+      if (this.error) {
+        return false
+      }
+
+      return !this.notClickable
     }
   },
   methods: {
     onClick() {
+      if (this.error) {
+        return
+      }
+
       if (!this.notClickable) {
         this.fullscreen = true
       }
