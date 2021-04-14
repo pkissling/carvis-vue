@@ -11,7 +11,7 @@
         max-height="80vh"
         contain
         :src="src"
-        :lazy-src="image.src"
+        :lazy-src="lazySrc"
       >
         <template v-slot:placeholder>
           <v-row
@@ -39,17 +39,24 @@ export default {
       type: Object,
       default: null
     }
-  }
-  ,
+  },
   data () {
     return {
       dialog: true,
       src: null
     }
   },
+  computed: {
+    lazySrc () {
+      return this.image.src ? this.image.src : this.image.lazySrc
+    }
+  },
   async created () {
-    imageService.fetchImageUrl(this.image.id)
-      .then(url => this.src = url)
+    if (!this.image || !this.image.id) {
+      return
+    }
+    imageService.fetchImageUrl(this.imageId)
+      .then(url => this.src = url )
   },
   methods: {
     onClickOutside () {

@@ -15,34 +15,15 @@
           width="200"
           outlined
         >
-          <div
-            class="clickable"
-            @click.prevent="fullScreenImage = image"
-          >
-            <v-card-title>
-              {{ index === 0 ? 'Titelbild' : 'Galleriebild ' + index }}
-            </v-card-title>
-            <v-divider />
-            <v-img
-              width="200"
-              height="200"
-              :src="image.src"
-              :lazy-src="image.lazySrc"
-            >
-              <template v-slot:placeholder>
-                <v-row
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <v-progress-circular
-                    indeterminate
-                    color="primary"
-                  />
-                </v-row>
-              </template>
-            </v-img>
-          </div>
+          <v-card-title>
+            {{ index === 0 ? 'Titelbild' : 'Galleriebild ' + index }}
+          </v-card-title>
+          <v-divider />
+          <PreviewImage
+            width="200"
+            height="200"
+            :image="image"
+          />
           <v-card-actions>
             <v-btn
               color="primary"
@@ -86,11 +67,13 @@
 <script>
 import FullscreenImageModal from '../modals/FullscreenImageModal'
 import EditImageExpansionSlot from './EditImageExpansionSlot'
+import PreviewImage from './PreviewImage'
 
 export default {
   components: {
     FullscreenImageModal,
-    EditImageExpansionSlot
+    EditImageExpansionSlot,
+    PreviewImage
   },
   props: {
     value: {
@@ -111,9 +94,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.clickable {
-  cursor: pointer
-}
-</style>

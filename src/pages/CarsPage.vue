@@ -21,6 +21,7 @@
       @click:row="viewCar"
     >
       <template v-slot:item.preview="{ item }">
+        <!-- TODO only pass one image lazy! -->
         <CarThumbnail
           :car-thumbnails="carThumbnails"
           :image-id="item.preview"

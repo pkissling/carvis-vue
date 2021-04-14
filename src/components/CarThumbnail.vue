@@ -1,5 +1,8 @@
 <template>
-  <v-avatar color="grey lighten-1">
+  <v-avatar
+    class="ma-1"
+    color="grey lighten-1"
+  >
     <v-img
       v-if="imageId"
       :src="carThumbnails.find(thumbnail => thumbnail.id === imageId)"

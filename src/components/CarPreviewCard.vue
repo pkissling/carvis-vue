@@ -1,49 +1,44 @@
 <template>
-  <v-card
-    v-if="value && value.length > 0"
-    :loading="loading"
-    class="my-12"
-  >
+  <v-card class="my-12">
     <v-card-title class="text-h4">
       Fahrzeugbilder
     </v-card-title>
     <v-col>
-      <v-skeleton-loader
-        v-if="loading"
-        type="image"
+      <PreviewImage
+        v-if="images.length === 0"
+        :src="require('@/assets/images/car_dummy.jpg')"
+        not-clickable
       />
-      <v-carousel
-        v-else
-        cycle
-        hide-delimiter-background
-      >
-        <v-carousel-item
-          v-for="image in images"
-          :key="image.id"
+      <div v-else>
+        <v-skeleton-loader
+          v-if="loading"
+          type="image"
+        />
+        <v-carousel
+          v-else
+          cycle
+          hide-delimiter-background
         >
-          <v-img
-            class="clickable"
-            :src="image.src"
-            @click.stop="imagePreview=image"
-          />
-        </v-carousel-item>
-      </v-carousel>
-
-      <FullscreenImageModal
-        v-if="imagePreview"
-        :image="imagePreview"
-        @cancel="imagePreview = null"
-      />
+          <v-carousel-item
+            v-for="image in images"
+            :key="image.id"
+          >
+            <PreviewImage
+              :image="image"
+            />
+          </v-carousel-item>
+        </v-carousel>
+      </div>
     </v-col>
   </v-card>
 </template>
 <script>
 import imageService from '../service/image-service'
-import FullscreenImageModal from '../modals/FullscreenImageModal.vue'
+import PreviewImage from './PreviewImage'
 
 export default {
   components: {
-    FullscreenImageModal
+    PreviewImage
   },
   props: {
     value: {
@@ -54,7 +49,7 @@ export default {
   data () {
     return {
       images: [],
-      loading: false, // TODO
+      loading: false,
       imagePreview: null
     }
   },
@@ -69,7 +64,6 @@ export default {
   },
   async created () {
     if (!this.value) {
-      this.images = []
       return
     }
 
