@@ -8,6 +8,7 @@
       :contain="contain"
       :class="{ 'clickable': !notClickable }"
       @click="onClick"
+      @error="error = true"
     >
       <template v-slot:placeholder>
         <v-row
@@ -56,8 +57,8 @@ export default {
       default: null
     },
     src: {
-      type: String,
-      default: ''
+      type: [String, Object],
+      default: null
     },
     lazySrc: {
       type: String,
@@ -70,11 +71,18 @@ export default {
   },
   data() {
     return {
-      fullscreen: false
+      fullscreen: false,
+      error: false
     }
   },
   computed: {
     _src() {
+      if (this.error) {
+        // TODO 1: smaller res?
+        // TODO 2: dedicated placeholder for not found?
+        return require("@/assets/images/car_dummy.jpg")
+      }
+
       if (this.src) {
         return this.src
       }

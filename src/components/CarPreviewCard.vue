@@ -4,9 +4,11 @@
       Fahrzeugbilder
     </v-card-title>
     <v-col>
+      <!-- TODO lazy src / dummy loader? -->
       <PreviewImage
         v-if="images.length === 0"
         :src="require('@/assets/images/car_dummy.jpg')"
+        :lazy-src="require('@/assets/images/car_dummy.jpg')"
         not-clickable
       />
       <div v-else>

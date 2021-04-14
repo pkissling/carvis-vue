@@ -21,7 +21,7 @@
             Abbrechen
           </v-btn>
           <v-btn
-            color="red"
+            color="error"
             text
             @click="submit"
           >

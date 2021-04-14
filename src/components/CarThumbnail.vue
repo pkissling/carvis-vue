@@ -1,35 +1,30 @@
 <template>
   <v-avatar
     class="ma-1"
-    color="grey lighten-1"
+    color="secondary"
   >
-    <v-img
+    <PreviewImage
       v-if="imageId"
       :src="carThumbnails.find(thumbnail => thumbnail.id === imageId)"
-    >
-      <template v-slot:placeholder>
-        <v-row
-          class="fill-height ma-0"
-          align="center"
-          justify="center"
-        >
-          <v-progress-circular
-            indeterminate
-            color="grey lighten-5"
-          />
-        </v-row>
-      </template>
-    </v-img>
+      height="48"
+      width="48"
+      not-clickable
+    />
     <v-icon v-else
             color="primary"
     >
-      mdi-car
+      mdi-car-side
     </v-icon>
   </v-avatar>
 </template>
 
 <script>
+import PreviewImage from './PreviewImage'
+
 export default {
+  components: {
+    PreviewImage
+  },
   props: {
    carThumbnails: {
       type: Array,
