@@ -16,7 +16,7 @@
         v-model="car"
       />
 
-      <ImageUploadCard
+      <EditCarPreviewCard
         v-if="!readOnly"
         v-model="car.images"
       />
@@ -41,7 +41,7 @@ import carService from '../service/car-service'
 import userService from '../service/user-service'
 import DeleteModal from '../modals/DeleteModal'
 import CarPreviewCard from '../cards/CarPreviewCard'
-import ImageUploadCard from '../cards/ImageUploadCard'
+import EditCarPreviewCard from '../cards/EditCarPreviewCard'
 import CarDataCard from '../cards/CarDataCard'
 import ActionsCard from '../cards/ActionsCard'
 
@@ -50,7 +50,7 @@ export default {
     DeleteModal,
     CarDataCard,
     CarPreviewCard,
-    ImageUploadCard,
+    EditCarPreviewCard,
     ActionsCard
   },
   props: {
