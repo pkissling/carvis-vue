@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO on error refretch image -->
     <v-img
       :height="height"
       :width="width"

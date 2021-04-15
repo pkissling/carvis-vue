@@ -1,35 +1,23 @@
-import { createUploadUrl, fetchImageUrl } from '../clients/backend-client'
+import { createUploadUrl } from '../clients/backend-client'
 import { uploadFile } from '../clients/s3-client'
+import store from '../store'
 
-export default class ImageService {
 
-  static async uploadImage(file) {
-    const contentType = file.type
-    const response = await createUploadUrl(contentType) // TODO
-    await uploadFile(response.data.url, contentType, file)
-    return response.data.id
+export async function uploadImage(file) {
+  const contentType = file.type
+  const response = await createUploadUrl(contentType) // TODO
+  await uploadFile(response.data.url, contentType, file)
+  return response.data.id
+}
+
+export async function fetchImageUrl(imageId, size) {
+
+  await store.dispatch('images/fetchImageUrl', { imageId, size })
+  const image = store.state.images.cachedImages.find(img => img.imageId === imageId && img.size === size)
+
+  if (image) {
+    return image.url
   }
 
-  static async createUploadUrl(file) {
-    return createUploadUrl(file.type)
-      .then(resp => resp.data)
-  }
-
-  static async uploadFile(file) {
-    return uploadFile(file.url)
-  }
-
-  // TODO cache urls and check if the presigned url is still valid
-  static async fetchImageUrl(imageId, size) {
-    console.log('HTTP: GET ' + imageId, size)
-    // TODO check size param everywhere!
-    // TODO cache!
-
-    const width = size ? size / 2 : 1000
-    const height = Math.round(width / 2)
-    const id = Math.floor(Math.random() * 100) + 1
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    return `https://picsum.photos/${width}/${height}?image=${id}`
-    return fetchImageUrl(imageId, size)
-  }
+  throw new Error('image not found', imageId, size) // TODO check how to use in Promise.catch
 }

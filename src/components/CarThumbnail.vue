@@ -5,7 +5,7 @@
   >
     <PreviewImage
       v-if="imageId"
-      :src="carThumbnails.find(thumbnail => thumbnail.id === imageId)"
+      :src="src"
       height="48"
       width="48"
       not-clickable
@@ -20,6 +20,7 @@
 
 <script>
 import PreviewImage from './PreviewImage'
+import { fetchImageUrl } from '../service/image-service'
 
 export default {
   components: {
@@ -34,6 +35,19 @@ export default {
       type: String,
       default: null
     }
+  },
+  data() {
+    return {
+      src: null
+    }
+  },
+  created() {
+    if (!this.imageId) {
+     return
+    }
+
+    fetchImageUrl(this.imageId, 100)
+      .then(url => this.src = url)
   }
 }
 </script>

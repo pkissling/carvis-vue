@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import imageService from '../service/image-service'
+import { fetchImageUrl } from '../service/image-service'
 
 export default {
   props: {
@@ -55,7 +55,7 @@ export default {
     if (!this.image || !this.image.id) {
       return
     }
-    imageService.fetchImageUrl(this.image.id)
+    fetchImageUrl(this.image.id)
       .then(url => this.src = url)
   }
 }

@@ -23,5 +23,4 @@ export const createUploadUrl = async (contentType) => {
 
 export const fetchImageUrl = async (imageId, size) => {
   return instance.get(`images/${imageId}`, { params: { size } })
-    .then(resp => resp.data.url)
 }

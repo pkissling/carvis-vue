@@ -12,7 +12,6 @@
         type="image"
       />
       <div v-else>
-        <!-- TODO lazy src -->
         <PreviewImage
           v-if="!images.length && !loading"
           src="require('@/assets/images/car_dummy_highres.jpg')"
@@ -20,7 +19,6 @@
           height="500"
           not-clickable
         />
-        <!-- TODO height? -->
         <div v-else>
           <v-carousel
             height="500"
@@ -43,7 +41,7 @@
   </v-card>
 </template>
 <script>
-import imageService from '../service/image-service'
+import { fetchImageUrl } from '../service/image-service'
 import PreviewImage from '../components/PreviewImage'
 
 export default {
@@ -97,7 +95,7 @@ export default {
   },
   methods: {
     async resolveImageUrl (imageId) {
-      return imageService.fetchImageUrl(imageId)
+      return fetchImageUrl(imageId)
         .then(url => { return { id: imageId, src: url }})
         .then(image => this.images = [ ...this.images.filter(img => img.id !== imageId), image ])
     }

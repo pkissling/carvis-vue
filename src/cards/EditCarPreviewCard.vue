@@ -30,7 +30,7 @@
 
 <script>
 import EditImages from '../components/EditImages'
-import imageService from '../service/image-service'
+import { fetchImageUrl, uploadImage } from '../service/image-service'
 
 export default {
   components: {
@@ -110,13 +110,13 @@ export default {
 
     },
     async uploadImage(previewImageId, file) {
-      const uploadedImageId = await imageService.uploadImage(file)
-      const imageUrl = await imageService.fetchImageUrl(uploadedImageId, 200)
+      const uploadedImageId = await uploadImage(file)
+      const imageUrl = await fetchImageUrl(uploadedImageId, 200)
       this.images = [ ...this.images.filter(i => i.id !== previewImageId), { id: uploadedImageId, src: imageUrl, processed: true } ]
     },
     async loadExistingImage(imageId, index) {
       this.images.push({ id: imageId, index, processed: true })
-      imageService.fetchImageUrl(imageId)
+      fetchImageUrl(imageId)
         .then(imageUrl => {
           this.images = [ ...this.images.filter(image => image.id !== imageId), { id: imageId, src: imageUrl, index: index, processed: true }]
             .sort((a,b) => a.index < b.index)

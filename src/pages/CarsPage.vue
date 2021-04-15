@@ -23,8 +23,7 @@
       <template v-slot:item.preview="{ item }">
         <!-- TODO only pass one image lazy! -->
         <CarThumbnail
-          :car-thumbnails="carThumbnails"
-          :image-id="item.preview"
+          :image-id="item.previewImageId"
         />
       </template>
     </v-data-table>
@@ -38,10 +37,10 @@
 
 <script>
 import ListCars from '../apollo/queries/ListCars'
-import imageService from '../service/image-service'
 import FloatingButton from '../components/FloatingButton'
 import CarThumbnail from '../components/CarThumbnail'
 import { relativeTimeDifference } from '../utilities/time'
+import { fetchImageUrl } from '../service/image-service'
 
 export default {
   components: {
@@ -102,24 +101,14 @@ export default {
       return this.cars
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
-          const preview = car.images ? car.images[0] : null
-          if (preview && !this.carThumbnails.map(p => p.id).includes(preview)) {
-            this.carThumbnails.push( { id: preview, loading: true, src: null })
-          }
+          const previewImageId = car.images ? car.images[0] : null
           return {
-            preview,
+            previewImageId,
             lastChanged,
             ...car
           }
         })
         .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    }
-  },
-  watch: {
-    carThumbnails(carThumbnails) {
-      carThumbnails.filter(thumbnail => thumbnail.loading)
-        .map(thumbnail => thumbnail.id)
-        .map(thumbnailImageId => this.resolveImageUrl(thumbnailImageId))
     }
   },
   methods: {
@@ -128,12 +117,7 @@ export default {
     },
     createCar () {
       this.$router.push({ path: '/cars/add' })
-    },
-    async resolveImageUrl (thumbnailImageId) {
-      return imageService.fetchImageUrl(thumbnailImageId, 50)
-        .then(url => { return { id: thumbnailImageId, src: url, loading: false }})
-        .then(thumbnail => this.carThumbnails = [ thumbnail, ...this.carThumbnails.filter(img => img.id !== thumbnail.id)])
-    },
+    }
   },
   apollo: {
     cars: {
