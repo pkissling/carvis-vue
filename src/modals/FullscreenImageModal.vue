@@ -55,7 +55,7 @@ export default {
     if (!this.image || !this.image.id) {
       return
     }
-    fetchImageUrl(this.image.id)
+    fetchImageUrl(this.image.id, 1080)
       .then(url => this.src = url)
   }
 }
