@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     async resolveImageUrl (imageId) {
-      return fetchImageUrl(imageId)
+      return fetchImageUrl(imageId, 500)
         .then(url => { return { id: imageId, src: url }})
         .then(image => this.images = [ ...this.images.filter(img => img.id !== imageId), image ])
     }

@@ -40,7 +40,6 @@ import ListCars from '../apollo/queries/ListCars'
 import FloatingButton from '../components/FloatingButton'
 import CarThumbnail from '../components/CarThumbnail'
 import { relativeTimeDifference } from '../utilities/time'
-import { fetchImageUrl } from '../service/image-service'
 
 export default {
   components: {
