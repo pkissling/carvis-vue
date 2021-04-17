@@ -1,12 +1,12 @@
 <template>
   <v-app-bar
-    color="#DDDDDD"
+    color="secondary"
     app
   >
     <div class="d-flex align-center">
       <router-link to="/">
         <v-img
-          alt="Vuetify Logo"
+          alt="Carvis"
           class="shrink mr-2"
           contain
           src="@/assets/images/logo_250px.png"

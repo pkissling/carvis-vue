@@ -25,6 +25,7 @@ query getCar($id: ID!) {
     description
     price
     ads
+    images
     ownerUsername
     ownerName
     createdAt

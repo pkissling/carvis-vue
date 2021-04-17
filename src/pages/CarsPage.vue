@@ -19,7 +19,14 @@
       :search="searchTerm"
       class="elevation-5"
       @click:row="viewCar"
-    />
+    >
+      <template v-slot:item.preview="{ item }">
+        <!-- TODO only pass one image lazy! -->
+        <CarThumbnail
+          :image-id="item.previewImageId"
+        />
+      </template>
+    </v-data-table>
 
     <FloatingButton
       :loading="loading"
@@ -31,19 +38,25 @@
 <script>
 import ListCars from '../apollo/queries/ListCars'
 import FloatingButton from '../components/FloatingButton'
+import CarThumbnail from '../components/CarThumbnail'
 import { relativeTimeDifference } from '../utilities/time'
 
 export default {
   components: {
+    CarThumbnail,
     FloatingButton
   },
   data () {
     return {
       searchTerm: '',
+      carThumbnails: [],
       headers: [
         {
+          sortable: false,
+          value: 'preview'
+        },
+        {
           text: 'Marke',
-          align: 'start',
           value: 'brand',
         },
         {
@@ -53,22 +66,18 @@ export default {
         },
         {
           text: 'Modellreihe',
-          align: 'start',
           value: 'modelSeries',
         },
         {
           text: 'Modelljahr',
-          align: 'start',
           value: 'modelYear',
         },
         {
           text: 'Außenfarbe',
-          align: 'start',
           value: 'colorExterior',
         },
         {
           text: 'Erstellt durch',
-          align: 'start',
           value: 'ownerName',
         },
         {
@@ -91,7 +100,9 @@ export default {
       return this.cars
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
+          const previewImageId = car.images ? car.images[0] : null
           return {
+            previewImageId,
             lastChanged,
             ...car
           }
@@ -109,7 +120,7 @@ export default {
   },
   apollo: {
     cars: {
-      query: () => ListCars,
+      query: ListCars,
       update: data => data.listCars ? data.listCars.items : [],
       prefetch: true
     }

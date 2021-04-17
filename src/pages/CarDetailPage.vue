@@ -1,23 +1,28 @@
 <template>
   <v-container>
-    <span class="text-h2">{{ title }}</span>
-    <CarDetailForm
-      :car="car"
-      @submit="updateCar"
-    />
+    <WaitingLayer v-if="loading" />
+    <div v-else>
+      <span class="text-h2">{{ title }}</span>
+      <CarDetailForm
+        :car="car"
+        @submit="updateCar"
+      />
+    </div>
   </v-container>
 </template>
 
 <script>
 import GetCar from '../apollo/queries/GetCar'
 import CarDetailForm from '../components/CarDetailForm'
+import WaitingLayer from '../components/WaitingLayer'
 import carService from '../service/car-service'
 import userService from '../service/user-service'
 import router from '../router'
 
 export default {
   components: {
-    CarDetailForm
+    CarDetailForm,
+    WaitingLayer
   },
   props: {
     carId: {
@@ -25,23 +30,10 @@ export default {
       default: null
     }
   },
-  apollo: {
-    car: {
-      query: () => GetCar,
-      update: data => {
-        const car = data.getCar
-        if (car) {
-          return car
-        } else {
-          router.push({ name: 'NotFound' })
-        }
-      },
-      variables () {
-        return {
-          id: this.carId,
-        }
-      },
-      prefetch: true
+  data: () => {
+    return {
+      loading: false,
+      car: null
     }
   },
   computed: {
@@ -57,6 +49,16 @@ export default {
       carService.updateCar(car)
         .then(() => this.$router.push({ path: '/' }))
     }
+  },
+  async beforeRouteEnter (to, from, next) {
+     next(vm => {
+      vm.loading = true
+      const carId = to.params.carId
+      carService.getCar(carId)
+        .then(car => vm.car = car)
+        .catch(err => router.push({ name: 'NotFound' }))
+        .finally(() => vm.loading = false)
+    })
   }
 }
 </script>

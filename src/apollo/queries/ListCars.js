@@ -26,6 +26,7 @@ query listCars {
       description
       price
       ads
+      images
       ownerUsername
       ownerName
       createdAt
