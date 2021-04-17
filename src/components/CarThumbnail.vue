@@ -2,6 +2,7 @@
   <v-avatar
     class="ma-1"
     color="secondary"
+    rounded
   >
     <PreviewImage
       v-if="imageId"

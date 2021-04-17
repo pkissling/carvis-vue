@@ -77,11 +77,14 @@ export default {
       }
 
       if (addedImages.length) {
-        await Promise.all(addedImages.map(imageId => this.resolveImageUrl(imageId)))
+        await Promise.all(addedImages.map(imageId => this.resolveImage(imageId)))
+          .then(resolvedImages => resolvedImages.map(image => this.images = [ ...this.images.filter(img => img.id !== image.id), image]))
       }
 
       // ensure sorting of images
-      this.images = newImageIds.map(imageId => this.images.find(image => image.id === imageId))
+      this.images = newImageIds.map((imageId, index) => {
+        return { ...this.images.find(image => image.id === imageId), index }
+      }).sort((a,b) => a.index - b.index)
     }
   },
   async created () {
@@ -90,14 +93,14 @@ export default {
     }
 
     this.loading = true
-    Promise.all(this.value.map(imageId => this.resolveImageUrl(imageId)))
+    Promise.all(this.value.map((imageId, index) => this.resolveImage(imageId, index)))
+      .then(images => this.images = images.sort((a,b) => a.index - b.index))
       .finally(() => this.loading = false)
   },
   methods: {
-    async resolveImageUrl (imageId) {
+    async resolveImage (imageId, index) {
       return fetchImageUrl(imageId, 500)
-        .then(url => { return { id: imageId, src: url }})
-        .then(image => this.images = [ ...this.images.filter(img => img.id !== imageId), image ])
+        .then(url => { return { id: imageId, src: url, index }})
     }
   }
 }
