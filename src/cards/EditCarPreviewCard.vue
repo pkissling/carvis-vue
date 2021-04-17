@@ -106,13 +106,14 @@ export default {
           this.images = [...this.images.filter(image => image !== file), previewImage]
           return previewImage
         })
-        .then(previewImage => this.uploadImage(previewImage.id, file))
+        .then(previewImage => this.uploadImage(previewImage, file))
 
     },
-    async uploadImage(previewImageId, file) {
+    async uploadImage(previewImage, file) {
       const uploadedImageId = await uploadImage(file)
       const imageUrl = await fetchImageUrl(uploadedImageId, 200)
-      this.images = [ ...this.images.filter(i => i.id !== previewImageId), { id: uploadedImageId, src: imageUrl, processed: true } ]
+      const lazySrc = previewImage ? previewImage.lazySrc : null
+      this.images = [ ...this.images.filter(img => img.id !== previewImage.id), { id: uploadedImageId, src: imageUrl, lazySrc, processed: true } ]
     },
     async loadExistingImage(imageId, index) {
       this.images.push({ id: imageId, index, processed: true })

@@ -49,7 +49,7 @@
               :image="image"
               :images="value"
               :image-count="value.length"
-              @input="onEditImage"
+              @input="onEditImages"
             />
           </v-expand-transition>
         </v-card>
@@ -88,7 +88,7 @@ export default {
     }
   },
   methods: {
-    onEditImage(images) {
+    onEditImages(images) {
       this.$emit('input', images)
     }
   }
