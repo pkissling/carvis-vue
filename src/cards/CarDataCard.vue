@@ -158,7 +158,7 @@
             v-model="value.ads"
             :items="ads"
             multiple
-            label="Geschaltete Anzeigen"
+            label="Inserate"
             chips
             outlined
             clearable
