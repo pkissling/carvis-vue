@@ -227,11 +227,13 @@ export default {
           "Andere"
         ],
         conditions: [
-          "Original",
+          "ursprünglich Original",
+          "Patiniert",
+          "Überwiegend original",
           "Teilrestauriert",
           "Restauriert",
           "Restaurationsobjekt",
-          "Umbau (Backdate)"
+          "Umbau / Backdate"
         ]
       }
     }
