@@ -1,5 +1,4 @@
-import router from "../router";
-import { getAuthInstance } from "./index";
+import { getAuthInstance } from "./index"
 import userService from '../service/user-service'
 
 export default (to, from, next) => {

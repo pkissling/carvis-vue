@@ -18,6 +18,14 @@
           justify="center"
         >
           <v-progress-circular
+            v-if="progress"
+            :value="progress"
+            color="primary"
+          >
+            {{ progress }}
+          </v-progress-circular>
+          <v-progress-circular
+            v-else
             indeterminate
             color="primary"
           />
@@ -102,6 +110,13 @@ export default {
       }
 
       return !this.notClickable
+    },
+    progress() {
+      if (!this.image || this.image.progress === null) {
+        return null
+      }
+
+      return this.image.progress === 0 ? "0" : this.image.progress
     }
   },
   methods: {

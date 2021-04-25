@@ -3,10 +3,10 @@ import { uploadFile } from '../clients/s3-client'
 import store from '../store'
 
 
-export async function uploadImage(file) {
+export async function uploadImage(file, progressCallback) {
   const contentType = file.type
-  const response = await createUploadUrl(contentType) // TODO
-  await uploadFile(response.data.url, contentType, file)
+  const response = await createUploadUrl(contentType)
+  await uploadFile(response.data.url, contentType, file, progressCallback)
   return response.data.id
 }
 
