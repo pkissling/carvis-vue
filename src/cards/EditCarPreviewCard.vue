@@ -117,10 +117,10 @@ export default {
     },
     async loadExistingImage(imageId, index) {
       this.images.push({ id: imageId, index, processed: true })
-      fetchImageUrl(imageId)
+      fetchImageUrl(imageId, 200)
         .then(imageUrl => {
           this.images = [ ...this.images.filter(image => image.id !== imageId), { id: imageId, src: imageUrl, index: index, processed: true }]
-            .sort((a,b) => a.index < b.index)
+            .sort((a,b) => a.index - b.index)
         })
 
     }
