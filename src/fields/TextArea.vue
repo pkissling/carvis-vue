@@ -4,6 +4,7 @@
       :value="value"
       :label="label"
       :rules="rules"
+      auto-grow
       dense
       outlined
       @input="$emit('input', $event)"
