@@ -113,7 +113,7 @@ export default {
     },
     async uploadImage(previewImage, file, index) {
       const progressCallback = (progress) => previewImage.progress = progress
-      const uploadedImageId = await uploadImage(file, progressCallback)
+      const uploadedImageId = await uploadImage(file, progressCallback, index)
       const imageUrl = await fetchImageUrl(uploadedImageId, 200)
       const lazySrc = previewImage ? previewImage.lazySrc : null
       this.images = this.images.filter(img => img.id !== previewImage.id)
