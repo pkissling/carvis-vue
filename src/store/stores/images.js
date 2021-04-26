@@ -11,7 +11,7 @@ export default {
       expiresAt.setDate(expiresAt.getDate() + 1) // + 1 day
       state.cachedImages.push({ ...payload, expiresAt })
     },
-    async evict(state, payload) {
+    evict(state, payload) {
       state.cachedImages = state.cachedImages.filter(img => img !== payload)
     }
   },
@@ -26,10 +26,11 @@ export default {
       }
 
       const now = new Date()
-      if (now > cachedImage.expiresAt) {
+      const expires = new Date(cachedImage.expiresAt)
+      if (now.getTime() > expires.getTime()) {
         // evict expired image and populate with new url
         context.commit('evict', cachedImage)
-          .then(() => fetchImageUrl(imageId, size))
+        return fetchImageUrl(imageId, size)
           .then(response => context.commit('put', { imageId, size, url: response.data.url }))
       }
 
