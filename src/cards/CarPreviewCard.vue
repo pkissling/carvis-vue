@@ -88,19 +88,29 @@ export default {
     }
   },
   async created () {
-    if (!this.value) {
+    if (!this.value || !this.value.length) {
       return
     }
 
     this.loading = true
-    Promise.all(this.value.map((imageId, index) => this.resolveImage(imageId, index)))
-      .then(images => this.images = images.sort((a,b) => a.index - b.index))
-      .finally(() => this.loading = false)
+    // populate placeholders
+    this.images = this.value.map(imageId => { return { id: imageId }})
+
+    // resolve image urls sequentially
+    this.images.reduce(async (previousPromise, image) => {
+      await previousPromise
+      return this.resolveImage(image.id)
+        .then(image => {
+          const index = this.images.indexOf(this.images.find(img => img.id === image.id))
+          this.images.splice(index, 1, image)
+        })
+        .then(() => this.loading = false) // stop loading animation after first image url was resolved
+    }, Promise.resolve())
   },
   methods: {
-    async resolveImage (imageId, index) {
+    async resolveImage (imageId) {
       return fetchImageUrl(imageId, 500)
-        .then(url => { return { id: imageId, src: url, index }})
+        .then(url => { return { id: imageId, src: url }})
     }
   }
 }
