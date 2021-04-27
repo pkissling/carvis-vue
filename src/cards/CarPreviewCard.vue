@@ -31,6 +31,7 @@
             >
               <PreviewImage
                 height="500"
+                contain=false
                 :image="image"
               />
             </v-carousel-item>
