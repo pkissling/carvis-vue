@@ -13,7 +13,7 @@ export const auth0ClientId = 'ukQnXHJoRrZwGf85Uh4Jpk8V932GsfKt'
 
 export const apiUrl = () => {
   if (process.env.NODE_ENV === 'development' || process.env.VUE_APP_NETLIFY_PREVIEW === 'true') {
-    return 'https://efyzgpa29g.execute-api.eu-west-1.amazonaws.com/v1/'
+    return 'https://liqhdwr3f0.execute-api.eu-west-1.amazonaws.com/v1/'
   } else {
     return 'https://a3pfc4p61e.execute-api.eu-west-1.amazonaws.com/v1/'
   }
