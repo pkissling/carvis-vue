@@ -23,10 +23,12 @@ const onLoaded = async () => {
   if (authService.isAuthenticated) {
     // Return token if authenticated
     const token = await authService.getIdTokenClaims()
-    return token.__raw
-  } else {
-    // otherwise login
-    authService.loginWithRedirect({});
+    if (token && token.__raw) {
+      return token.__raw
+    }
   }
+
+  // otherwise login
+  authService.loginWithRedirect({});
 };
 
