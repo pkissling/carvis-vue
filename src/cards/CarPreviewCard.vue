@@ -3,65 +3,74 @@
     :loading="loading"
     class="my-12"
   >
-    <v-card-title class="text-h4">
-      Fahrzeugbilder
-    </v-card-title>
+    <div class="p-12 d-flex justify-space-between">
+      <v-card-title class="text-h4">
+        Fahrzeugbilder
+      </v-card-title>
+      <v-btn
+        v-if="canEdit"
+        large
+        class="my-auto mx-4"
+        @click="editMode = !editMode"
+      >
+        <v-icon>
+          {{ editMode ? 'mdi-image' : 'mdi-image-edit' }}
+        </v-icon>
+      </v-btn>
+    </div>
     <v-card-text>
-      <v-skeleton-loader
-        v-if="loading"
-        type="image"
+      <EditCarImages
+        v-if="editMode"
+        :image-ids="value"
+        @change="onImagesChange"
+        @loading="onLoading"
       />
-      <div v-else>
-        <PreviewImage
-          v-if="!images.length && !loading"
-          :src="require('@/assets/images/car_dummy_highres.jpg')"
-          :lazy-src="require('@/assets/images/car_dummy_lowres.jpg')"
-          height="500"
-          not-clickable
-        />
-        <div v-else>
-          <v-carousel
-            :show-arrows="hasMultipleImages"
-            :hide-delimiters="!hasMultipleImages"
-            height="500"
-            cycle
-            hide-delimiter-background
-          >
-            <v-carousel-item
-              v-for="image in images"
-              :key="image.id"
-            >
-              <PreviewImage
-                height="500"
-                :image-id="image.id"
-                :image="image"
-              />
-            </v-carousel-item>
-          </v-carousel>
-        </div>
-      </div>
+      <ViewCarImages
+        v-else
+        :image-ids="value"
+        :loading="loading"
+        @loading="onLoading"
+      />
     </v-card-text>
   </v-card>
 </template>
 <script>
-import { fetchImageUrl } from '../service/image-service'
-import PreviewImage from '../components/PreviewImage'
+import ViewCarImages from '../components/ViewCarImages'
+import EditCarImages from '../components/EditCarImages'
 
 export default {
   components: {
-    PreviewImage
+    ViewCarImages,
+    EditCarImages
   },
   props: {
+    startInEditMode: {
+      type: Boolean,
+      value: false
+    },
     value: {
       type: Array,
-      default: () => []
+      default: () => [],
+      immediate: true,
+      handler (val) {
+        if (!val) {
+          this.imageIds = []
+          return
+        }
+        this.imageIds = val
+      }
+    },
+    canEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      images: [],
+      imageIds: [],
       loading: false,
-      imagePreview: null
+      imagePreview: null,
+      editMode: this.startInEditMode
     }
   },
   computed: {
@@ -99,27 +108,14 @@ export default {
     if (!this.value || !this.value.length) {
       return
     }
-
-    this.loading = true
-    // populate placeholders
-    this.images = this.value.map(imageId => { return { id: imageId }})
-
-    // resolve image urls sequentially
-    this.images.reduce(async (previousPromise, image) => {
-      await previousPromise
-      return this.resolveImage(image.id)
-        .then(image => {
-          const index = this.images.indexOf(this.images.find(img => img.id === image.id))
-          this.images.splice(index, 1, image)
-        })
-        .then(() => this.loading = false) // stop loading animation after first image url was resolved
-    }, Promise.resolve())
   },
   methods: {
-    async resolveImage (imageId) {
-      return fetchImageUrl(imageId, 500)
-        .then(url => { return { id: imageId, src: url }})
+    onImagesChange(event) {
+      this.$emit('input', event)
+    },
+    onLoading(value) {
+      this.loading = value
     }
-  }
+  },
 }
 </script>

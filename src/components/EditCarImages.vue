@@ -1,52 +1,43 @@
 <template>
-  <v-card
-    :loading="loading"
-    class="my-12"
-  >
-    <v-card-title class="text-h4">
-      Fahrzeugbilder
-    </v-card-title>
-    <v-card-text>
-      <EditImages
-        v-model="images"
-      />
-      <v-row>
-        <v-col>
-          <v-file-input
-            v-bind:clearable="false"
-            :value="images"
-            accept="image/*"
-            multiple
-            outlined
-            label="Fahrzeugbilder"
-            truncate-length="10"
-            @change="onImageUpload"
-          />
-        </v-col>
-      </v-row>
-    </v-card-text>
-  </v-card>
+  <div>
+    <EditImages
+      v-model="images"
+    />
+    <v-row>
+      <v-col>
+        <v-file-input
+          v-bind:clearable="false"
+          :value="images"
+          accept="image/*"
+          multiple
+          outlined
+          label="Fahrzeugbilder"
+          truncate-length="10"
+          @change="onImageUpload"
+        />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
-import EditImages from '../components/EditImages'
+import EditImages from './EditImages'
 import { fetchImageUrl, uploadImage } from '../service/image-service'
+
 
 export default {
   components: {
     EditImages
   },
   props: {
-    value: {
+    imageIds: {
       type: Array,
       default: () => []
-    }
+    },
   },
-  data () {
+  data() {
     return {
       images: [],
-      loading: false,
-      clearable: false
     }
   },
   watch: {
@@ -59,17 +50,17 @@ export default {
 
       // only emit imageIds if value has changed
       if (JSON.stringify(imageIds) !== JSON.stringify(this.value)) {
-        this.$emit('input', imageIds)
+        this.$emit('change', imageIds)
       }
     }
   },
   created() {
-    if (!this.value) {
+    if (!this.imageIds) {
       this.images = []
       return
     }
 
-    this.value.map((imageId, index) => this.loadExistingImage(imageId, index))
+    this.imageIds.map((imageId, index) => this.loadExistingImage(imageId, index))
   },
   methods: {
     async onImageUpload(images) {
@@ -81,9 +72,9 @@ export default {
         return
       }
 
-      this.loading = true
+      this.$emit('loading', true)
       Promise.all(imageUploadPromises)
-        .finally(() => this.loading = false)
+        .finally(() => this.$emit('loading', false))
     },
     createPreview(imageId, file, index) {
       return new Promise((resolve) => {

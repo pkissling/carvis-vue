@@ -9,16 +9,13 @@
     >
       <CarPreviewCard
         v-model="car.images"
+        :can-edit="canEdit"
+        :start-in-edit-mode="!car || !car.id"
       />
 
       <CarDataCard
         id="car-data-card"
         v-model="car"
-      />
-
-      <EditCarPreviewCard
-        v-if="!readOnly"
-        v-model="car.images"
       />
 
       <ActionsCard
@@ -41,7 +38,6 @@ import carService from '../service/car-service'
 import userService from '../service/user-service'
 import DeleteModal from '../modals/DeleteModal'
 import CarPreviewCard from '../cards/CarPreviewCard'
-import EditCarPreviewCard from '../cards/EditCarPreviewCard'
 import CarDataCard from '../cards/CarDataCard'
 import ActionsCard from '../cards/ActionsCard'
 
@@ -50,7 +46,6 @@ export default {
     DeleteModal,
     CarDataCard,
     CarPreviewCard,
-    EditCarPreviewCard,
     ActionsCard
   },
   props: {
@@ -81,6 +76,13 @@ export default {
     deleteModalSubject () {
       return `${this.car.brand} ${this.car.type}`
     },
+    canEdit () {
+      if (!this.car || !this.car.id) {
+        return true
+      }
+
+      return this.car.ownerUsername === userService.getUsername()
+    }
   },
   methods: {
     onSubmit () {

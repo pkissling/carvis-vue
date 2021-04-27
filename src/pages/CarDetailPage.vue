@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import GetCar from '../apollo/queries/GetCar'
 import CarDetailForm from '../components/CarDetailForm'
 import WaitingLayer from '../components/WaitingLayer'
 import carService from '../service/car-service'
