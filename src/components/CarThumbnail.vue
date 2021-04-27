@@ -11,8 +11,9 @@
       width="48"
       not-clickable
     />
-    <v-icon v-else
-            color="primary"
+    <v-icon 
+      v-else
+      color="primary"
     >
       mdi-car-side
     </v-icon>
@@ -28,10 +29,6 @@ export default {
     PreviewImage
   },
   props: {
-   carThumbnails: {
-      type: Array,
-      default: () => []
-    },
     imageId: {
       type: String,
       default: null

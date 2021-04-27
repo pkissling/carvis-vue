@@ -9,7 +9,7 @@
       :contain="contain"
       :class="{ 'clickable': _clickable }"
       @click="onClick"
-      @error="error = true"
+      @error="onError"
     >
       <template v-slot:placeholder>
         <v-row
@@ -128,6 +128,9 @@ export default {
       if (!this.notClickable) {
         this.fullscreen = true
       }
+    },
+    onError() {
+      this.error = true
     }
   }
 }

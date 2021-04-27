@@ -6,13 +6,13 @@ export default {
     cachedImages: [],
   },
   mutations: {
-    put(state, payload) {
+    put(state, image) {
       const expiresAt = new Date()
       expiresAt.setDate(expiresAt.getDate() + 1) // + 1 day
-      state.cachedImages.push({ ...payload, expiresAt })
+      state.cachedImages.push({ ...image, expiresAt })
     },
-    evict(state, payload) {
-      state.cachedImages = state.cachedImages.filter(img => img !== payload)
+    evict(state, { imageId, size }) {
+      state.cachedImages = state.cachedImages.filter(img => img.imageId !== imageId && img.size == size)
     }
   },
   actions: {

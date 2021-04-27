@@ -12,7 +12,12 @@ export async function uploadImage(file, progressCallback, index) {
 
 export async function fetchImageUrl(imageId, size) {
 
-  await store.dispatch('images/fetchImageUrl', { imageId, size })
+  try {
+    await store.dispatch('images/fetchImageUrl', { imageId, size })
+  } catch (err) {
+    store.commit('images/evict', { imageId, size })
+    return null
+  }
   const image = store.state.images.cachedImages.find(img => img.imageId === imageId && img.size === size)
 
   if (image) {
