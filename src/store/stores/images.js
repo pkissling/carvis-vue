@@ -1,4 +1,4 @@
-import { fetchImageUrlBackend } from '../../clients/backend-client'
+import { fetchImageUrl } from '../../clients/backend-client'
 
 export default {
   namespaced: true,
@@ -7,12 +7,18 @@ export default {
   },
   mutations: {
     put(state, image) {
+      console.log('put', image.imageId, image.size)
       const expiresAt = new Date()
-      expiresAt.setDate(expiresAt.getDate() + 1) // + 1 day
+      expiresAt.setDate(expiresAt.getDate() + 5) // + 5 day
       state.cachedImages.push({ ...image, expiresAt })
     },
     evict(state, { imageId, size }) {
-      state.cachedImages = state.cachedImages.filter(img => img.imageId !== imageId && img.size == size)
+      console.log('evict', imageId, size)
+      var index = state.cachedImages.findIndex(img => img.imageId === imageId && img.size === size)
+      if (index === -1) {
+        return
+      }
+      state.cachedImages.splice(index, 1)
     }
   },
   actions: {
@@ -25,9 +31,9 @@ export default {
           .then(response => context.commit('put', { imageId, size, url: response.data.url }))
       }
 
-      const now = new Date()
-      const expires = new Date(cachedImage.expiresAt)
-      if (now.getTime() > expires.getTime()) {
+      const now = new Date().getTime()
+      const expires = Date.parse(cachedImage.expiresAt)
+      if (expires < now) {
         // evict expired image and populate with new url
         context.commit('evict', cachedImage)
         return fetchImageUrlBackend(imageId, size)
@@ -35,6 +41,7 @@ export default {
       }
 
       // otherwise cached image exist and is valid, so nothing to do
+      console.log('use cached image. expires: ' + expires + ', now:' + now, imageId, size)
       return
     }
   },

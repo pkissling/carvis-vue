@@ -21,6 +21,6 @@ export const createUploadUrl = async (contentType) => {
   })
 }
 
-export const fetchImageUrlBackend = async (imageId, size) => {
+export const fetchImageUrl = async (imageId, size) => {
   return instance.get(`images/${imageId}`, { params: { size } })
 }
