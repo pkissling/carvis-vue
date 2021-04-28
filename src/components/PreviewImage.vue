@@ -129,6 +129,11 @@ export default {
       return this.image.progress === 0 ? "0" : this.image.progress
     }
   },
+  watch: {
+    fullscreen(newVal) {
+      this.$emit('fullscreen', newVal)
+    }
+  },
   methods: {
     onClick() {
       if (this.error) {

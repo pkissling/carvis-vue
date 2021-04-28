@@ -16,7 +16,7 @@
         :show-arrows="hasMultipleImages"
         :hide-delimiters="!hasMultipleImages"
         height="500"
-        cycle
+        :cycle="!fullscreen"
         hide-delimiter-background
       >
         <v-carousel-item
@@ -26,6 +26,7 @@
           <PreviewImage
             height="500"
             :image="image"
+            @fullscreen="onFullscreen"
           />
         </v-carousel-item>
       </v-carousel>
@@ -53,7 +54,8 @@ export default {
   },
   data() {
     return {
-      images: []
+      images: [],
+      fullscreen: false
     }
   },
    computed: {
@@ -112,6 +114,9 @@ export default {
     async resolveImage (imageId) {
       return fetchImageUrl(imageId, 500)
         .then(url => { return { id: imageId, src: url }})
+    },
+    onFullscreen(value) {
+      this.fullscreen = value
     }
   }
 }
