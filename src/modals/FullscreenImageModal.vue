@@ -2,14 +2,10 @@
   <v-row justify="center">
     <v-dialog
       v-model="dialog"
-      max-width="80vh"
-      max-height="80vh"
       @input="$emit('cancel')"
     >
       <!-- TODO Handle image loading error -->
       <v-img
-        max-width="80vh"
-        max-height="80vh"
         contain
         :src="src"
         :lazy-src="lazySrc"
