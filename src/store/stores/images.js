@@ -1,4 +1,4 @@
-import { fetchImageUrl } from '../../clients/backend-client'
+import { fetchImageUrlBackend } from '../../clients/backend-client'
 
 export default {
   namespaced: true,
@@ -30,7 +30,7 @@ export default {
       if (now.getTime() > expires.getTime()) {
         // evict expired image and populate with new url
         context.commit('evict', cachedImage)
-        return fetchImageUrl(imageId, size)
+        return fetchImageUrlBackend(imageId, size)
           .then(response => context.commit('put', { imageId, size, url: response.data.url }))
       }
 
