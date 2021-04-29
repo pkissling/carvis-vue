@@ -140,9 +140,12 @@ export default {
       }
     },
     async onError() {
-      this.error = true
       if (this.imageId && this.height) {
-        this.reloadedSrc = await reloadImage(this.imageId, this.height)  
+        reloadImage(this.imageId, this.height)
+          .then(url => this.reloadedSrc = url)
+          .finally(() => this.error = true)
+      } else {
+        this.error = true
       }
     }
   }

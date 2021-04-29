@@ -9,6 +9,9 @@ export async function uploadImage(file, progressCallback, index) {
   return response.data.id
 }
 
+export async function purge() {
+  store.commit('images/purge')
+}
 export async function reloadImage(imageId, size) {
   store.commit('images/evict', { imageId, size })
   return fetchImageUrl(imageId, size)

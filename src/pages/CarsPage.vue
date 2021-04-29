@@ -40,6 +40,7 @@ import ListCars from '../apollo/queries/ListCars'
 import FloatingButton from '../components/FloatingButton'
 import CarThumbnail from '../components/CarThumbnail'
 import { relativeTimeDifference } from '../utilities/time'
+import { purge } from '../service/image-service'
 
 export default {
   components: {
@@ -109,6 +110,9 @@ export default {
         })
         .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt))
     }
+  },
+  created() {
+    purge()
   },
   methods: {
     viewCar (car) {

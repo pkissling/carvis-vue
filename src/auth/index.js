@@ -1,5 +1,7 @@
 import Vue from "vue";
 import createAuth0Client from "@auth0/auth0-spa-js";
+import * as Sentry from '@sentry/vue'
+
 
 /** Define a default action to perform after authentication */
 const DEFAULT_REDIRECT_CALLBACK = () => {
@@ -61,7 +63,14 @@ export const useAuth0 = ({
         // Initialize our internal authentication state
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
-        this.loading = false;
+        this.loading = false
+
+        if (this.user) {
+          Sentry.setUser({
+            id: this.user.sub,
+            email: this.user.email
+          })
+        }
       }
     },
     methods: {

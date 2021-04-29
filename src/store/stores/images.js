@@ -16,9 +16,16 @@ export default {
       console.log('evict', imageId, size)
       var index = state.cachedImages.findIndex(img => img.imageId === imageId && img.size === size)
       if (index === -1) {
+        console.log('no evict', imageId)
         return
       }
+      console.log('before evict index: ' + index, imageId, state.cachedImages.length)
       state.cachedImages.splice(index, 1)
+      console.log('after evict index: ' + index, imageId, state.cachedImages.length)
+    },
+    purge(state) {
+      console.log('purged cache')
+      state.cachedImages = []
     }
   },
   actions: {
