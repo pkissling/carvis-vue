@@ -43,6 +43,7 @@
 
 <script>
 import FullscreenImageModal from '../modals/FullscreenImageModal'
+import { reloadImage } from '../service/image-service'
 
 export default {
   components: {
@@ -76,16 +77,25 @@ export default {
     contain: {
       type: Boolean,
       default: false
+    },
+    imageId: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       fullscreen: false,
-      error: false
+      error: false,
+      reloadedSrc: false
     }
   },
   computed: {
     _src() {
+      if (this.reloadedSrc) {
+        return this.reloadedSrc
+      }
+
       if (this.error) {
         // TODO: dedicated placeholder for not found?
         return require("@/assets/images/car_dummy_highres.jpg")
@@ -129,8 +139,11 @@ export default {
         this.fullscreen = true
       }
     },
-    onError() {
+    async onError() {
       this.error = true
+      if (this.imageId && this.height) {
+        this.reloadedSrc = await reloadImage(this.imageId, this.height)  
+      }
     }
   }
 }

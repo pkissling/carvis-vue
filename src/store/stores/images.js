@@ -22,13 +22,14 @@ export default {
     }
   },
   actions: {
-    fetchImageUrl(context, { imageId, size }) {
+    async fetchImageUrl(context, { imageId, size }) {
       // check cache
       const cachedImage = context.getters.getImage(imageId, size)
       if (!cachedImage) {
         // fetch image and populate cache
-        return fetchImageUrl(imageId, size)
-          .then(response => context.commit('put', { imageId, size, url: response.data.url }))
+        const response = await fetchImageUrl(imageId, size)
+        context.commit('put', { imageId, size, url: response.data.url })
+        return
       }
 
       const now = new Date().getTime()
@@ -36,13 +37,13 @@ export default {
       if (expires < now) {
         // evict expired image and populate with new url
         context.commit('evict', cachedImage)
-        return fetchImageUrl(imageId, size)
-          .then(response => context.commit('put', { imageId, size, url: response.data.url }))
+        const response = fetchImageUrl(imageId, size)
+        context.commit('put', { imageId, size, url: response.data.url })
+        return
       }
 
       // otherwise cached image exist and is valid, so nothing to do
       console.log('use cached image. expires: ' + expires + ', now:' + now, imageId, size)
-      return
     }
   },
   getters: {

@@ -7,6 +7,7 @@
     <PreviewImage
       v-if="imageId"
       :src="src"
+      :image-id="imageId"
       height="48"
       width="48"
       not-clickable
