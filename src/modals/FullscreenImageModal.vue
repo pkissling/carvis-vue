@@ -9,6 +9,7 @@
         contain
         :src="src"
         :lazy-src="lazySrc"
+        @click="$emit('cancel')"
       >
         <template v-slot:placeholder>
           <v-row
