@@ -164,13 +164,17 @@ export default {
           .then(() => this.testReloadedSrc())
     },
     async testReloadedSrc() {
-      fetch(this.src)
+      fetch(this.reloadedSrc)
         .then(response => {
           if (!response.ok) {
-            captureMessage(`reloaded image can not be resolved either. url=[${this.reloadedSrc}], imageId=[${this.imageId}], size=[${this.height}]`)
+            captureMessage(`reloaded image can neither be resolved. original url=[${this.src}], reloaded url=[${this.reloadedSrc}], imageId=[${this.imageId}], size=[${this.height}]`)
             this.reloadedSrc = null
             this.error = true
           }
+        })
+        .catch(() => {
+          captureMessage(`reloaded image can neither be resolved. original url=[${this.src}], reloaded url=[${this.reloadedSrc}], imageId=[${this.imageId}], size=[${this.height}]`)
+          this.error = true
         })
     }
   }
