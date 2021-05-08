@@ -14,7 +14,7 @@
       <div v-else>
         <PreviewImage
           v-if="!images.length && !loading"
-          src="require('@/assets/images/car_dummy_highres.jpg')"
+          :src="require('@/assets/images/car_dummy_highres.jpg')"
           :lazy-src="require('@/assets/images/car_dummy_lowres.jpg')"
           height="500"
           not-clickable
