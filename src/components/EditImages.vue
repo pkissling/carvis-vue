@@ -23,7 +23,6 @@
             width="200"
             height="200"
             :image="image"
-            :image-id="image.id"
           />
           <v-card-actions>
             <v-btn
