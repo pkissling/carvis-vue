@@ -143,7 +143,7 @@ export default {
       return this.image.progress === 0 ? "0" : this.image.progress
     },
     _imageId() {
-      return this.image && this.image.imageId ? this.image.imageId : this.imageId
+      return this.image && this.image.id ? this.image.id : this.imageId
     }
   },
   watch: {
@@ -162,15 +162,15 @@ export default {
       }
     },
     async onError(url) {
-      captureMessage(`exception caught while resolving url: ${url}`)
-
       // prevent endless loop
       if (this.error) {
+        captureMessage(`Won't retry. Error is set already. url=[${url}]`)
         return
       }
 
       // if there are no image properties, we can not fetch again
       if (!this._imageId || !this.height) {
+        captureMessage(`Can't retry. Properties are missing. imageId=[${this._imageId}], height=[${this.height}], url=[${url}]. `)
         this.error = true
         return
       }
@@ -184,15 +184,17 @@ export default {
       fetch(this.reloadedSrc)
         .then(response => {
           if (!response.ok) {
-            captureMessage(`reloaded image can neither be resolved. original url=[${this.src}], reloaded url=[${this.reloadedSrc}], imageId=[${this._imageId}], size=[${this.height}]`)
-            this.reloadedSrc = null
-            this.error = true
+            this.imageReloadFailed()
+          } else {
+            captureMessage(`Successfully reloaded expired image. Old url=[${this.src}], new url=${this.reloadedSrc}]`)
           }
         })
-        .catch(() => {
-          captureMessage(`reloaded image can neither be resolved. original url=[${this.src}], reloaded url=[${this.reloadedSrc}], imageId=[${this._imageId}], size=[${this.height}]`)
-          this.error = true
-        })
+        .catch(() => this.imageReloadFailed())
+    },
+    imageReloadFailed() {
+      captureMessage(`reloaded image can neither be resolved. original url=[${this.src}], reloaded url=[${this.reloadedSrc}], imageId=[${this._imageId}], size=[${this.height}]`)
+      this.error = true
+      this.reloadedSrc = null
     }
   }
 }
