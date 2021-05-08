@@ -4,11 +4,11 @@
       v-model="dialog"
       @input="$emit('cancel')"
     >
-      <!-- TODO Handle image loading error -->
       <v-img
-        contain
         :src="src"
         :lazy-src="lazySrc"
+        max-height="90vh"
+        contain
         @click="$emit('cancel')"
       >
         <template v-slot:placeholder>
