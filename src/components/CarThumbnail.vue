@@ -1,9 +1,5 @@
 <template>
-  <v-avatar
-    class="ma-1"
-    color="secondary"
-    rounded
-  >
+  <div class="ma-1">
     <PreviewImage
       v-if="imageId"
       :src="src"
@@ -12,13 +8,17 @@
       width="48"
       not-clickable
     />
-    <v-icon 
+
+    <v-avatar
       v-else
-      color="primary"
+      color="secondary"
+      tile
     >
-      mdi-car-side
-    </v-icon>
-  </v-avatar>
+      <v-icon color="primary">
+        mdi-car-side
+      </v-icon>
+    </v-avatar>
+  </div>
 </template>
 
 <script>
