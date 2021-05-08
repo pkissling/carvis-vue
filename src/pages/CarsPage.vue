@@ -5,7 +5,7 @@
       v-model="searchTerm"
       prepend-icon="mdi-magnify"
       placeholder="Porsche Carrera"
-      class="my-12"
+      class="mt-12 mb-4"
       outlined
       clearable
     />
