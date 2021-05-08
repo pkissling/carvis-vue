@@ -20,8 +20,7 @@
       class="elevation-5"
       @click:row="viewCar"
     >
-      <template v-slot:item.preview="{ item }">
-        <!-- TODO only pass one image lazy! -->
+      <template #[`item.preview`]="{ item }">
         <CarThumbnail
           :image-id="item.previewImageId"
         />
