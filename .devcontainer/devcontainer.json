@@ -15,11 +15,12 @@
   "extensions": [
     "apollographql.vscode-apollo",
     "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
     "eg2.vscode-npm-script",
     "jcbuisson.vue",
     "octref.vetur",
     "wix.vscode-import-cost"
-],
+  ],
   "settings": {
     "files.eol": "\n",
     "editor.tabSize": 2,
