@@ -14,18 +14,19 @@
     <div v-else>
       <v-carousel
         :show-arrows="hasMultipleImages"
-        :hide-delimiters="!hasMultipleImages"
-        height="500"
         :cycle="!fullscreen"
-        hide-delimiter-background
+        height="500"
+        hide-delimiters
       >
         <v-carousel-item
-          v-for="image in images"
+          v-for="(image, i) in images"
           :key="image.id"
         >
           <PreviewImage
             height="500"
             :image="image"
+            :current-image="i + 1"
+            :images-count="images.length"
             @fullscreen="onFullscreen"
           />
         </v-carousel-item>

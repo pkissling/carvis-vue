@@ -10,7 +10,11 @@
       @click="onClick"
       @error="onError"
     >
-      <template v-slot:placeholder>
+      <ImagePagination
+        :current-image="currentImage"
+        :images-count="imagesCount"
+      />
+      <template #placeholder>
         <v-row
           class="fill-height ma-0"
           align="center"
@@ -42,12 +46,14 @@
 
 <script>
 import FullscreenImageModal from '../modals/FullscreenImageModal'
+import ImagePagination from './ImagePagination'
 import { reloadImage } from '../service/image-service'
 import { captureMessage } from '../service/sentry-service'
 
 export default {
   components: {
-    FullscreenImageModal
+    FullscreenImageModal,
+    ImagePagination
   },
   props: {
     image: {
@@ -81,7 +87,16 @@ export default {
     imageId: {
       type: String,
       default: ''
+    },
+    imagesCount: {
+      type: Number,
+      default: 0
+    },
+    currentImage: {
+      type: Number,
+      default: 0
     }
+
   },
   data() {
     return {
