@@ -88,7 +88,7 @@ export default {
       if (this.valid) {
         this.$emit('submit', this.car)
       } else {
-        this.$vuetify.goTo('#car-data-card')
+        this.$vuetify.goTo('#car-data-card') // TODO go to specific item!
       }
     },
     deleteCar() {

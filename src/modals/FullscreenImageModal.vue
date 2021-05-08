@@ -6,6 +6,7 @@
       max-height="80vh"
       @input="$emit('cancel')"
     >
+      <!-- TODO Handle image loading error -->
       <v-img
         max-width="80vh"
         max-height="80vh"
