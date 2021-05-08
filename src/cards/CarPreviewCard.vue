@@ -7,16 +7,13 @@
       <v-card-title class="text-h4">
         Fahrzeugbilder
       </v-card-title>
-      <v-btn
+      <v-switch
         v-if="canEdit"
+        v-model="editMode"
+        label="Bearbeiten"
         large
         class="my-auto mx-4"
-        @click="editMode = !editMode"
-      >
-        <v-icon>
-          {{ editMode ? 'mdi-image' : 'mdi-image-edit' }}
-        </v-icon>
-      </v-btn>
+      />
     </div>
     <v-card-text>
       <EditCarImages
@@ -69,44 +66,7 @@ export default {
     return {
       imageIds: [],
       loading: false,
-      imagePreview: null,
       editMode: this.startInEditMode
-    }
-  },
-  computed: {
-    hasMultipleImages() {
-      return this.images && this.images.length > 1
-    }
-  },
-  watch: {
-    async value(newImageIds) {
-      if (!newImageIds) {
-        this.images = []
-        return
-      }
-
-      const loadedImageIds = this.images.map(image => image.id)
-      const removedImages = loadedImageIds.filter(loaded => !newImageIds.includes(loaded))
-      const addedImages = newImageIds.filter(loaded => !loadedImageIds.includes(loaded))
-
-      if (removedImages.length) {
-        this.images = this.images.filter(image => !removedImages.includes(image.id))
-      }
-
-      if (addedImages.length) {
-        await Promise.all(addedImages.map(imageId => this.resolveImage(imageId)))
-          .then(resolvedImages => resolvedImages.map(image => this.images = [ ...this.images.filter(img => img.id !== image.id), image]))
-      }
-
-      // ensure sorting of images
-      this.images = newImageIds.map((imageId, index) => {
-        return { ...this.images.find(image => image.id === imageId), index }
-      }).sort((a,b) => a.index - b.index)
-    }
-  },
-  async created () {
-    if (!this.value || !this.value.length) {
-      return
     }
   },
   methods: {
