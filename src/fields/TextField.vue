@@ -69,6 +69,7 @@ export default {
 </script>
 
 <style scoped>
+/* Hides arrows next to numeric fields to increase / decrease values */
 ::v-deep input::-webkit-outer-spin-button,
 ::v-deep input::-webkit-inner-spin-button {
   -webkit-appearance: none;

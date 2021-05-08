@@ -169,10 +169,11 @@
         </v-col>
       </v-row>
       <v-row>
-        <TextField
+        <TextArea
           v-model="value.shortDescription"
           label="Eine Kurzbeschreibung mit den wichtigsten Merkmalen"
           :counter="100"
+          :rows="1"
           required
         />
       </v-row>
@@ -181,7 +182,6 @@
         <TextArea
           v-model="value.description"
           label="Detailbeschreibung"
-          outlined
         />
       </v-row>
     </v-card-text>
