@@ -70,7 +70,7 @@ export default {
         return
       }
 
-      const loadedImageIds = this.images.map(image => image.id)
+      const loadedImageIds = this.images ? this.images.map(image => image.id) : []
       const removedImages = loadedImageIds.filter(loaded => !newImageIds.includes(loaded))
       const addedImages = newImageIds.filter(loaded => !loadedImageIds.includes(loaded))
 
