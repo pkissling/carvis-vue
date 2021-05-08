@@ -162,11 +162,6 @@ export default {
     async onError(url) {
       captureMessage(`exception caught while resolving url: ${url}`)
 
-      // prevent endless loop
-      if (this.error) {
-        return
-      }
-
       // if there are no image properties, we can not fetch again
       if (!this.imageId || !this.height) {
         this.error = true
