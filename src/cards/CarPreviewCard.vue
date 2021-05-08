@@ -21,6 +21,8 @@
         />
         <div v-else>
           <v-carousel
+            :show-arrows="hasMultipleImages"
+            :hide-delimiters="!hasMultipleImages"
             height="500"
             cycle
             hide-delimiter-background
@@ -60,6 +62,11 @@ export default {
       images: [],
       loading: false,
       imagePreview: null
+    }
+  },
+  computed: {
+    hasMultipleImages() {
+      return this.images && this.images.length > 1
     }
   },
   watch: {
