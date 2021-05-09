@@ -10,6 +10,7 @@ export async function uploadImage(file, progressCallback, index) {
 }
 
 export async function reloadImage(imageId, size) {
+  console.log('reladod triggered', imageId, size)
   store.commit('images/evictOne', { imageId, size })
   return fetchImageUrl(imageId, size)
 }
