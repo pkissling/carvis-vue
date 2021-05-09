@@ -48,7 +48,7 @@
 import FullscreenImageModal from '../modals/FullscreenImageModal'
 import ImagePagination from './ImagePagination'
 import { reloadImage } from '../service/image-service'
-import { captureMessage } from '../service/sentry-service'
+import { captureError, captureInfo } from '../service/sentry-service'
 
 export default {
   components: {
@@ -164,13 +164,13 @@ export default {
     async onError(url) {
       // prevent endless loop
       if (this.error) {
-        captureMessage('Won\'t retry. Error is set already.', [{ url }])
+        captureError('Won\'t retry. Error is set already.', { url })
         return
       }
 
       // if there are no image properties, we can not fetch again
       if (!this._imageId || !this.height) {
-        captureMessage('Can\'t retry. Properties are missing.', {
+        captureError('Can\'t retry. Properties are missing.', {
           imageId: this._imageId,
           height: this.height,
           url
@@ -190,7 +190,7 @@ export default {
           if (!response.ok) {
             this.imageReloadFailed()
           } else {
-            captureMessage('Successfully reloaded expired image.', {
+            captureInfo('Successfully reloaded expired image.', {
               src: this.src,
               reloadedSrc: this.reloadedSrc
             })
@@ -199,7 +199,7 @@ export default {
         .catch(() => this.imageReloadFailed())
     },
     imageReloadFailed() {
-      captureMessage('reloaded image can neither be resolved.', {
+      captureError('reloaded image can neither be resolved.', {
         src: this.src,
         reloadedSrc: this.reloadedSrc,
         imageId: this._imageId,

@@ -1,6 +1,14 @@
 import * as Sentry from '@sentry/vue'
 
-export function captureMessage(payload, extras) {
+export function captureInfo(payload, extras) {
+  captureMessage(payload, extras, 'info')
+}
+
+export function captureError(payload, extras) {
+  captureMessage(payload, extras, 'error')
+}
+
+export function captureMessage(payload, extras, severity) {
   Sentry.withScope(scope => {
 
     Object.keys(extras).forEach(key => {
@@ -8,7 +16,7 @@ export function captureMessage(payload, extras) {
       scope.setExtra(key, value)
     })
 
-    scope.setLevel('info')
+    scope.setLevel(severity || 'debug')
 
     Sentry.captureMessage(payload)
   })
