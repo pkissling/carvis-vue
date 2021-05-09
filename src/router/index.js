@@ -20,6 +20,10 @@ const routes = [
     component: () => import('../pages/CreateCarPage.vue')
   },
   {
+    path: '/requests',
+    component: () => import('../pages/RequestsPage.vue')
+  },
+  {
     path: '/forbidden',
     component: () => import('../pages/ForbiddenPage.vue'),
   },

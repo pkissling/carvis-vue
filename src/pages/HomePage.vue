@@ -42,7 +42,7 @@ export default {
       if (this.isLoggedin) {
         return [
           { text: 'Fahrzeuge', color: 'primary', action: () => this.$router.push({ path: '/cars'}) },
-          { text: 'Gesuche', color: 'primary', action: () => this.$router.push({ path: '/foo'} ) }
+          { text: 'Gesuche', color: 'primary', action: () => this.$router.push({ path: '/requests'} ) }
         ]
       } else {
         return [
@@ -51,6 +51,9 @@ export default {
         ]
       }
     }
+  },
+  created: {
+    // TODO warmup lambda
   }
 }
 </script>
