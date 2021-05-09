@@ -47,7 +47,7 @@ export default {
       } else {
         return [
           { text: 'Login', color: 'primary', action: () => this.$auth.loginWithRedirect() },
-          { text: 'Registrieren', action: () => this.$auth.loginWithRedirect() }
+          { text: 'Registrieren', action: () => this.$auth.loginWithRedirect({ screen_hint: 'signup' }) }
         ]
       }
     }
