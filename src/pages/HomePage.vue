@@ -41,12 +41,12 @@ export default {
     navigationItems() {
       if (this.isLoggedin) {
         return [
-          { text: 'Fahrzeuge', action: () => this.$router.push({ path: '/cars'}) },
-          { text: 'Gesuche', action: () => this.$router.push({ path: '/foo'} ) }
+          { text: 'Fahrzeuge', color: 'primary', action: () => this.$router.push({ path: '/cars'}) },
+          { text: 'Gesuche', color: 'primary', action: () => this.$router.push({ path: '/foo'} ) }
         ]
       } else {
         return [
-          { text: 'Login', action: () => this.$auth.loginWithRedirect() },
+          { text: 'Login', color: 'primary', action: () => this.$auth.loginWithRedirect() },
           { text: 'Registrieren', action: () => this.$auth.loginWithRedirect() }
         ]
       }

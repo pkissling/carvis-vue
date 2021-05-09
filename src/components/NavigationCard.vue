@@ -20,7 +20,8 @@
             />
             <v-btn
               v-else
-              text
+              :color="item.color"
+              :text="!item.color"
               @click="item.action"
             >
               {{ item.text }}
@@ -54,6 +55,9 @@ export default {
   },
   methods: {
     align(index) {
+      if (this.items.length <= 1) {
+        return 'center'
+      }
       return index < (this.items.length / 2) ? 'left' : 'right'
     }
   }
