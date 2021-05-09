@@ -23,6 +23,6 @@ export default {
 
 <style scoped>
 .spacer {
-  padding-top: 50px;
+  /* padding-top: 50px; */
 }
 </style>
