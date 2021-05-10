@@ -14,7 +14,7 @@ export async function reloadImage(imageId, size) {
   console.log('reload triggered', imageId, size)
 
   store.commit('images/evictOne', { imageId, size })
-  const url = fetchImageUrl(imageId, size)
+  const url = await fetchImageUrl(imageId, size)
 
   const loads = await imageLoads(url)
   if (!loads) {
