@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import FullscreenImageModal from '../modals/FullscreenImageModal'
-import ImagePagination from './ImagePagination'
+import FullscreenImageModal from '../modals/FullscreenImageModal.vue'
+import ImagePagination from './ImagePagination.vue'
 import { reloadImage } from '../service/image-service'
-import { captureError, captureInfo } from '../service/sentry-service'
+import { captureError } from '../service/sentry-service'
 
 export default {
   components: {
@@ -182,31 +182,10 @@ export default {
       // try to fetch new image
       reloadImage(this._imageId, this.height)
           .then(url => this.reloadedSrc = url)
-          .then(() => this.testReloadedSrc())
-    },
-    async testReloadedSrc() {
-      fetch(this.reloadedSrc)
-        .then(response => {
-          if (!response.ok) {
-            this.imageReloadFailed()
-          } else {
-            captureInfo('Successfully reloaded expired image.', {
-              src: this.src,
-              reloadedSrc: this.reloadedSrc
-            })
-          }
-        })
-        .catch(() => this.imageReloadFailed())
-    },
-    imageReloadFailed() {
-      captureError('reloaded image can neither be resolved.', {
-        src: this.src,
-        reloadedSrc: this.reloadedSrc,
-        imageId: this._imageId,
-        height: this.height
-      })
-      this.error = true
-      this.reloadedSrc = null
+          .catch(() => {
+            this.error = true
+            this.reloadedSrc = null
+          })
     }
   }
 }
