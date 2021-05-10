@@ -9,6 +9,10 @@ export function captureError(payload, extras) {
 }
 
 export function captureMessage(payload, extras, severity) {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(payload, extras)
+  }
+
   Sentry.withScope(scope => {
 
     Object.keys(extras).forEach(key => {
