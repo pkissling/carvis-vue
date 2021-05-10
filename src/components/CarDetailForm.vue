@@ -36,10 +36,10 @@
 <script>
 import carService from '../service/car-service'
 import userService from '../service/user-service'
-import DeleteModal from '../modals/DeleteModal'
-import CarPreviewCard from '../cards/CarPreviewCard'
-import CarDataCard from '../cards/CarDataCard'
-import ActionsCard from '../cards/ActionsCard'
+import DeleteModal from '../modals/DeleteModal.vue'
+import CarPreviewCard from '../cards/CarPreviewCard.vue'
+import CarDataCard from '../cards/CarDataCard.vue'
+import ActionsCard from '../cards/ActionsCard.vue'
 
 export default {
   components: {

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import CarDetailForm from '../components/CarDetailForm'
+import CarDetailForm from '../components/CarDetailForm.vue'
 import carService from '../service/car-service'
 
 export default {

@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import CarDetailForm from '../components/CarDetailForm'
-import WaitingLayer from '../components/WaitingLayer'
+import CarDetailForm from '../components/CarDetailForm.vue'
+import WaitingLayer from '../components/WaitingLayer.vue'
 import carService from '../service/car-service'
 import userService from '../service/user-service'
 import router from '../router'
@@ -55,7 +55,8 @@ export default {
       const carId = to.params.carId
       carService.getCar(carId)
         .then(car => vm.car = car)
-        .catch(err => router.push({ name: 'NotFound' }))
+        // this.$router is not available
+        .catch(() => router.push({ name: 'NotFound' }))
         .finally(() => vm.loading = false)
     })
   }

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import PreviewImage from './PreviewImage'
+import PreviewImage from './PreviewImage.vue'
 import { fetchImageUrl } from '../service/image-service'
 
 export default {

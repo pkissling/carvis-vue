@@ -32,8 +32,8 @@
   </v-card>
 </template>
 <script>
-import ViewCarImages from '../components/ViewCarImages'
-import EditCarImages from '../components/EditCarImages'
+import ViewCarImages from '../components/ViewCarImages.vue'
+import EditCarImages from '../components/EditCarImages.vue'
 
 export default {
   components: {

@@ -36,8 +36,8 @@
 
 <script>
 import ListCars from '../apollo/queries/ListCars'
-import FloatingButton from '../components/FloatingButton'
-import CarThumbnail from '../components/CarThumbnail'
+import FloatingButton from '../components/FloatingButton.vue'
+import CarThumbnail from '../components/CarThumbnail.vue'
 import { relativeTimeDifference } from '../utilities/time'
 
 export default {

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import EditImages from './EditImages'
+import EditImages from './EditImages.vue'
 import { fetchImageUrl, uploadImage } from '../service/image-service'
 
 

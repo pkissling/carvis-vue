@@ -55,23 +55,15 @@
         </v-card>
       </v-slide-item>
     </v-slide-group>
-
-    <FullscreenImageModal
-      v-if="fullScreenImage"
-      :image="fullScreenImage"
-      @cancel="fullScreenImage = null"
-    />
   </div>
 </template>
 
 <script>
-import FullscreenImageModal from '../modals/FullscreenImageModal'
-import EditImageExpansionSlot from './EditImageExpansionSlot'
-import PreviewImage from './PreviewImage'
+import EditImageExpansionSlot from './EditImageExpansionSlot.vue'
+import PreviewImage from './PreviewImage.vue'
 
 export default {
   components: {
-    FullscreenImageModal,
     EditImageExpansionSlot,
     PreviewImage
   },
