@@ -22,7 +22,10 @@
           <PreviewImage
             width="200"
             height="200"
-            :image="image"
+            :src="image.src"
+            :lazy-src="image.lazySrc"
+            :image-id="image.id"
+            :progress="image.progress"
           />
           <v-card-actions>
             <v-btn
@@ -75,7 +78,6 @@ export default {
   },
   data () {
     return {
-      fullScreenImage: null,
       editImage: false,
     }
   },

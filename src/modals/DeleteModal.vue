@@ -38,7 +38,7 @@ export default {
   props: {
     subject: {
       type: String,
-      default: ''
+      default: null
     }
   }
   ,

@@ -4,26 +4,16 @@
       v-model="dialog"
       @input="$emit('cancel')"
     >
-      <v-img
+      <PreviewImage
         :src="src"
         :lazy-src="lazySrc"
+        :height="height"
+        :image-id="imageId"
         max-height="90vh"
+        :not-clickable="true"
         contain
         @click="$emit('cancel')"
-      >
-        <template v-slot:placeholder>
-          <v-row
-            class="fill-height ma-0"
-            align="center"
-            justify="center"
-          >
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            />
-          </v-row>
-        </template>
-      </v-img>
+      />
     </v-dialog>
   </v-row>
 </template>
@@ -33,27 +23,27 @@ import { fetchImageUrl } from '../service/image-service'
 
 export default {
   props: {
-    image: {
-      type: Object,
+    imageId: {
+      type: String,
+      required: true
+    },
+    lazySrc: {
+      type: String,
       default: null
     }
   },
   data () {
     return {
       dialog: true,
-      src: null
+      src: null,
+      height: '1080'
     }
   },
-  computed: {
-    lazySrc () {
-      return this.image.src ? this.image.src : this.image.lazySrc
-    }
+  beforeCreate: function(){
+    this.$options.components.PreviewImage = require("../components/PreviewImage.vue").default;
   },
   async created () {
-    if (!this.image || !this.image.id) {
-      return
-    }
-    fetchImageUrl(this.image.id, 1080)
+    fetchImageUrl(this.imageId, this.height)
       .then(url => this.src = url)
   }
 }

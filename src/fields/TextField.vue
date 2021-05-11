@@ -28,11 +28,11 @@ export default {
     },
     label: {
       type: String,
-      default: ''
+      default: null
     },
     hint: {
       type: String,
-      default: ''
+      default: null
     },
     required: {
       type: Boolean,
@@ -40,11 +40,11 @@ export default {
     },
     type: {
       type: String,
-      default: ''
+      default: null
     },
     suffix: {
       type: String,
-      default: ''
+      default: null
     },
     counter: {
       type: Number,

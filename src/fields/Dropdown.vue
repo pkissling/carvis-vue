@@ -19,7 +19,7 @@ export default {
   props: {
     value: {
       type: String,
-      default: ''
+      default: null
     },
     items: {
       type: Array,
@@ -27,11 +27,11 @@ export default {
     },
     label: {
       type: String,
-      default: ''
+      default: null
     },
     hint: {
       type: String,
-      default: ''
+      default: null
     },
     required: {
       type: Boolean,

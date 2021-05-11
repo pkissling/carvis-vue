@@ -19,7 +19,7 @@ export default {
   props: {
     value: {
       type: String,
-      default: ''
+      default: null
     },
     required: {
       type: Boolean,
@@ -27,7 +27,7 @@ export default {
     },
     label: {
       type: String,
-      default: ''
+      default: null
     },
     rows: {
       type: Number,

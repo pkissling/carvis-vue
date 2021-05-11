@@ -1,6 +1,6 @@
 <template>
   <v-container
-    v-if="imagesCount && currentImage"
+    v-if="currentImagePosition && imagesCount"
     class="fill-height"
   >
     <v-row class="fill-height">
@@ -10,7 +10,7 @@
         align="center"
       >
         <p class="pt-4 font-weight-medium">
-          {{ currentImage }} / {{ imagesCount }}
+          {{ currentImagePosition }} / {{ imagesCount }}
         </p>
       </v-col>
     </v-row>
@@ -24,7 +24,7 @@ export default {
       type: Number,
       default: 0
     },
-    currentImage: {
+    currentImagePosition: {
       type: Number,
       default: 0
     }

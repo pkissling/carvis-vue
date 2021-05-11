@@ -24,8 +24,9 @@
         >
           <PreviewImage
             height="500"
-            :image="image"
-            :current-image="i + 1"
+            :image-id="image.id"
+            :src="image.src"
+            :current-image-position="i + 1"
             :images-count="images.length"
             @fullscreen="onFullscreen"
           />

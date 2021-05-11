@@ -2,7 +2,9 @@
   <div>
     <v-img
       :height="height"
+      :max-height="maxHeight"
       :width="width"
+      :max-width="maxWidth"
       :src="_src"
       :lazy-src="_lazySrc"
       :contain="contain"
@@ -11,7 +13,7 @@
       @error="onError"
     >
       <ImagePagination
-        :current-image="currentImage"
+        :current-image-position="currentImagePosition"
         :images-count="imagesCount"
       />
       <template #placeholder>
@@ -38,7 +40,8 @@
 
     <FullscreenImageModal
       v-if="fullscreen"
-      :image="image"
+      :image-id="imageId"
+      :lazy-src="src"
       @cancel="fullscreen = false"
     />
   </div>
@@ -51,13 +54,22 @@ import { reloadImage } from '../service/image-service'
 import { captureError } from '../service/sentry-service'
 
 export default {
+  name: 'PreviewImage',
   components: {
     FullscreenImageModal,
     ImagePagination
   },
   props: {
-    image: {
-      type: Object,
+    imageId: {
+      type: String,
+      required: true
+    },
+    height: {
+      type: String,
+      required: true
+    },
+    src: {
+      type: [String, Object],
       default: null
     },
     notClickable: {
@@ -68,35 +80,34 @@ export default {
       type: String,
       default: null
     },
-    height: {
+    maxWidth: {
       type: String,
-      default: null
+      default: null,
     },
-    src: {
-      type: [String, Object],
-      default: null
+    maxHeight: {
+      type: String,
+      default: null,
     },
     lazySrc: {
       type: String,
-      default: ''
+      default: null
     },
     contain: {
       type: Boolean,
       default: false
     },
-    imageId: {
-      type: String,
-      default: ''
-    },
     imagesCount: {
       type: Number,
       default: 0
     },
-    currentImage: {
+    currentImagePosition: {
+      type: Number,
+      default: 0
+    },
+    progress: {
       type: Number,
       default: 0
     }
-
   },
   data() {
     return {
@@ -115,18 +126,14 @@ export default {
         return require("@/assets/images/car_dummy_highres.jpg")
       }
 
-      if (this.src) {
-        return this.src
-      }
-
-      return this.image ? this.image.src : null
+      return this.src
     },
     _lazySrc() {
       if (this.error) {
         return require("@/assets/images/car_dummy_lowres.jpg")
       }
 
-      return this.image ? this.image.lazySrc : null
+      return this.lazySrc
     },
     _clickable() {
       if (this.error) {
@@ -135,15 +142,8 @@ export default {
 
       return !this.notClickable
     },
-    progress() {
-      if (!this.image || this.image.progress === null) {
-        return null
-      }
-
-      return this.image.progress === 0 ? "0" : this.image.progress
-    },
-    _imageId() {
-      return this.image && this.image.id ? this.image.id : this.imageId
+    _progress() {
+      return this.progress === 0 ? "0" : this.progress
     }
   },
   watch: {
@@ -158,8 +158,10 @@ export default {
       }
 
       if (!this.notClickable) {
-        this.fullscreen = true
+           this.fullscreen = true
       }
+
+      this.$emit('click')
     },
     async onError(url) {
       // prevent endless loop
@@ -169,9 +171,9 @@ export default {
       }
 
       // if there are no image properties, we can not fetch again
-      if (!this._imageId || !this.height) {
+      if (!this.imageId || !this.height) {
         captureError('Can\'t retry. Properties are missing.', {
-          imageId: this._imageId,
+          imageId: this.imageId,
           height: this.height,
           url
         })
@@ -180,7 +182,7 @@ export default {
       }
 
       // try to fetch new image
-      reloadImage(this._imageId, this.height)
+      reloadImage(this.imageId, this.height)
           .then(url => this.reloadedSrc = url)
           .catch(() => {
             this.error = true
