@@ -52,8 +52,6 @@ export default {
       }
     }
   },
-  created: {
-    // TODO warmup lambda
-  }
+  // TODO create warmup lambda call
 }
 </script>
