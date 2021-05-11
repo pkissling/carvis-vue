@@ -4,34 +4,36 @@
       v-if="loading"
       type="image"
     />
-    <PreviewImage
-      v-if="!images.length && !loading"
-      :src="require('@/assets/images/car_dummy_highres.jpg')"
-      :lazy-src="require('@/assets/images/car_dummy_lowres.jpg')"
-      height="500"
-      not-clickable
-    />
     <div v-else>
-      <v-carousel
-        :show-arrows="hasMultipleImages"
-        :cycle="!fullscreen"
+      <PreviewImage
+        v-if="!images.length"
+        :src="require('@/assets/images/car_dummy_highres.jpg')"
+        :lazy-src="require('@/assets/images/car_dummy_lowres.jpg')"
         height="500"
-        hide-delimiters
-      >
-        <v-carousel-item
-          v-for="(image, i) in images"
-          :key="image.id"
+        not-clickable
+      />
+      <div v-else>
+        <v-carousel
+          :show-arrows="hasMultipleImages"
+          :cycle="!fullscreen"
+          height="500"
+          hide-delimiters
         >
-          <PreviewImage
-            height="500"
-            :image-id="image.id"
-            :src="image.src"
-            :current-image-position="i + 1"
-            :images-count="images.length"
-            @fullscreen="onFullscreen"
-          />
-        </v-carousel-item>
-      </v-carousel>
+          <v-carousel-item
+            v-for="(image, i) in images"
+            :key="image.id"
+          >
+            <PreviewImage
+              height="500"
+              :image-id="image.id"
+              :src="image.src"
+              :current-image-position="i + 1"
+              :images-count="images.length"
+              @fullscreen="onFullscreen"
+            />
+          </v-carousel-item>
+        </v-carousel>
+      </div>
     </div>
   </div>
 </template>
