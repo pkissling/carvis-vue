@@ -60,13 +60,13 @@ export default {
     ImagePagination
   },
   props: {
-    imageId: {
-      type: String,
-      required: true
-    },
     height: {
       type: String,
       required: true
+    },
+    imageId: {
+      type: String,
+      default: null
     },
     src: {
       type: [String, Object],
