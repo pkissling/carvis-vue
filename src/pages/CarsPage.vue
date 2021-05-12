@@ -29,7 +29,7 @@
 
     <FloatingButton
       :loading="loading"
-      @create-clicked="createCar"
+      @create="createCar"
     />
   </v-container>
 </template>
