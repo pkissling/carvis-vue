@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { fetchImageUrl } from '../service/image-service'
+import imageService from '../service/image-service'
 
 export default {
   props: {
@@ -43,7 +43,7 @@ export default {
     this.$options.components.PreviewImage = require("../components/PreviewImage.vue").default;
   },
   async created () {
-    fetchImageUrl(this.imageId, this.height)
+    imageService.fetchImageUrl(this.imageId, this.height)
       .then(url => this.src = url)
   }
 }

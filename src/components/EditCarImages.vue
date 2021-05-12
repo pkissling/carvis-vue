@@ -22,7 +22,7 @@
 
 <script>
 import EditImages from './EditImages.vue'
-import { fetchImageUrl, uploadImage } from '../service/image-service'
+import imageService from '../service/image-service'
 
 
 export default {
@@ -107,15 +107,15 @@ export default {
     },
     async uploadImage(previewImage, file, index) {
       const progressCallback = (progress) => previewImage.progress = progress
-      const uploadedImageId = await uploadImage(file, progressCallback, index)
-      const imageUrl = await fetchImageUrl(uploadedImageId, 200)
+      const uploadedImageId = await imageService.uploadImage(file, progressCallback, index)
+      const imageUrl = await imageService.fetchImageUrl(uploadedImageId, 200)
       const lazySrc = previewImage ? previewImage.lazySrc : null
       this.images = this.images.filter(img => img.id !== previewImage.id)
       this.images.splice(index, 0, { id: uploadedImageId, src: imageUrl, lazySrc, processed: true })
     },
     async loadExistingImage(imageId, index) {
       this.images.push({ id: imageId, index, processed: true })
-      fetchImageUrl(imageId, 200)
+      imageService.fetchImageUrl(imageId, 200)
         .then(imageUrl => {
           this.images = this.images.filter(image => image.id !== imageId)
           this.images.splice(index, 0, { id: imageId, src: imageUrl, index: index, processed: true })

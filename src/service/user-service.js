@@ -1,30 +1,30 @@
-import { getAuthInstance } from "../auth";
+import { getAuthInstance } from "../auth"
 
-export default class UserService {
+export default {
 
-  static getUsername() {
+  getUsername() {
     const user = this.getUser()
     return user ? user.sub : undefined
-  }
+  },
 
-  static getName() {
+  getName() {
     const user = this.getUser()
     return user ? user.name : undefined
-  }
+  },
 
-  static isAdmin() {
+  isAdmin() {
     return this.hasRole('admin')
-  }
+  },
 
-  static isUser() {
+  isUser() {
     return this.hasRole('user')
-  }
+  },
 
-  static getUser() {
+  getUser() {
     return getAuthInstance().user
-  }
+  },
 
-  static hasRole(requiredRole) {
+  hasRole(requiredRole) {
     if (!requiredRole) {
       return false
     }

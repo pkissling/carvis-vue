@@ -6,9 +6,9 @@ import GetCar from '../apollo/queries/GetCar'
 import { apolloClient } from '../apollo'
 import userService from '../service/user-service'
 
-export default class CarService {
+export default {
 
-  static async createCar(car) {
+  async createCar(car) {
     apolloClient.mutate({
       mutation: CreateCar,
       variables: {
@@ -47,9 +47,9 @@ export default class CarService {
         }
       }
     })
-  }
+  },
 
-  static async updateCar(car) {
+  async updateCar(car) {
     // remove fields which are not part of the schema. (_type)
     // otherwise apollo will refuse the update
     Object.keys(car)
@@ -78,9 +78,9 @@ export default class CarService {
         }
       }
     })
-  }
+  },
 
-  static async deleteCar(car) {
+  async deleteCar(car) {
     apolloClient.mutate({
       mutation: DeleteCar,
       variables: { id: car.id },
@@ -97,9 +97,9 @@ export default class CarService {
         }
       }
     })
-  }
+  },
 
-  static async getCar(carId) {
+  async getCar(carId) {
     if (!carId) {
       throw new Error('carId not provided')
     }

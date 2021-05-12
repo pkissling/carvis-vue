@@ -1,4 +1,4 @@
-import { fetchImageUrl } from '../../clients/backend-client'
+import backendClient from '../../clients/backend-client'
 
 export default {
   namespaced: true,
@@ -43,7 +43,7 @@ export default {
       const cachedImage = context.getters.getImage(imageId, size)
       if (!cachedImage) {
         // fetch image and populate cache
-        const response = await fetchImageUrl(imageId, size)
+        const response = await backendClient.fetchImageUrl(imageId, size)
         context.commit('put', { imageId, size, url: response.data.url })
         return
       }
@@ -54,7 +54,7 @@ export default {
         // evict expired image and populate with new url
         console.log(`image in cache has expired on ${new Date(expires)}. Repopulating cache`, cachedImage)
         context.commit('evictOne', { imageId: cachedImage.imageId, size: cachedImage.size })
-        const response = fetchImageUrl(imageId, size)
+        const response = backendClient.fetchImageUrl(imageId, size)
         context.commit('put', { imageId, size, url: response.data.url })
         return
       }

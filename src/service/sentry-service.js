@@ -1,27 +1,30 @@
 import * as Sentry from '@sentry/vue'
 
-export function captureInfo(payload, extras) {
-  captureMessage(payload, extras, 'info')
-}
+export default {
 
-export function captureError(payload, extras) {
-  captureMessage(payload, extras, 'error')
-}
+  captureInfo(payload, extras) {
+    captureMessage(payload, extras, 'info')
+  },
 
-export function captureMessage(payload, extras, severity) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(payload, extras)
-  }
+  captureError(payload, extras) {
+    captureMessage(payload, extras, 'error')
+  },
 
-  Sentry.withScope(scope => {
+  captureMessage(payload, extras, severity) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(payload, extras)
+    }
 
-    Object.keys(extras).forEach(key => {
-      const value = extras[key]
-      scope.setExtra(key, value)
+    Sentry.withScope(scope => {
+
+      Object.keys(extras).forEach(key => {
+        const value = extras[key]
+        scope.setExtra(key, value)
+      })
+
+      scope.setLevel(severity || 'debug')
+
+      Sentry.captureMessage(payload)
     })
-
-    scope.setLevel(severity || 'debug')
-
-    Sentry.captureMessage(payload)
-  })
+  }
 }

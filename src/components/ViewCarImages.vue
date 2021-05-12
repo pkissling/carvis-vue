@@ -40,7 +40,7 @@
 
 <script>
 import PreviewImage from './PreviewImage.vue'
-import { fetchImageUrl } from '../service/image-service'
+import imageService from '../service/image-service'
 
 export default {
   components: {
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     async resolveImage (imageId) {
-      return fetchImageUrl(imageId, 500)
+      return imageService.fetchImageUrl(imageId, 500)
         .then(url => { return { id: imageId, src: url }})
     },
     onFullscreen(value) {

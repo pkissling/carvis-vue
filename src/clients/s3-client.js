@@ -27,21 +27,23 @@ instance.interceptors.request.use(async req => {
   return req
 })
 
-export const uploadFile = async (url, contentType, file, progressCallback, index) => {
-  uploadQueue.splice(index, 0, { url, uploaded: false })
-  try {
-    return await instance.put(url, file, {
-      headers: {
-        'Content-Type': contentType
-      },
-      onUploadProgress: progressEvent => {
-        const uploadPercent = Math.round(progressEvent.loaded / progressEvent.total * 100)
-        progressCallback(uploadPercent)
-      }
-    })
-  } catch (err) {
-    // remove item from uploadQueue if upload failed
-    uploadQueue.splice(0, 1)
-    throw new Error(err)
+export default {
+  async uploadFile(url, contentType, file, progressCallback, index)  {
+    uploadQueue.splice(index, 0, { url, uploaded: false })
+    try {
+      return await instance.put(url, file, {
+        headers: {
+          'Content-Type': contentType
+        },
+        onUploadProgress: progressEvent => {
+          const uploadPercent = Math.round(progressEvent.loaded / progressEvent.total * 100)
+          progressCallback(uploadPercent)
+        }
+      })
+    } catch (err) {
+      // remove item from uploadQueue if upload failed
+      uploadQueue.splice(0, 1)
+      throw new Error(err)
+    }
   }
 }

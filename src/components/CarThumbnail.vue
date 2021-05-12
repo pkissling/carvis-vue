@@ -23,7 +23,7 @@
 
 <script>
 import PreviewImage from './PreviewImage.vue'
-import { fetchImageUrl } from '../service/image-service'
+import imageService from '../service/image-service'
 
 export default {
   components: {
@@ -45,7 +45,7 @@ export default {
      return
     }
 
-    fetchImageUrl(this.imageId, 100)
+    imageService.fetchImageUrl(this.imageId, 100)
       .then(url => this.src = url)
   }
 }

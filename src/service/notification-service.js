@@ -1,20 +1,20 @@
 import store from '../store'
 
-export default class NotificationService {
+export default {
 
-  static async info(message) {
+  async info(message) {
     store.dispatch('notifications/info', message)
-  }
+  },
 
-  static async success(message) {
+  async success(message) {
     store.dispatch('notifications/success', message)
-  }
+  },
 
-  static async warning(message) {
+  async warning(message) {
     store.dispatch('notifications/warning', message)
-  }
+  },
 
-  static async error(message) {
+  async error(message) {
     store.dispatch('notifications/error', message)
   }
 }

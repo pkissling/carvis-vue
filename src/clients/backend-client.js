@@ -13,14 +13,16 @@ instance.interceptors.request.use(async config => {
   return config;
 });
 
-export const createUploadUrl = async (contentType) => {
-  return instance.post('images', null, {
-    headers: {
-      'Content-Type': contentType
-    }
-  })
-}
+export default {
+  async createUploadUrl (contentType) {
+    return instance.post('images', null, {
+      headers: {
+        'Content-Type': contentType
+      }
+    })
+  },
 
-export const fetchImageUrl = async (imageId, size) => {
-  return instance.get(`images/${imageId}`, { params: { size } })
+  async fetchImageUrl (imageId, size) {
+    return instance.get(`images/${imageId}`, { params: { size } })
+  }
 }

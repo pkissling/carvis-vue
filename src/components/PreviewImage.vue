@@ -50,8 +50,8 @@
 <script>
 import FullscreenImageModal from '../modals/FullscreenImageModal.vue'
 import ImagePagination from './ImagePagination.vue'
-import { reloadImage } from '../service/image-service'
-import { captureError } from '../service/sentry-service'
+import imageService from '../service/image-service'
+import sentryService from '../service/sentry-service'
 
 export default {
   name: 'PreviewImage',
@@ -166,13 +166,13 @@ export default {
     async onError(url) {
       // prevent endless loop
       if (this.error) {
-        captureError('Won\'t retry. Error is set already.', { url })
+        sentryService.captureError('Won\'t retry. Error is set already.', { url })
         return
       }
 
       // if there are no image properties, we can not fetch again
       if (!this.imageId || !this.height) {
-        captureError('Can\'t retry. Properties are missing.', {
+        sentryService.captureError('Can\'t retry. Properties are missing.', {
           imageId: this.imageId,
           height: this.height,
           url
@@ -182,7 +182,7 @@ export default {
       }
 
       // try to fetch new image
-      reloadImage(this.imageId, this.height)
+      imageService.reloadImage(this.imageId, this.height)
           .then(url => this.reloadedSrc = url)
           .catch(() => {
             this.error = true
