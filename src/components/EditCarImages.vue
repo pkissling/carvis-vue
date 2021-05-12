@@ -6,7 +6,7 @@
     <v-row>
       <v-col>
         <v-file-input
-          v-bind:clearable="false"
+          :clearable="false"
           :value="images"
           accept="image/*"
           multiple
@@ -73,7 +73,10 @@ export default {
       }
 
       this.$emit('loading', true)
-      Promise.all(imageUploadPromises)
+      // TODO 1. catch errors
+      // TODO 2. axios retry
+      // TODO 3. run sequentially
+      Promise.all(imageUploadPromises) // TODO
         .finally(() => this.$emit('loading', false))
     },
     createPreview(imageId, file, index) {
