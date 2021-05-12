@@ -1,10 +1,16 @@
 import axios from 'axios'
-
-const uploadQueue = []
+import axiosRetry from 'axios-retry'
 
 const instance = axios.create({
   timeout: 60000
 })
+axiosRetry(instance, {
+  retries: 3,
+  retryDelay: axiosRetry.exponentialDelay,
+  shouldResetTimeout: true
+})
+
+const uploadQueue = []
 
 instance.interceptors.response.use(res => {
   const index = uploadQueue.indexOf(uploadQueue.find(item => item.url === res.config.url))
@@ -23,13 +29,19 @@ instance.interceptors.request.use(async req => {
 
 export const uploadFile = async (url, contentType, file, progressCallback, index) => {
   uploadQueue.splice(index, 0, { url, uploaded: false })
-  return instance.put(url, file, {
-    headers: {
-      'Content-Type': contentType
-    },
-    onUploadProgress: progressEvent => {
-      const uploadPercent = Math.round(progressEvent.loaded / progressEvent.total * 100)
-      progressCallback(uploadPercent)
-    }
-  })
+  try {
+    return await instance.put(url, file, {
+      headers: {
+        'Content-Type': contentType
+      },
+      onUploadProgress: progressEvent => {
+        const uploadPercent = Math.round(progressEvent.loaded / progressEvent.total * 100)
+        progressCallback(uploadPercent)
+      }
+    })
+  } catch (err) {
+    // remove item from uploadQueue if upload failed
+    uploadQueue.splice(0, 1)
+    throw new Error(err)
+  }
 }
