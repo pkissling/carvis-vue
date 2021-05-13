@@ -16,9 +16,9 @@ export default {
     console.log('reload triggered', imageId, size)
 
     store.commit('images/evictOne', { imageId, size })
-    const url = await fetchImageUrl(imageId, size)
+    const url = await this.fetchImageUrl(imageId, size)
 
-    const loads = await imageLoads(url)
+    const loads = await this.imageLoads(url)
     if (!loads) {
       sentryService.captureError('Reloaded url was invalid as well!', { url })
       throw new Error('Cannot resolve image from url', url)
