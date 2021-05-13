@@ -245,17 +245,17 @@ export default {
   },
   watch: {
     'value.ads' () {
-      if (this.ads.length === 0 && this.car.ads) {
-        this.ads = [...this.car.ads]
+      if (this.ads.length === 0 && this.value.ads) {
+        this.ads = [...this.value.ads]
       }
     }
   },
   methods: {
     kilowattsChanged(kw) {
       if (!kw) {
-        this.car.horsePower = null
+        this.value.horsePower = null
       }
-      this.car.horsePower = Math.round(kw / 0.73549875)
+      this.value.horsePower = Math.round(kw / 0.73549875)
     },
     onAdsChange(ad) {
       const newAd = ad.find(i => !this.ads.includes(i))
