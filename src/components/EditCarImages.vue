@@ -23,6 +23,8 @@
 <script>
 import EditImages from './EditImages.vue'
 import imageService from '../service/image-service'
+import notificationService from '../service/notification-service'
+import sentryService from '../service/sentry-service'
 
 
 export default {
@@ -73,10 +75,7 @@ export default {
       }
 
       this.$emit('loading', true)
-      // TODO 1. catch errors
-      // TODO 2. axios retry
-      // TODO 3. run sequentially
-      Promise.all(imageUploadPromises) // TODO
+      Promise.allSettled(imageUploadPromises)
         .finally(() => this.$emit('loading', false))
     },
     createPreview(imageId, file, index) {
@@ -107,11 +106,18 @@ export default {
     },
     async uploadImage(previewImage, file, index) {
       const progressCallback = (progress) => previewImage.progress = progress
-      const uploadedImageId = await imageService.uploadImage(file, progressCallback, index)
-      const imageUrl = await imageService.fetchImageUrl(uploadedImageId, 200)
-      const lazySrc = previewImage ? previewImage.lazySrc : null
-      this.images = this.images.filter(img => img.id !== previewImage.id)
-      this.images.splice(index, 0, { id: uploadedImageId, src: imageUrl, lazySrc, processed: true })
+      try {
+        const uploadedImageId = await imageService.uploadImage(file, progressCallback, index)
+        const imageUrl = await imageService.fetchImageUrl(uploadedImageId, 200)
+        const lazySrc = previewImage ? previewImage.lazySrc : null
+        this.images = this.images.filter(img => img.id !== previewImage.id)
+        this.images.splice(index, 0, { id: uploadedImageId, src: imageUrl, lazySrc, processed: true })
+      } catch (err) {
+        console.error(err)
+        notificationService.error('Fehler beim Hochladen eines Bilds. Bitte versuche es erneut.')
+        sentryService.captureError(err, { imageId: previewImage.id })
+        this.images = this.images.filter(img => img.id !== previewImage.id)
+      }
     },
     async loadExistingImage(imageId, index) {
       this.images.push({ id: imageId, index, processed: true })

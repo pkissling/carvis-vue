@@ -3,14 +3,22 @@ import * as Sentry from '@sentry/vue'
 export default {
 
   captureInfo(payload, extras) {
-    captureMessage(payload, extras, 'info')
+    this.captureMessage(payload, extras, 'info')
   },
 
   captureError(payload, extras) {
-    captureMessage(payload, extras, 'error')
+    this.captureMessage(payload, extras, 'error')
+  },
+
+  captureException(error, extras) {
+    this.send((p) => Sentry.captureException(p), 'error', error, extras)
   },
 
   captureMessage(payload, extras, severity) {
+    this.send((p) => Sentry.captureMessage(p), severity, payload, extras)
+  },
+
+  send(sendFn, severity, payload, extras) {
     if (process.env.NODE_ENV === 'development') {
       console.log(payload, extras)
     }
@@ -24,7 +32,7 @@ export default {
 
       scope.setLevel(severity || 'debug')
 
-      Sentry.captureMessage(payload)
+      sendFn(payload)
     })
   }
 }

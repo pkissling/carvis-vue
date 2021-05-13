@@ -43,7 +43,7 @@ export default {
     } catch (err) {
       // remove item from uploadQueue if upload failed
       uploadQueue.splice(0, 1)
-      throw new Error(err)
+      throw (err)
     }
   }
 }
