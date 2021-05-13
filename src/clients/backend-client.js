@@ -1,10 +1,16 @@
 import axios from 'axios'
 import { apiUrl } from '../../app.config'
 import { obtainJwtToken } from '../auth/utils'
+import axiosRetry from 'axios-retry'
 
 const instance = axios.create({
   baseURL: apiUrl(),
   timeout: 10000
+})
+
+axiosRetry(instance, {
+  retries: 3,
+  retryDelay: axiosRetry.exponentialDelay
 })
 
 instance.interceptors.request.use(async config => {
