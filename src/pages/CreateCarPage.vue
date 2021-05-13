@@ -11,6 +11,7 @@
 <script>
 import CarDetailForm from '../components/CarDetailForm.vue'
 import carService from '../service/car-service'
+import notificationService from '../service/notification-service'
 
 export default {
   components: {
@@ -25,8 +26,8 @@ export default {
     createCar(car) {
       carService.createCar(car)
         .then(() => this.$router.push({ path: '/' }))
-        .then(() => this.$store.dispatch('notifications/success', 'Fahrzeug erfolgreich hinzugefügt.'))
-        .catch(e => this.$store.dispatch('notifications/error', 'Fehler' + e)) // TODO
+        .then(() => notificationService.success('Fahrzeug erfolgreich erstellt.'))
+        .catch(() => notificationService.error('Fehler beim Erstellen des Fahrzeugs. Bitte versuche es erneut.'))
     }
   }
 }

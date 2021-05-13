@@ -7,18 +7,19 @@ import { appsyncUrl, appsyncRegion } from '../../app.config'
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import notificationService from '../service/notification-service'
+import sentryService from '../service/sentry-service';
 
 
 Vue.use(VueApollo)
 
 const errorLink = onError(({ networkError, graphQLErrors }) => {
+  notificationService.error('Fehler beim Laden der Daten vom Server. Bitte versuche es später erneut.')
   if (graphQLErrors) {
-    const errorMessages = graphQLErrors.map(({ message, locations, path }) => `Message: ${message}, Location: ${locations}, Path: ${path}`)
-    notificationService.error('Es ist ein Fehler aufgetreten: ' + errorMessages)
+    graphQLErrors.forEach(error => sentryService.captureError('graphql network error', { error }))
   }
 
   if (networkError) {
-    notificationService.error('Es gibt Netzwerkprobleme: ' + networkError)
+    sentryService.captureError('graphql network error', { networkError })
   }
 })
 

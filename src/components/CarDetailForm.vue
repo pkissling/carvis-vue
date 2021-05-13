@@ -35,6 +35,7 @@
 </template>
 <script>
 import carService from '../service/car-service'
+import notificationService from '../service/notification-service'
 import userService from '../service/user-service'
 import DeleteModal from '../modals/DeleteModal.vue'
 import CarPreviewCard from '../cards/CarPreviewCard.vue'
@@ -96,7 +97,9 @@ export default {
     deleteCar() {
       this.showCarDeletionModal = false
       carService.deleteCar(this.car)
+        .then(() => notificationService.success('Fahrzeug erfolgreich gelöscht.'))
         .then(() => this.$router.push({ path: '/' }))
+        .catch(() => notificationService.error('Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.'))
     }
   }
 }

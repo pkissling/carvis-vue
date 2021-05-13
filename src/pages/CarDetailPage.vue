@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import notificationService from '../service/notification-service'
 import CarDetailForm from '../components/CarDetailForm.vue'
 import WaitingLayer from '../components/WaitingLayer.vue'
 import carService from '../service/car-service'
@@ -47,6 +48,8 @@ export default {
     updateCar (car) {
       carService.updateCar(car)
         .then(() => this.$router.push({ path: '/' }))
+        .then(() => notificationService.success('Fahrzeug erfolgreich bearbeitet.'))
+        .catch(() => notificationService.error('Fehler beim Bearbeiten des Fahrzeugs. Bitte versuche es erneut.'))
     }
   },
   async beforeRouteEnter (to, from, next) {
@@ -56,7 +59,10 @@ export default {
       carService.getCar(carId)
         .then(car => vm.car = car)
         // this.$router is not available
-        .catch(() => router.push({ name: 'NotFound' }))
+        .catch(() => {
+          notificationService.error('Fehler beim Laden des Fahrzeugs. Bitte versuche es erneut.')
+          router.push({ name: 'NotFound' })
+        })
         .finally(() => vm.loading = false)
     })
   }
