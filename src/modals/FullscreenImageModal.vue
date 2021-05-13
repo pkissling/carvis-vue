@@ -9,8 +9,9 @@
         :lazy-src="lazySrc"
         :height="height"
         :image-id="imageId"
-        max-height="90vh"
         :not-clickable="true"
+        :error="error"
+        max-height="90vh"
         contain
         @click="$emit('cancel')"
       />
@@ -36,7 +37,8 @@ export default {
     return {
       dialog: true,
       src: null,
-      height: '1080'
+      height: '1080',
+      error: false
     }
   },
   beforeCreate: function(){
@@ -45,6 +47,7 @@ export default {
   async created () {
     imageService.fetchImageUrl(this.imageId, this.height)
       .then(url => this.src = url)
+      .catch(() => this.error = true)
   }
 }
 </script>

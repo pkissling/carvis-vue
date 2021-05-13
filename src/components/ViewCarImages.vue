@@ -29,6 +29,7 @@
               :src="image.src"
               :current-image-position="i + 1"
               :images-count="images.length"
+              :error="image.error"
               @fullscreen="onFullscreen"
             />
           </v-carousel-item>
@@ -83,7 +84,7 @@ export default {
       }
 
       if (addedImages.length) {
-        await Promise.all(addedImages.map(imageId => this.resolveImage(imageId)))
+        await Promise.allSettled(addedImages.map(imageId => this.resolveImage(imageId)))
           .then(resolvedImages => resolvedImages.map(image => this.images = [ ...this.images.filter(img => img.id !== image.id), image]))
       }
 
@@ -111,13 +112,14 @@ export default {
           const index = this.images.indexOf(this.images.find(img => img.id === image.id))
           this.images.splice(index, 1, image)
         })
-        .then(() => this.$emit('loading', false)) // stop loading animation after first image url was resolved
+        .finally(() => this.$emit('loading', false)) // stop loading animation after first image url was resolved
     }, Promise.resolve())
   },
   methods: {
     async resolveImage (imageId) {
       return imageService.fetchImageUrl(imageId, 500)
         .then(url => { return { id: imageId, src: url }})
+        .catch(() => { return { id: imageId, error: true }})
     },
     onFullscreen(value) {
       this.fullscreen = value

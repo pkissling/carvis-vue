@@ -26,6 +26,7 @@
             :lazy-src="image.lazySrc"
             :image-id="image.id"
             :progress="image.progress"
+            :error="image.error"
           />
           <v-card-actions>
             <v-btn

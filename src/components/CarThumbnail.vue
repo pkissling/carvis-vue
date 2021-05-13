@@ -4,6 +4,7 @@
       v-if="imageId"
       :src="src"
       :image-id="imageId"
+      :error="error"
       height="48"
       width="48"
       not-clickable
@@ -37,7 +38,8 @@ export default {
   },
   data() {
     return {
-      src: null
+      src: null,
+      error: false
     }
   },
   created() {
@@ -47,6 +49,7 @@ export default {
 
     imageService.fetchImageUrl(this.imageId, 100)
       .then(url => this.src = url)
+      .catch(() => this.error = true)
   }
 }
 </script>

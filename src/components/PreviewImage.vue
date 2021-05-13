@@ -68,6 +68,10 @@ export default {
       type: String,
       default: null
     },
+    error: {
+      type: Boolean,
+      default: false
+    },
     src: {
       type: [String, Object],
       default: null
@@ -112,7 +116,7 @@ export default {
   data() {
     return {
       fullscreen: false,
-      error: false,
+      internalError: false,
       reloadedSrc: false
     }
   },
@@ -122,21 +126,21 @@ export default {
         return this.reloadedSrc
       }
 
-      if (this.error) {
+      if (this._error) {
         return require("@/assets/images/car_dummy_highres.jpg")
       }
 
       return this.src
     },
     _lazySrc() {
-      if (this.error) {
+      if (this._error) {
         return require("@/assets/images/car_dummy_lowres.jpg")
       }
 
       return this.lazySrc
     },
     _clickable() {
-      if (this.error) {
+      if (this._error) {
         return false
       }
 
@@ -144,6 +148,9 @@ export default {
     },
     _progress() {
       return this.progress === 0 ? "0" : this.progress
+    },
+    _error() {
+      return this.error || this.internalError
     }
   },
   watch: {
@@ -153,7 +160,7 @@ export default {
   },
   methods: {
     onClick() {
-      if (this.error) {
+      if (this._error) {
         return
       }
 
@@ -165,7 +172,7 @@ export default {
     },
     async onError(url) {
       // prevent endless loop
-      if (this.error) {
+      if (this.internalError) {
         sentryService.captureError('Won\'t retry. Error is set already.', { url })
         return
       }
@@ -177,7 +184,7 @@ export default {
           height: this.height,
           url
         })
-        this.error = true
+        this.internalError = true
         return
       }
 
@@ -185,7 +192,7 @@ export default {
       imageService.reloadImage(this.imageId, this.height)
           .then(url => this.reloadedSrc = url)
           .catch(() => {
-            this.error = true
+            this.internalError = true
             this.reloadedSrc = null
           })
     }

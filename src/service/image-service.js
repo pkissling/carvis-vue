@@ -2,6 +2,7 @@ import backendClient from '../clients/backend-client'
 import s3Client from '../clients/s3-client'
 import sentryService from './sentry-service'
 import store from '../store'
+import notificationService from './notification-service'
 
 export default {
 
@@ -20,6 +21,7 @@ export default {
 
     const loads = await this.imageLoads(url)
     if (!loads) {
+      notificationService.warning('Ein Bild konnte nicht geladen werden. Bitte versuche es später erneut.')
       sentryService.captureError('Reloaded url was invalid as well!', { url })
       throw new Error('Cannot resolve image from url', url)
     }
@@ -49,12 +51,17 @@ export default {
     } catch (err) {
       console.error(err)
       store.commit('images/evictOne', { imageId, size })
+      notificationService.warning('Ein Bild konnte nicht geladen werden. Bitte versuche es später erneut.')
+      sentryService.captureException(err, { imageId, size })
       throw new Error('unable to fetch image', imageId, err)
     }
     const image = store.state.images.cachedImages.find(img => img.imageId === imageId && img.size === size)
 
     if (!image || !image.url) {
-      throw new Error('image not found', imageId, size) // TODO check how to use in Promise.catch
+      const err = new Error('image not found', imageId, size)
+      notificationService.warning('Ein Bild konnte nicht geladen werden. Bitte versuche es später erneut.')
+      sentryService.captureException(err, { imageId, size })
+      throw err
     }
 
     return image.url
