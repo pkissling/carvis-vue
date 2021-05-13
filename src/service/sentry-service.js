@@ -27,7 +27,7 @@ export default {
 
       Object.keys(extras).forEach(key => {
         const value = extras[key]
-        scope.setExtra(key, value)
+        scope.setExtra(key, value ? JSON.stringify(value) : undefined)
       })
 
       scope.setLevel(severity || 'debug')
