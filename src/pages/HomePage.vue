@@ -10,6 +10,7 @@
         class="pa-4 ma-4"
         contain
         src="@/assets/images/logo_500px.png"
+        lazy-src="@/assets/images/logo_250px.png"
       />
 
       <v-card-text>
