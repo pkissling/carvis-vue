@@ -25,11 +25,12 @@ export default {
 
     Sentry.withScope(scope => {
 
-      Object.keys(extras).forEach(key => {
-        const value = extras[key]
-        scope.setExtra(key, value ? JSON.stringify(value) : undefined)
-      })
-
+      if (extras) {
+        Object.keys(extras).forEach(key => {
+          const value = extras[key]
+          scope.setExtra(key, value ? JSON.stringify(value) : undefined)
+        })
+      }
       scope.setLevel(severity || 'debug')
 
       sendFn(payload)
