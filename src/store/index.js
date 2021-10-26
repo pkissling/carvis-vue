@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import notifications from './stores/notifications'
+import cars from './stores/cars'
 import images from './stores/images'
+import notifications from './stores/notifications'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    notifications,
-    images
+    cars,
+    images,
+    notifications
   },
   plugins: [new VuexPersistence().plugin]
 })

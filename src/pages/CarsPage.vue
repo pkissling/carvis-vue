@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ListCars from '../apollo/queries/ListCars'
+import carService from '../service/car-service'
 import CarThumbnail from '../components/CarThumbnail.vue'
 import OverviewTable from '../components/OverviewTable.vue'
 import { relativeTimeDifference } from '../utilities/time'
@@ -76,11 +76,7 @@ export default {
       return this.$apollo.loading || this.$auth.loading
     },
     _cars () {
-      if (!this.cars) {
-        return []
-      }
-
-      return this.cars
+      return this.$store.state.cars.cars
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
           const previewImageId = car.images ? car.images[0] : null
@@ -93,19 +89,15 @@ export default {
         .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt))
     }
   },
+  created () {
+    carService.fetchCars()
+  },
   methods: {
     viewCar (car) {
       this.$router.push({ path: `/cars/${car.id}`})
     },
     createCar () {
       this.$router.push({ path: '/cars/add' })
-    }
-  },
-  apollo: {
-    cars: {
-      query: ListCars,
-      update: data => data.listCars ? data.listCars.items : [],
-      prefetch: true
     }
   }
 }

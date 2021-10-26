@@ -30,5 +30,9 @@ export default {
 
   async fetchImageUrl (imageId, size) {
     return instance.get(`images/${imageId}`, { params: { size } })
+  },
+
+  async fetchCars() {
+    return instance.get('/cars')
   }
 }

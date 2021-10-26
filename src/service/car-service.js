@@ -5,6 +5,9 @@ import ListCars from '../apollo/queries/ListCars'
 import GetCar from '../apollo/queries/GetCar'
 import { apolloClient } from '../apollo'
 import userService from '../service/user-service'
+import sentryService from './sentry-service'
+import store from '../store'
+import notificationService from './notification-service'
 
 export default {
 
@@ -114,6 +117,16 @@ export default {
         throw new Error('car with carId not found')
       }
     })
+  },
+
+  async fetchCars() {
+    try {
+      await store.dispatch('cars/fetchCars')
+    } catch (err) {
+      console.error(err)
+      notificationService.warning('Fahrzeuge konnten nicht geladen werden. Bitte versuche es später erneut.')
+      sentryService.captureException(err)
+      throw new Error('unable to fetch cars', err)
+    }
   }
 }
-
