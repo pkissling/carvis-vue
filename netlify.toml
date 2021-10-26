@@ -1,5 +1,8 @@
+[context.dev.environment]
+  VUE_APP_USE_DEV = "true"
+
 [context.deploy-preview.environment]
-  VUE_APP_NETLIFY_PREVIEW = "true"
+  VUE_APP_USE_DEV = "true"
 
 [[redirects]]
   from = "/*"

@@ -3,14 +3,14 @@ import { Integrations } from '@sentry/tracing'
 
 function env() {
   if (process.env.NODE_ENV === 'development') {
-    return 'development'
+    return 'local'
   }
 
-  if( process.env.VUE_APP_NETLIFY_PREVIEW === 'true') {
-    return 'deploy-preview'
+  if(process.env.VUE_APP_USE_DEV === 'true') {
+    return 'dev'
   }
 
-  return 'production'
+  return 'live'
 }
 
 export default (vue) => {
