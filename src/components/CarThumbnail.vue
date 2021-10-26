@@ -48,7 +48,7 @@ export default {
     }
 
     imageService.fetchImageUrl(this.imageId, 100)
-      .then(imageDto => this.src = imageDto.url)
+      .then(url => this.src = url)
       .catch(() => this.error = true)
   }
 }

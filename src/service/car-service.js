@@ -128,6 +128,5 @@ export default {
       sentryService.captureException(err)
       throw new Error('unable to fetch cars', err)
     }
-    return store.state.cars.cars
   }
 }

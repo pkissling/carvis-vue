@@ -64,7 +64,6 @@ export default {
       throw err
     }
 
-    debugger
     return image.url
   }
 }
