@@ -15,9 +15,9 @@
 import notificationService from '../service/notification-service'
 import CarDetailForm from '../components/CarDetailForm.vue'
 import WaitingLayer from '../components/WaitingLayer.vue'
-import carService from '../service/car-service'
 import userService from '../service/user-service'
 import router from '../router'
+import store from '../store'
 
 export default {
   components: {
@@ -46,21 +46,22 @@ export default {
   },
   methods: {
     updateCar (car) {
-      carService.updateCar(car)
-        .then(() => this.$router.push({ path: '/' }))
+      this.$store.dispatch('cars/updateCar', car)
+        .then(() => this.$router.push({ path: '/cars' }))
         .then(() => notificationService.success('Fahrzeug erfolgreich bearbeitet.'))
-        .catch(() => notificationService.error('Fehler beim Bearbeiten des Fahrzeugs. Bitte versuche es erneut.'))
+        .catch(err => notificationService.error('Fehler beim Bearbeiten des Fahrzeugs. Bitte versuche es erneut.', err))
     }
   },
   async beforeRouteEnter (to, from, next) {
      next(vm => {
       vm.loading = true
       const carId = to.params.carId
-      carService.getCar(carId)
+      store.dispatch('cars/fetchCar', carId)
+        .then(() => store.getters['cars/oneCar'](carId))
         .then(car => vm.car = car)
-        // this.$router is not available
-        .catch(() => {
-          notificationService.error('Fehler beim Laden des Fahrzeugs. Bitte versuche es erneut.')
+        .catch(err => {
+          notificationService.error('Fehler beim Laden des Fahrzeugs. Bitte versuche es erneut.', err)
+          // this.$router is not available
           router.push({ name: 'NotFound' })
         })
         .finally(() => vm.loading = false)

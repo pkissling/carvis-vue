@@ -34,7 +34,6 @@
   </div>
 </template>
 <script>
-import carService from '../service/car-service'
 import notificationService from '../service/notification-service'
 import userService from '../service/user-service'
 import DeleteModal from '../modals/DeleteModal.vue'
@@ -63,7 +62,7 @@ export default {
   },
   computed: {
     loading () {
-      return this.$apollo.loading || this.$auth.loading
+      return this.$auth.loading // TODO
     },
     readOnly () {
       if (this.car.id === undefined) {
@@ -96,10 +95,10 @@ export default {
     },
     deleteCar() {
       this.showCarDeletionModal = false
-      carService.deleteCar(this.car)
+      this.$store.dispatch('cars/deleteCar', this.car.id)
         .then(() => notificationService.success('Fahrzeug erfolgreich gelöscht.'))
-        .then(() => this.$router.push({ path: '/' }))
-        .catch(() => notificationService.error('Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.'))
+        .then(() => this.$router.push({ path: '/cars' }))
+        .catch(err => notificationService.error('Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err))
     }
   }
 }

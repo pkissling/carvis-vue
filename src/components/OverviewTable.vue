@@ -27,7 +27,7 @@
 
     <FloatingButton
       :loading="loading"
-      @create-clicked="onCreateClicked"
+      v-on="$listeners"
     />
   </div>
 </template>
@@ -60,10 +60,6 @@ export default {
       type: Boolean,
       loading: false
     }
-    // previewSlot: {
-    //   type: Component,
-    //   default: null
-    // }
   },
   data() {
     return {
@@ -73,9 +69,6 @@ export default {
   methods: {
     onRowClicked(car) {
       this.$emit('row-clicked', car)
-    },
-    onCreateClicked() {
-      this.$emit('create-clicked')
     }
   }
 }

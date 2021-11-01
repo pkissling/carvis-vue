@@ -10,7 +10,6 @@
 
 <script>
 import CarDetailForm from '../components/CarDetailForm.vue'
-import carService from '../service/car-service'
 import notificationService from '../service/notification-service'
 
 export default {
@@ -24,10 +23,10 @@ export default {
   },
   methods: {
     createCar(car) {
-      carService.createCar(car)
-        .then(() => this.$router.push({ path: '/' }))
+      this.$store.dispatch('cars/createCar', car)
+        .then(() => this.$router.push({ path: '/cars' }))
         .then(() => notificationService.success('Fahrzeug erfolgreich erstellt.'))
-        .catch(() => notificationService.error('Fehler beim Erstellen des Fahrzeugs. Bitte versuche es erneut.'))
+        .catch(err => notificationService.error('Fehler beim Erstellen des Fahrzeugs. Bitte versuche es erneut.', err))
     }
   }
 }

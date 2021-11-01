@@ -20,7 +20,11 @@ export default {
 
   send(sendFn, severity, payload, extras) {
     if (process.env.NODE_ENV === 'development') {
-      console.log(payload, extras)
+      if (severity === 'error') {
+        console.error('SENTRY: ' + payload, extras)
+      } else {
+        console.log('SENTRY: ' + payload, extras)
+      }
     }
 
     Sentry.withScope(scope => {

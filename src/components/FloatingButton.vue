@@ -11,7 +11,7 @@
           :loading="loading"
           color="primary"
           fab
-          @click="$emit('create')"
+          @click="$emit('create-clicked')"
         >
           <v-icon>
             mdi-plus
@@ -28,10 +28,6 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    }
-  },
-  data () {
-    return {
     }
   }
 }

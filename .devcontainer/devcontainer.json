@@ -13,7 +13,6 @@
     "${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh", // This is added so you can push from inside the container
   ],
   "extensions": [
-    "apollographql.vscode-apollo",
     "dbaeumer.vscode-eslint",
     "eamodio.gitlens",
     "eg2.vscode-npm-script",

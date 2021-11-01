@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import carService from '../service/car-service'
+import notificationService from '../service/notification-service'
 import CarThumbnail from '../components/CarThumbnail.vue'
 import OverviewTable from '../components/OverviewTable.vue'
 import { relativeTimeDifference } from '../utilities/time'
@@ -73,10 +73,10 @@ export default {
   },
   computed: {
     loading () {
-      return this.$apollo.loading || this.$auth.loading
+      return this.$auth.loading // TODO
     },
     _cars () {
-      return this.$store.state.cars.cars
+      return this.$store.getters['cars/allCars']
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
           const previewImageId = car.images ? car.images[0] : null
@@ -90,7 +90,8 @@ export default {
     }
   },
   created () {
-    carService.fetchCars()
+    this.$store.dispatch('cars/fetchAllCars')
+      .catch(err => notificationService.error('Fehler beim Lesen der Fahrzeug. Bitte versuche es erneut.', err))
   },
   methods: {
     viewCar (car) {

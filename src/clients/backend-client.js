@@ -9,7 +9,6 @@ const instance = axios.create({
 })
 
 axiosRetry(instance, {
-  retries: 3,
   retryDelay: axiosRetry.exponentialDelay
 })
 
@@ -17,7 +16,7 @@ instance.interceptors.request.use(async config => {
   const token = await obtainJwtToken()
   config.headers.Authorization = `Bearer ${token}`;
   return config;
-});
+})
 
 export default {
   async createUploadUrl (contentType) {
@@ -32,7 +31,23 @@ export default {
     return instance.get(`images/${imageId}`, { params: { size } })
   },
 
-  async fetchCars() {
+  async fetchAllCars() {
     return instance.get('/cars')
+  },
+
+  async fetchCar(id) {
+    return instance.get(`/cars/${id}`)
+  },
+
+  async createCar(car) {
+    return instance.post('/cars', car)
+  },
+
+  async updateCar(id, car) {
+    return instance.put(`/cars/${id}`, car)
+  },
+
+  async deleteCar(id) {
+    return instance.delete(`/cars/${id}`)
   }
 }

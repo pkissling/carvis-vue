@@ -1,4 +1,5 @@
 import store from '../store'
+import sentryService from './sentry-service'
 
 export default {
 
@@ -14,7 +15,10 @@ export default {
     store.dispatch('notifications/warning', message)
   },
 
-  async error(message) {
+  async error(message, err) {
+    if (err) {
+      sentryService.captureException(err)
+    }
     store.dispatch('notifications/error', message)
   }
 }
