@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     loading () {
-      return this.$auth.loading // TODO
+      return this.$auth.loading || this.$store.getters['common/isLoading']
     },
     readOnly () {
       if (this.car.id === undefined) {

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { apiUrl } from '../../app.config'
 import { obtainJwtToken } from '../auth/utils'
 import axiosRetry from 'axios-retry'
+import store from '../store'
 
 const instance = axios.create({
   baseURL: apiUrl(),
@@ -12,10 +13,16 @@ axiosRetry(instance, {
   retryDelay: axiosRetry.exponentialDelay
 })
 
-instance.interceptors.request.use(async config => {
+instance.interceptors.request.use(async request => {
   const token = await obtainJwtToken()
-  config.headers.Authorization = `Bearer ${token}`;
-  return config;
+  request.headers.Authorization = `Bearer ${token}`
+  store.commit('common/setLoading', true)
+  return request
+})
+
+instance.interceptors.response.use(response => {
+  store.commit('common/setLoading', false)
+  return response
 })
 
 export default {

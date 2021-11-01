@@ -73,7 +73,7 @@ export default {
   },
   computed: {
     loading () {
-      return this.$auth.loading // TODO
+      return this.$auth.loading || this.$store.getters['common/isLoading']
     },
     _cars () {
       return this.$store.getters['cars/allCars']

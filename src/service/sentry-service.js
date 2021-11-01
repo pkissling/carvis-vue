@@ -21,7 +21,7 @@ export default {
   send(sendFn, severity, payload, extras) {
     if (process.env.NODE_ENV === 'development') {
       if (severity === 'error') {
-        console.error('SENTRY: ' + payload, extras)
+        throw new Error(payload, extras)
       } else {
         console.log('SENTRY: ' + payload, extras)
       }

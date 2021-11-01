@@ -12,7 +12,6 @@
     "@mdi/font": "^5.9.55",
     "@sentry/tracing": "^6.13.3",
     "@sentry/vue": "^6.13.3",
-    "aws-appsync": "^4.0.3",
     "axios": "^0.21.1",
     "axios-retry": "^3.1.9",
     "core-js": "^3.6.5",
