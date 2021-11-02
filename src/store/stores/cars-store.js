@@ -1,4 +1,5 @@
 import backendClient from '../../clients/backend-client'
+import userService from '../../service/user-service'
 
 export default {
   namespaced: true,
@@ -30,7 +31,11 @@ export default {
     },
 
     async createCar(context, car) {
-      const response = await backendClient.createCar(car)
+      const response = await backendClient.createCar({
+        // TODO this must be done in the backend
+        ownerName: userService.getName(),
+        ...car
+      })
       context.commit('put', response.data)
     },
 

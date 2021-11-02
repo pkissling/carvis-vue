@@ -5,7 +5,6 @@ export default {
   },
   mutations: {
     setLoading(state, loading) {
-      debugger
       state.loading = loading
     }
   },
