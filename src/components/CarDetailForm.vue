@@ -68,7 +68,7 @@ export default {
       if (this.car.id === undefined) {
         return false
       }
-      if (this.car.ownerUsername === userService.getUsername()) {
+      if (this.car.createdBy === userService.getUsername()) {
         return false
       }
       return true
@@ -81,7 +81,7 @@ export default {
         return true
       }
 
-      return this.car.ownerUsername === userService.getUsername()
+      return this.car.createdBy === userService.getUsername()
     }
   },
   methods: {

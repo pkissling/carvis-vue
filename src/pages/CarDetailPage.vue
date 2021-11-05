@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     canEdit () {
-      return this.car && this.car.ownerUsername === userService.getUsername()
+      return this.car && this.car.createdBy === userService.getUsername()
     },
     title () {
       return this.canEdit ? 'Fahrzeug bearbeiten' : 'Fahrzeug anzeigen'
