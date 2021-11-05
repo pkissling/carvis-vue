@@ -31,11 +31,7 @@ export default {
     },
 
     async createCar(context, car) {
-      const response = await backendClient.createCar({
-        // TODO this must be done in the backend
-        ownerName: userService.getName(),
-        ...car
-      })
+      const response = await backendClient.createCar(car)
       context.commit('put', response.data)
     },
 

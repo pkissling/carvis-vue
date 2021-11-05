@@ -7,11 +7,6 @@ export default {
     return user ? user.sub : undefined
   },
 
-  getName() {
-    const user = this.getUser()
-    return user ? user.name : undefined
-  },
-
   isAdmin() {
     return this.hasRole('admin')
   },
