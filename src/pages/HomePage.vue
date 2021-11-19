@@ -43,7 +43,8 @@ export default {
       if (this.isLoggedin) {
         return [
           { text: 'Fahrzeuge', color: 'primary', action: () => this.$router.push({ path: '/cars'}) },
-          { text: 'Gesuche', color: 'primary', action: () => this.$router.push({ path: '/requests'} ) }
+          // TODO
+          // { text: 'Gesuche', color: 'primary', action: () => this.$router.push({ path: '/requests'} ) }
         ]
       } else {
         return [

@@ -56,5 +56,25 @@ export default {
 
   async deleteCar(id) {
     return instance.delete(`/cars/${id}`)
+  },
+
+  async fetchAllRequests() {
+    return instance.get('/requests')
+  },
+
+  async fetchRequest(id) {
+    return instance.get(`/request/${id}`)
+  },
+
+  async createRequest(request) {
+    return instance.post('/requests', request)
+  },
+
+  async updateRequest(id, request) {
+    return instance.put(`/request/${id}`, request)
+  },
+
+  async deleteRequest(id) {
+    return instance.delete(`/requests/${id}`)
   }
 }

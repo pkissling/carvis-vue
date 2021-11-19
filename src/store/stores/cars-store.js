@@ -1,5 +1,4 @@
 import backendClient from '../../clients/backend-client'
-import userService from '../../service/user-service'
 
 export default {
   namespaced: true,
