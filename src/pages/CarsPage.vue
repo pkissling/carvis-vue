@@ -4,7 +4,7 @@
       title="Fahrzeuge"
       search-placeholder-text="Porsche Carrera"
       :headers="headers"
-      :items="_cars"
+      :items="cars"
       :loading="loading"
       @row-clicked="viewCar"
       @create-clicked="createCar"
@@ -75,7 +75,7 @@ export default {
     loading () {
       return this.$auth.loading || this.$store.getters['common/isLoading']
     },
-    _cars () {
+    cars () {
       return this.$store.getters['cars/allCars']
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
