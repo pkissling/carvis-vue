@@ -10,6 +10,9 @@ const routes = [
   {
     path: '/',
     component: HomePage,
+    meta: {
+      requiresNoAuth: true
+    }
   },
   {
     path: '/cars',
@@ -20,17 +23,24 @@ const routes = [
     component: () => import('../pages/CreateCarPage.vue')
   },
   {
-    path: '/requests',
-    component: () => import('../pages/RequestsPage.vue')
+    path: '/cars/:carId',
+    component: () => import('../pages/CarDetailPage.vue'),
+    props: true
   },
   {
     path: '/forbidden',
     component: () => import('../pages/ForbiddenPage.vue'),
+    meta: {
+      requiresNoAuth: true
+    }
   },
   {
-    path: '/cars/:carId',
-    component: () => import('../pages/CarDetailPage.vue'),
-    props: true
+    path: '/requests',
+    component: () => import('../pages/RequestsPage.vue')
+  },
+  {
+    path: '/requests/add',
+    component: () => import('../pages/CreateRequestPage.vue')
   },
   {
     path: '*',
@@ -57,7 +67,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/forbidden' || to.path === '/') next()
+  if (to.meta?.requiresNoAuth) next()
   else authGuard(to, from, next)
 })
 

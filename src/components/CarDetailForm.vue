@@ -20,7 +20,7 @@
 
       <ActionsCard
         v-if="!readOnly"
-        :car-id="car.id"
+        :id="car.id"
         @delete="showCarDeletionModal = true"
       />
 

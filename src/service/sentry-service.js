@@ -18,10 +18,10 @@ export default {
     this.send((p) => Sentry.captureMessage(p), severity, payload, extras)
   },
 
-  send(sendFn, severity, payload, extras) {
+  send(sendFn, severity, payload, extras = '') {
     if (process.env.NODE_ENV === 'development') {
       if (severity === 'error') {
-        throw new Error(payload, extras)
+        console.error('SENTRY: ' + payload, extras)
       } else {
         console.log('SENTRY: ' + payload, extras)
       }

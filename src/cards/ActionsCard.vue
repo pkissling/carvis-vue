@@ -5,7 +5,7 @@
         color="primary"
         type="submit"
       >
-        <span v-if="carId">
+        <span v-if="id">
           Speichern
         </span>
         <span v-else>
@@ -16,7 +16,7 @@
       <v-spacer />
 
       <v-btn
-        v-if="carId"
+        v-if="id"
         color="error"
         text
         @click="$emit('delete')"
@@ -30,7 +30,7 @@
 <script>
 export default {
   props: {
-    carId: {
+    id: {
       type: String,
       default: null
     }
