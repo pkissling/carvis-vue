@@ -29,8 +29,15 @@ export default {
         },
         {
           text: 'Typ',
-          align: 'start',
           value: 'type',
+        },
+        {
+          text: 'Karosserie',
+          value: 'bodyType',
+        },
+        {
+          text: 'Modelljahr',
+          value: 'modelYear',
         },
         {
           text: 'Erstellt durch',
