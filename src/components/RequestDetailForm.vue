@@ -71,7 +71,7 @@ export default {
         return true
       }
 
-      return this.request.createdBy === userService.getUsername()
+      return userService.isAdmin() || this.request?.createdBy === userService.getUsername()
     }
   },
   methods: {
