@@ -1,14 +1,12 @@
 <template>
-  <v-container>
-    <WaitingLayer v-if="loading" />
-    <div v-else>
-      <span class="text-h2">{{ title }}</span>
-      <CarDetailForm
-        :car="car"
-        @submit="updateCar"
-      />
-    </div>
-  </v-container>
+  <WaitingLayer v-if="loading" />
+  <div v-else>
+    <span class="text-h2">{{ title }}</span>
+    <CarDetailForm
+      :car="car"
+      @submit="updateCar"
+    />
+  </div>
 </template>
 
 <script>

@@ -1,21 +1,19 @@
 <template>
-  <v-container>
-    <OverviewTable
-      title="Fahrzeuge"
-      search-placeholder-text="Porsche Carrera"
-      :headers="headers"
-      :items="cars"
-      :loading="loading"
-      @row-clicked="viewCar"
-      @create-clicked="createCar"
-    >
-      <template v-slot="item">
-        <CarThumbnail
-          :image-id="item.proxiedProps.previewImageId"
-        />
-      </template>
-    </OverviewTable>
-  </v-container>
+  <OverviewTable
+    title="Fahrzeuge"
+    search-placeholder-text="Porsche Carrera"
+    :headers="headers"
+    :items="cars"
+    :loading="loading"
+    @row-clicked="viewCar"
+    @create-clicked="createCar"
+  >
+    <template v-slot="item">
+      <CarThumbnail
+        :image-id="item.proxiedProps.previewImageId"
+      />
+    </template>
+  </OverviewTable>
 </template>
 
 <script>

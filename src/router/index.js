@@ -48,9 +48,15 @@ const routes = [
     props: true
   },
   {
-    path: '*',
+    path: '/404',
     name: 'NotFound',
     component: () => import('../pages/NotFoundPage.vue')
+  },
+  {
+    path: '*',
+    beforeEnter: (to, from, next) => {
+      next('/404')
+    }
   }
 ]
 

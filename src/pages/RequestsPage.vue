@@ -1,15 +1,13 @@
 <template>
-  <v-container>
-    <OverviewTable
-      title="Gesuche"
-      search-placeholder-text="Porsche Carrera"
-      :headers="headers"
-      :items="requests"
-      :loading="loading"
-      @row-clicked="viewRequest"
-      @create-clicked="createRequest"
-    />
-  </v-container>
+  <OverviewTable
+    title="Gesuche"
+    search-placeholder-text="Porsche Carrera"
+    :headers="headers"
+    :items="requests"
+    :loading="loading"
+    @row-clicked="viewRequest"
+    @create-clicked="createRequest"
+  />
 </template>
 
 <script>

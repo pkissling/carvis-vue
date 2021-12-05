@@ -1,14 +1,12 @@
 <template>
-  <v-container>
-    <WaitingLayer v-if="loading" />
-    <div v-else>
-      <span class="text-h2">{{ title }}</span>
-      <RequestDetailForm
-        :request="request"
-        @submit="updateRequest"
-      />
-    </div>
-  </v-container>
+  <WaitingLayer v-if="loading" />
+  <div v-else>
+    <span class="text-h2">{{ title }}</span>
+    <RequestDetailForm
+      :request="request"
+      @submit="updateRequest"
+    />
+  </div>
 </template>
 
 <script>

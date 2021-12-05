@@ -1,62 +1,90 @@
 <template>
-  <v-app-bar
-    color="secondary"
+  <v-navigation-drawer
     app
+    clipped
+    :value="value"
+    @input="$emit('input', $event)"
   >
-    <div class="d-flex align-center">
-      <router-link to="/">
-        <v-img
-          alt="Carvis"
-          class="shrink mr-2"
-          contain
-          src="@/assets/images/logo_250px.png"
-          transition="scale-transition"
-          width="100"
-        />
-      </router-link>
-    </div>
+    <template v-slot:prepend>
+      <v-list-item two-line>
+        <v-list-item-avatar>
+          <img :src="picture">
+        </v-list-item-avatar>
 
-    <v-spacer />
+        <v-list-item-content>
+          <v-list-item-title>{{ name }}</v-list-item-title>
+          <v-list-item-subtitle>Eingeloggt</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </template>
 
-    <v-btn
-      v-if="showLogin"
-      :loading="$auth.loading"
-      dark
-      elevation="2"
-      color="accent"
-      @click="login"
-    >
-      Login
-    </v-btn>
-    <v-btn
-      v-else
-      dark
-      elevation="2"
-      :loading="$auth.loading"
-      color="accent"
-      @click="logout"
-    >
-      Logout
-    </v-btn>
-  </v-app-bar>
+    <v-divider />
+
+    <v-list>
+      <v-list-item
+        v-for="([icon, text, route], i) in items"
+        :key="i"
+        :to="route"
+        link
+      >
+        <v-list-item-icon>
+          <v-icon>{{ icon }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title>{{ text }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+
+    <template v-slot:append>
+      <div class="pa-2">
+        <v-btn
+          dark
+          block
+          elevation="2"
+          :loading="$auth.loading"
+          color="accent"
+          @click="logout"
+        >
+          Logout
+        </v-btn>
+      </div>
+    </template>
+  </v-navigation-drawer>
 </template>
 
 <script>
+import userService from '@/service/user-service'
 export default {
+  props: {
+    value: {
+      type: Boolean,
+      default: null
+    }
+  },
+  data() {
+    return {
+        items: [
+          ['mdi-car', 'Fahrzeuge', '/cars'],
+          ['mdi-file-document-multiple', 'Gesuche', '/requests']
+        ]
+    }
+  },
   computed: {
-    showLogin () {
-      return !this.$auth.isAuthenticated
+    name () {
+      return userService.getName()
+    },
+    picture () {
+      return userService.getPicture()
+    },
+    isMobile () {
+      return this.$vuetify.breakpoint.mobile
     }
   },
   methods: {
-    login () {
-      this.$auth.loginWithRedirect()
-    },
     logout () {
       this.$auth.logout()
-    },
-    onImageClick() {
-      this.$router.push({ path: '/'})
     }
   }
 }

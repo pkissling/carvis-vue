@@ -1,11 +1,11 @@
 <template>
-  <v-container>
+  <div>
     <span class="text-h2">Fahrzeug hinzufügen</span>
     <CarDetailForm
       :car="car"
       @submit="createCar"
     />
-  </v-container>
+  </div>
 </template>
 
 <script>

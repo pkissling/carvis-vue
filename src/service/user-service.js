@@ -7,6 +7,16 @@ export default {
     return user ? user.sub : undefined
   },
 
+  getName() {
+    const user = this.getUser()
+    return user ? user.name : undefined
+  },
+
+  getPicture() {
+    const user = this.getUser()
+    return user ? user.picture : undefined
+  },
+
   isAdmin() {
     return this.hasRole('admin')
   },
