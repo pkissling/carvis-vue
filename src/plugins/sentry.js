@@ -20,7 +20,7 @@ export default (vue) => {
     integrations: [new Integrations.BrowserTracing({
       tracingOrigins: ["api.carvis.cloud", "api.dev.carvis.cloud"]
     })],
-    tracesSampleRate: 1.0,
+    tracesSampleRate: 0.2,
     release: process.env.npm_package_version,
     environment: env()
   })
