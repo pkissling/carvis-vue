@@ -1,40 +1,27 @@
+import { startIdleTransaction } from '@sentry/tracing'
 import backendClient from '../../clients/backend-client'
 
 export default {
   namespaced: true,
   state: {
-    cachedImages: [],
+    images: [],
   },
   mutations: {
     put(state, image) {
-      console.log('put', image.imageId, image.size)
+       // remove otherwise duplicated images in cache
+       const duplicatedImages = state.images.filter(img => img.imageId === image.imageId && img.size === image.size)
+       while (duplicatedImages.length) {
+         state.cachedImages.splice(duplicatedImages.pop(), 1);
+       }
 
-      // remove otherwise duplicated images in cache
-      const duplicatedImages = state.cachedImages.filter(img => img.imageId === image.imageId && img.size === image.size)
-      while (duplicatedImages.length) {
-        console.log('removing otherwise duplicated image', duplicatedImages[duplicatedImages.length - 1])
-        state.cachedImages.splice(duplicatedImages.pop(), 1);
-      }
-
-      // populate new entry
-      console.log('before put', state.cachedImages.length)
-      const expiresAt = new Date()
-      expiresAt.setDate(expiresAt.getDate() + 5) // + 5 day
-      const putImage = { ...image, expiresAt }
-      state.cachedImages.push(putImage)
-      console.log('after put', state.cachedImages.length)
+       // populate new entry
+       state.images.push(image)
     },
     evictOne(state, { imageId, size }) {
-      console.log('evictOne', imageId, size)
-      console.log('before evictOne length = ', state.cachedImages.length)
-      state.cachedImages = state.cachedImages.filter(img => img.imageId !== imageId && img.size !== size)
-      console.log('after evictOne length = ', state.cachedImages.length)
+      state.images = state.images.filter(img => img.imageId !== imageId && img.size !== size)
     },
     evictMany(state, images) {
-      console.log('evictMany.length = ', images.length)
-      console.log('before evictMany length = ', state.cachedImages.length)
-      state.cachedImages = state.cachedImages.filter(img => !images.includes(img))
-      console.log('after evictMany length = ', state.cachedImages.length)
+      state.images = state.images.filter(img => !images.includes(img))
     }
   },
   actions: {
@@ -52,15 +39,11 @@ export default {
       const expires = Date.parse(cachedImage.expiresAt)
       if (expires < now) {
         // evict expired image and populate with new url
-        console.log(`image in cache has expired on ${new Date(expires)}. Repopulating cache`, cachedImage)
         context.commit('evictOne', { imageId: cachedImage.imageId, size: cachedImage.size })
         const response = backendClient.fetchImageUrl(imageId, size)
         context.commit('put', { imageId, size, url: response.data.url })
         return
       }
-
-      // otherwise cached image exist and is valid, so nothing to do
-      console.log('use cached image. expires: ' + new Date(expires) + ', now:' + new Date(now), imageId, size)
     },
     async purgeExpired(context) {
       const expiredImages = context.getters.getExpiredImages()
@@ -68,17 +51,16 @@ export default {
         return
       }
 
-      console.log('expiredImages', expiredImages.length, expiredImages)
       context.commit('evictMany', expiredImages)
     }
   },
   getters: {
     getImage: state => (imageId, size) => {
-      return state.cachedImages.find(img => img.imageId === imageId && img.size === size)
+      return state.images.find(img => img.imageId === imageId && img.size === size)
     },
     getExpiredImages: state => () => {
       const now = new Date().getTime()
-      return state.cachedImages.filter(img => Date.parse(img.expiresAt) < now)
+      return state.images.filter(img => Date.parse(img.expiresAt) < now)
     }
   }
 }

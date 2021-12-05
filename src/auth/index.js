@@ -86,7 +86,7 @@ export const useAuth0 = ({
         } catch (e) {
           this.error = e;
           // eslint-disable-next-line
-          console.error(e);
+          console.error(e)
         } finally {
           this.popupOpen = false;
         }

@@ -190,11 +190,11 @@ export default {
 
       // try to fetch new image
       imageService.reloadImage(this.imageId, this.height)
-          .then(url => this.reloadedSrc = url)
-          .catch(() => {
-            this.internalError = true
-            this.reloadedSrc = null
-          })
+        .then(url => this.reloadedSrc = url)
+        .catch(() => {
+          this.internalError = true
+          this.reloadedSrc = null
+        })
     }
   }
 }

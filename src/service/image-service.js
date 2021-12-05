@@ -14,8 +14,6 @@ export default {
   },
 
   async reloadImage(imageId, size) {
-    console.log('reload triggered', imageId, size)
-
     store.commit('images/evictOne', { imageId, size })
     const url = await this.fetchImageUrl(imageId, size)
 
@@ -31,8 +29,6 @@ export default {
   },
 
   async imageLoads(url) {
-    console.log('imageLoads', url)
-
     const result = await new Promise(resolve => {
       const image = new Image()
       image.onload = resolve
@@ -49,14 +45,12 @@ export default {
     try {
       await store.dispatch('images/fetchImageUrl', { imageId, size })
     } catch (err) {
-      console.error(err)
       store.commit('images/evictOne', { imageId, size })
       notificationService.warning('Ein Bild konnte nicht geladen werden. Bitte versuche es später erneut.')
       sentryService.captureException(err, { imageId, size })
       throw new Error('unable to fetch image', imageId, err)
     }
-    const image = store.state.images.cachedImages.find(img => img.imageId === imageId && img.size === size)
-
+    const image = store.getters['images/getImage'](imageId, size)
     if (!image || !image.url) {
       const err = new Error('image not found', imageId, size)
       notificationService.warning('Ein Bild konnte nicht geladen werden. Bitte versuche es später erneut.')

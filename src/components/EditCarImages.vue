@@ -113,7 +113,6 @@ export default {
         this.images = this.images.filter(img => img.id !== previewImage.id)
         this.images.splice(index, 0, { id: uploadedImageId, src: imageUrl, lazySrc, processed: true })
       } catch (err) {
-        console.error(err)
         notificationService.error('Fehler beim Hochladen eines Bildes. Bitte versuche es erneut.', err)
         sentryService.captureError(err, { imageId: previewImage.id })
         this.images = this.images.filter(img => img.id !== previewImage.id)
