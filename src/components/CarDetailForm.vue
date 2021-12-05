@@ -1,10 +1,9 @@
 <template>
-  <!-- TODO use a guad to prepolulate -->
   <div v-if="car">
     <v-form
       ref="form"
       v-model="valid"
-      :disabled="readOnly"
+      :disabled="!canEdit"
       @submit.stop.prevent="onSubmit"
     >
       <CarPreviewCard
@@ -19,7 +18,7 @@
       />
 
       <ActionsCard
-        v-if="!readOnly"
+        v-if="canEdit"
         :id="car.id"
         @delete="showCarDeletionModal = true"
       />
@@ -64,15 +63,6 @@ export default {
     loading () {
       return this.$auth.loading || this.$store.getters['common/isLoading']
     },
-    readOnly () {
-      if (this.car.id === undefined) {
-        return false
-      }
-      if (this.car.createdBy === userService.getUsername()) {
-        return false
-      }
-      return true
-    },
     deleteModalSubject () {
       return `${this.car.brand} ${this.car.type}`
     },
@@ -81,7 +71,7 @@ export default {
         return true
       }
 
-      return this.car.createdBy === userService.getUsername()
+      return userService.isAdmin() || this.car.createdBy === userService.getUsername()
     }
   },
   methods: {

@@ -128,6 +128,7 @@
           label="Laufleistung"
           type="number"
           suffix="km"
+          @change="onMileageChanged"
         />
       </v-row>
 
@@ -271,6 +272,9 @@ export default {
       if (this.lastInput) this.ads = this.ads.filter(ad => ad !== this.lastInput)
       this.lastInput = input
       this.ads.push(input)
+    },
+    onMileageChanged(input) {
+      this.value.mileage = isNaN(parseInt(input)) ? null : parseInt(input)
     }
   }
 }

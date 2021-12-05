@@ -11,6 +11,7 @@
       dense
       outlined
       @input="onInput"
+      @change="onChange"
     />
   </v-col>
 </template>
@@ -63,6 +64,9 @@ export default {
       } else {
         this.$emit('input', input)
       }
+    },
+    onChange (input) {
+      this.$emit('change', input)
     }
   }
 }

@@ -63,7 +63,7 @@ export default {
   },
 
   async fetchRequest(id) {
-    return instance.get(`/request/${id}`)
+    return instance.get(`/requests/${id}`)
   },
 
   async createRequest(request) {
@@ -71,7 +71,7 @@ export default {
   },
 
   async updateRequest(id, request) {
-    return instance.put(`/request/${id}`, request)
+    return instance.put(`/requests/${id}`, request)
   },
 
   async deleteRequest(id) {

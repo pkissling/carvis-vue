@@ -2,7 +2,7 @@
   <v-container>
     <OverviewTable
       title="Gesuche"
-      search-placeholder-text="TODO"
+      search-placeholder-text="Porsche Carrera"
       :headers="headers"
       :items="requests"
       :loading="loading"
@@ -13,8 +13,9 @@
 </template>
 
 <script>
-import notificationService from '../service/notification-service'
-import OverviewTable from '../components/OverviewTable.vue'
+import notificationService from '@/service/notification-service'
+import OverviewTable from '@/components/OverviewTable.vue'
+import { relativeTimeDifference } from '../utilities/time'
 
 export default {
   components: {
@@ -63,6 +64,13 @@ export default {
     },
     requests () {
       return this.$store.getters['requests/allRequests']
+        .map(request => {
+          const lastChanged = relativeTimeDifference(request.updatedAt)
+          return {
+            lastChanged,
+            ...request
+          }
+        })
     }
   },
   created () {

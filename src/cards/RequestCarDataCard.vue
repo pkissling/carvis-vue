@@ -116,6 +116,7 @@
           label="Laufleistung"
           type="number"
           suffix="km"
+          @change="onMileageChanged"
         />
       </v-row>
 
@@ -223,6 +224,9 @@ export default {
         this.value.horsePower = null
       }
       this.value.horsePower = Math.round(kw / 0.73549875)
+    },
+    onMileageChanged(input) {
+      this.value.mileage = isNaN(parseInt(input)) ? null : parseInt(input)
     }
   }
 }

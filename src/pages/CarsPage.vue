@@ -86,7 +86,6 @@ export default {
             ...car
           }
         })
-        .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // TODO automatic sorting?
     }
   },
   created () {

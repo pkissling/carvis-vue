@@ -11,17 +11,37 @@
 
     <v-card-text>
       <v-row>
+        <v-col>
+          <v-alert
+            border="left"
+            dense
+            outlined
+            text
+            color="accent"
+            type="info"
+          >
+            Diese Informationen sind nur für Dich sichtbar.
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row>
         <TextField
-          v-model="value.brand"
-          label="Fahrzeughersteller"
-          hint="Beispiel: Porsche, VW, BMW"
-          required
+          v-model="value.contactDetails.name"
+          label="Name"
         />
         <TextField
-          v-model="value.type"
-          label="Typ"
-          hint="Beispiel: 911, Bus, 5er"
-          required
+          v-model="value.contactDetails.company"
+          label="Firma"
+        />
+      </v-row>
+      <v-row>
+        <TextField
+          v-model="value.contactDetails.email"
+          label="E-Mail"
+        />
+        <TextField
+          v-model="value.contactDetails.phone"
+          label="Telefon"
         />
       </v-row>
     </v-card-text>

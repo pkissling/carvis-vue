@@ -17,6 +17,8 @@
       :loading="loading"
       :mobile-breakpoint="0"
       :search="searchTerm"
+      :sort-by.sync="sortColumn"
+      :sort-desc.sync="descending"
       class="elevation-5"
       @click:row="onRowClicked"
     >
@@ -64,6 +66,8 @@ export default {
   data() {
     return {
       searchTerm: '',
+      sortColumn: 'updatedAt',
+      descending: true
     }
   },
   methods: {

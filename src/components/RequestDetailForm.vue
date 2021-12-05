@@ -1,10 +1,9 @@
 <template>
-  <!-- TODO use a guard to prepolulate -->
   <div v-if="request">
     <v-form
       ref="form"
       v-model="valid"
-      :disabled="readOnly"
+      :disabled="!canEdit"
       @submit.stop.prevent="onSubmit"
     >
       <RequestCarDataCard
@@ -13,12 +12,13 @@
       />
 
       <RequestContactDataCard
+        v-if="!request.hasHiddenFields"
         id="request-contact-data-card"
         v-model="request"
       />
 
       <ActionsCard
-        v-if="!readOnly"
+        v-if="canEdit"
         :id="request.id"
         @delete="showDeletionModal = true"
       />
@@ -62,15 +62,6 @@ export default {
   computed: {
     loading () {
       return this.$auth.loading || this.$store.getters['common/isLoading']
-    },
-    readOnly () {
-      if (this.request.id === undefined) {
-        return false
-      }
-      if (this.request.createdBy === userService.getUsername()) {
-        return false
-      }
-      return true
     },
     deleteModalSubject () {
       return `${this.request.brand} ${this.request.type}` // TODO

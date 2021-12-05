@@ -18,7 +18,10 @@ export default {
   },
   data () {
     return {
-      request: {}
+      request: {
+        contactDetails: {
+        }
+      }
     }
   },
   methods: {

@@ -43,6 +43,11 @@ const routes = [
     component: () => import('../pages/CreateRequestPage.vue')
   },
   {
+    path: '/requests/:requestId',
+    component: () => import('../pages/RequestDetailPage.vue'),
+    props: true
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: () => import('../pages/NotFoundPage.vue')
