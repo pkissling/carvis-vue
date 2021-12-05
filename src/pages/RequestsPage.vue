@@ -33,18 +33,6 @@ export default {
           value: 'type',
         },
         {
-          text: 'Modellreihe',
-          value: 'modelSeries',
-        },
-        {
-          text: 'Modelljahr',
-          value: 'modelYear',
-        },
-        {
-          text: 'Außenfarbe',
-          value: 'colorExterior',
-        },
-        {
           text: 'Erstellt durch',
           value: 'ownerName',
         },
