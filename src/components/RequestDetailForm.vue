@@ -12,7 +12,7 @@
       />
 
       <RequestContactDataCard
-        v-if="!request.hasHiddenFields"
+        v-if="canEdit"
         id="request-contact-data-card"
         v-model="request"
       />
@@ -64,7 +64,7 @@ export default {
       return this.$auth.loading || this.$store.getters['common/isLoading']
     },
     deleteModalSubject () {
-      return `${this.request.brand} ${this.request.type}` // TODO
+      return `${this.request.brand} ${this.request.type}`
     },
     canEdit () {
       if (!this.request || !this.request.id) {
