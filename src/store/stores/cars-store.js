@@ -32,16 +32,19 @@ export default {
     async createCar(context, car) {
       const response = await backendClient.createCar(car)
       context.commit('put', response.data)
+      await context.dispatch('fetchAllCars')
     },
 
     async updateCar(context, car) {
       const response = await backendClient.updateCar(car.id, car)
       context.commit('put', response.data)
+      await context.dispatch('fetchAllCars')
     },
 
     async deleteCar(context, id) {
       await backendClient.deleteCar(id)
       context.commit('remove', id)
+      await context.dispatch('fetchAllCars')
     }
   },
 

@@ -32,16 +32,19 @@ export default {
     async createRequest(context, request) {
       const response = await backendClient.createRequest(request)
       context.commit('put', response.data)
+      await context.dispatch('fetchAllRequests')
     },
 
     async updateRequest(context, request) {
       const response = await backendClient.updateRequest(request.id, request)
       context.commit('put', response.data)
+      await context.dispatch('fetchAllRequests')
     },
 
     async deleteRequest(context, id) {
       await backendClient.deleteRequest(id)
       context.commit('remove', id)
+      await context.dispatch('fetchAllRequests')
     }
   },
 

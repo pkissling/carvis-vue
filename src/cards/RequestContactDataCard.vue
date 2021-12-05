@@ -34,6 +34,7 @@
           label="Firma"
         />
       </v-row>
+
       <v-row>
         <TextField
           v-model="value.contactDetails.email"
@@ -44,16 +45,25 @@
           label="Telefon"
         />
       </v-row>
+
+      <v-row>
+        <TextArea
+          v-model="value.contactDetails.freeText"
+          label="Freitext"
+        />
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import TextField from '../fields/TextField.vue'
+import TextField from '@/fields/TextField.vue'
+import TextArea from '@/fields/TextArea.vue'
 
 export default {
   components: {
-    TextField
+    TextField,
+    TextArea
   },
   props: {
     value: {
