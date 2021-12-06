@@ -1,4 +1,3 @@
-import { startIdleTransaction } from '@sentry/tracing'
 import backendClient from '../../clients/backend-client'
 
 export default {
