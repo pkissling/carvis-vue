@@ -12,11 +12,10 @@
 
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="filteredItems"
       :items-per-page="20"
       :loading="loading"
       :mobile-breakpoint="0"
-      :search="searchTerm"
       :sort-by.sync="sortColumn"
       :sort-desc.sync="descending"
       class="elevation-5"
@@ -70,9 +69,32 @@ export default {
       descending: true
     }
   },
+  computed: {
+    filteredItems () {
+      if (!this.searchTerm?.trim()) {
+        return this.items
+      }
+
+      const searchTerms = this.searchTerm
+        .split(' ')
+        .map(term => term.toLowerCase())
+
+      return this.items.filter(item => {
+        const attributes = this.extractAllAttributes(item)
+        return searchTerms.every(term => attributes.some(a => a.includes(term)))
+      })
+    }
+  },
   methods: {
     onRowClicked(car) {
       this.$emit('row-clicked', car)
+    },
+    extractAllAttributes(item) {
+      if (item === null || !Object.keys(item).length) return null
+      return Object.values(item)
+        .map(v => typeof v == "object" ? this.extractAllAttributes(v) : v)
+        .filter(v => v)
+        .map(v => v.toString().toLowerCase())
     }
   }
 }

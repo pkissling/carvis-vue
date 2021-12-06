@@ -29,8 +29,6 @@ export default {
   },
   data () {
     return {
-      searchTerm: '',
-      carThumbnails: [],
       headers: [
         {
           sortable: false,

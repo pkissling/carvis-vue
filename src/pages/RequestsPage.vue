@@ -21,7 +21,6 @@ export default {
   },
   data () {
     return {
-      searchTerm: '',
       headers: [
         {
           text: 'Marke',
