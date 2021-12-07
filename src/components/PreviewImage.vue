@@ -189,6 +189,9 @@ export default {
       }
 
       // try to fetch new image
+      sentryService.captureError('Image could not be loaded. Getting new imageUrl', {
+         url, imageId: this.imageId
+        })
       imageService.reloadImage(this.imageId, this.height)
         .then(url => this.reloadedSrc = url)
         .catch(() => {

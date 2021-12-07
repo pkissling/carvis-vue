@@ -24,7 +24,6 @@ export default {
       throw new Error('Cannot resolve image from url', url)
     }
 
-    sentryService.captureInfo('Successfully reloaded expired image.', { url })
     return url
   },
 
