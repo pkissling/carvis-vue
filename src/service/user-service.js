@@ -25,6 +25,10 @@ export default {
     return this.hasRole('user')
   },
 
+  hasAccess() {
+    return this.isAdmin() || this.isUser()
+  },
+
   getUser() {
     return getAuthInstance().user
   },
