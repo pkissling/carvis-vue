@@ -1,26 +1,30 @@
 <template>
   <WaitingLayer v-if="loading" />
-  <div v-else>
-    <span class="text-h2">{{ title }}</span>
+  <Page
+    v-else
+    :title="title"
+  >
     <CarDetailForm
       :car="car"
       @submit="updateCar"
     />
-  </div>
+  </Page>
 </template>
 
 <script>
-import notificationService from '../service/notification-service'
-import CarDetailForm from '../components/CarDetailForm.vue'
-import WaitingLayer from '../components/WaitingLayer.vue'
-import userService from '../service/user-service'
-import router from '../router'
-import store from '../store'
+import Page from '@/pages/Page.vue'
+import notificationService from '@/service/notification-service'
+import CarDetailForm from '@/components/CarDetailForm.vue'
+import WaitingLayer from '@/components/WaitingLayer.vue'
+import userService from '@/service/user-service'
+import router from '@/router'
+import store from '@/store'
 
 export default {
   components: {
     CarDetailForm,
-    WaitingLayer
+    WaitingLayer,
+    Page
   },
   props: {
     carId: {

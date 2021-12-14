@@ -1,23 +1,26 @@
 <template>
-  <OverviewTable
-    title="Gesuche"
-    search-placeholder-text="Porsche Carrera"
-    :headers="headers"
-    :items="requests"
-    :loading="loading"
-    @row-clicked="viewRequest"
-    @create-clicked="createRequest"
-  />
+  <Page title="Gesuche">
+    <OverviewTable
+      search-placeholder-text="Porsche Carrera"
+      :headers="headers"
+      :items="requests"
+      :loading="loading"
+      @row-clicked="viewRequest"
+      @create-clicked="createRequest"
+    />
+  </Page>
 </template>
 
 <script>
+import Page from '@/pages/Page.vue'
 import notificationService from '@/service/notification-service'
 import OverviewTable from '@/components/OverviewTable.vue'
 import { relativeTimeDifference } from '../utilities/time'
 
 export default {
   components: {
-    OverviewTable
+    OverviewTable,
+    Page
   },
   data () {
     return {

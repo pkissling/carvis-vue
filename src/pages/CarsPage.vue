@@ -1,31 +1,34 @@
 <template>
-  <OverviewTable
-    title="Fahrzeuge"
-    search-placeholder-text="Porsche Carrera"
-    :headers="headers"
-    :items="cars"
-    :loading="loading"
-    @row-clicked="viewCar"
-    @create-clicked="createCar"
-  >
-    <template v-slot="item">
-      <CarThumbnail
-        :image-id="item.proxiedProps.previewImageId"
-      />
-    </template>
-  </OverviewTable>
+  <Page title="Fahrzeuge">
+    <OverviewTable
+      search-placeholder-text="Porsche Carrera"
+      :headers="headers"
+      :items="cars"
+      :loading="loading"
+      @row-clicked="viewCar"
+      @create-clicked="createCar"
+    >
+      <template v-slot="item">
+        <CarThumbnail
+          :image-id="item.proxiedProps.previewImageId"
+        />
+      </template>
+    </OverviewTable>
+  </Page>
 </template>
 
 <script>
-import notificationService from '../service/notification-service'
-import CarThumbnail from '../components/CarThumbnail.vue'
-import OverviewTable from '../components/OverviewTable.vue'
+import Page from '@/pages/Page.vue'
+import notificationService from '@/service/notification-service'
+import CarThumbnail from '@/components/CarThumbnail.vue'
+import OverviewTable from '@/components/OverviewTable.vue'
 import { relativeTimeDifference } from '../utilities/time'
 
 export default {
   components: {
     OverviewTable,
-    CarThumbnail
+    CarThumbnail,
+    Page
   },
   data () {
     return {

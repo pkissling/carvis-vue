@@ -1,20 +1,21 @@
 <template>
-  <div>
-    <span class="text-h2">Fahrzeug hinzufügen</span>
+  <Page title="Fahrzeug hinzufügen">
     <CarDetailForm
       :car="car"
       @submit="createCar"
     />
-  </div>
+  </Page>
 </template>
 
 <script>
-import CarDetailForm from '../components/CarDetailForm.vue'
-import notificationService from '../service/notification-service'
+import Page from '@/pages/Page.vue'
+import CarDetailForm from '@/components/CarDetailForm.vue'
+import notificationService from '@/service/notification-service'
 
 export default {
   components: {
-    CarDetailForm
+    CarDetailForm,
+    Page
   },
   data () {
     return {

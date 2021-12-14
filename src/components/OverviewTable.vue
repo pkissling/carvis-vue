@@ -1,6 +1,5 @@
 <template>
   <div>
-    <span class="text-h2">{{ title }}</span>
     <v-text-field
       v-model="searchTerm"
       :placeholder="searchPlaceholderText"
@@ -34,17 +33,13 @@
 </template>
 
 <script>
-import FloatingButton from './FloatingButton'
+import FloatingButton from '@/components/FloatingButton'
 
 export default {
   components: {
-    FloatingButton
+    FloatingButton,
   },
   props: {
-    title: {
-      type: String,
-      default: ""
-    },
     searchPlaceholderText: {
       type: String,
       default: ''

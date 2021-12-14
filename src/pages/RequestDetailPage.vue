@@ -1,15 +1,18 @@
 <template>
   <WaitingLayer v-if="loading" />
-  <div v-else>
-    <span class="text-h2">{{ title }}</span>
+  <Page
+    v-else
+    :title="title"
+    >
     <RequestDetailForm
       :request="request"
       @submit="updateRequest"
     />
-  </div>
+  </Page>
 </template>
 
 <script>
+import Page from '@/pages/Page.vue'
 import notificationService from '@/service/notification-service'
 import RequestDetailForm from '@/components/RequestDetailForm.vue'
 import WaitingLayer from '@/components/WaitingLayer.vue'
@@ -20,7 +23,8 @@ import store from '@/store'
 export default {
   components: {
     RequestDetailForm,
-    WaitingLayer
+    WaitingLayer,
+    Page
   },
   props: {
     requestId: {

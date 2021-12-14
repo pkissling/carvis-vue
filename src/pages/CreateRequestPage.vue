@@ -1,20 +1,21 @@
 <template>
-  <v-container>
-    <span class="text-h2">Gesuch hinzufügen</span>
+  <Page title="Gesuch hinzufügen">
     <RequestDetailForm
       :request="request"
       @submit="createRequest"
     />
-  </v-container>
+  </Page>
 </template>
 
 <script>
+import Page from '@/pages/Page.vue'
 import RequestDetailForm from '@/components/RequestDetailForm.vue'
 import notificationService from '@/service/notification-service'
 
 export default {
   components: {
-    RequestDetailForm
+    RequestDetailForm,
+    Page
   },
   data () {
     return {
