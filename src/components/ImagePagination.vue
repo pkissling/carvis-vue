@@ -5,7 +5,7 @@
     align-self="end"
     align="center"
   >
-    <p class="pt-4 font-weight-medium">
+    <p class="pt-4 font-weight-bold white--text">
       {{ currentImagePosition }} / {{ imagesCount }}
     </p>
   </div>
