@@ -3,7 +3,7 @@
   <Page
     v-else
     :title="title"
-    >
+  >
     <RequestDetailForm
       :request="request"
       @submit="updateRequest"
