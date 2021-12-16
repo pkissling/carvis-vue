@@ -1,20 +1,14 @@
 <template>
-  <v-container
-    v-if="currentImagePosition && imagesCount"
-    class="fill-height"
+  <div
+    v-if="imagesCount && currentImagePosition"
+    class="v-carousel__controls"
+    align-self="end"
+    align="center"
   >
-    <v-row class="fill-height">
-      <v-col
-        class="v-carousel__controls"
-        align-self="end"
-        align="center"
-      >
-        <p class="pt-4 font-weight-medium">
-          {{ currentImagePosition }} / {{ imagesCount }}
-        </p>
-      </v-col>
-    </v-row>
-  </v-container>
+    <p class="pt-4 font-weight-medium">
+      {{ currentImagePosition }} / {{ imagesCount }}
+    </p>
+  </div>
 </template>
 
 <script>
