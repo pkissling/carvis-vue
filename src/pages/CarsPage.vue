@@ -89,7 +89,7 @@ export default {
   },
   created () {
     this.$store.dispatch('cars/fetchAllCars')
-      .catch(err => notificationService.error('Fehler beim Lesen der Fahrzeug. Bitte versuche es erneut.', err))
+      .catch(err => notificationService.error('Fehler beim Laden der Fahrzeug. Bitte versuche es erneut.', err))
   },
   methods: {
     viewCar (car) {

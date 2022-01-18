@@ -70,7 +70,7 @@ export default {
   },
   created () {
     this.$store.dispatch('requests/fetchAllRequests')
-      .catch(err => notificationService.error('Fehler beim Lesen der Gesuche. Bitte versuche es erneut.', err))
+      .catch(err => notificationService.error('Fehler beim Laden der Gesuche. Bitte versuche es erneut.', err))
   },
   methods: {
     viewRequest (request) {
