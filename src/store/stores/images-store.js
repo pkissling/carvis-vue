@@ -10,7 +10,7 @@ export default {
        // remove otherwise duplicated images in cache
        const duplicatedImages = state.images.filter(img => img.imageId === image.imageId && img.size === image.size)
        while (duplicatedImages.length) {
-         state.cachedImages.splice(duplicatedImages.pop(), 1);
+         state.images.splice(duplicatedImages.pop(), 1)
        }
 
        // populate new entry
