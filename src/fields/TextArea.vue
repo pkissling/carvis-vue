@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    rules () {
+    rules() {
       const rules = []
 
       if (this.required) {
@@ -48,16 +48,16 @@ export default {
       }
 
       if (this.counter) {
-        const rule = v => !v || v.length <= this.counter || `Maximal ${this.counter} Zeichen`
+        const rule = v =>
+          !v || v.length <= this.counter || `Maximal ${this.counter} Zeichen`
         rules.push(rule)
       }
-
 
       return rules
     }
   },
   methods: {
-    onInput (input) {
+    onInput(input) {
       if (input === '') {
         this.$emit('input', null)
       } else {

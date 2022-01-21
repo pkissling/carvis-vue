@@ -22,28 +22,28 @@ export default {
     OverviewTable,
     Page
   },
-  data () {
+  data() {
     return {
       headers: [
         {
           text: 'Marke',
-          value: 'brand',
+          value: 'brand'
         },
         {
           text: 'Typ',
-          value: 'type',
+          value: 'type'
         },
         {
           text: 'Karosserie',
-          value: 'bodyType',
+          value: 'bodyType'
         },
         {
           text: 'Modelljahr',
-          value: 'modelYear',
+          value: 'modelYear'
         },
         {
           text: 'Erstellt durch',
-          value: 'ownerName',
+          value: 'ownerName'
         },
         {
           text: 'Zuletzt aktualisiert',
@@ -54,29 +54,32 @@ export default {
     }
   },
   computed: {
-    loading () {
+    loading() {
       return this.$auth.loading || commonStore.isLoading
     },
-    requests () {
-      return requestsStore.requests
-        .map(request => {
-          const lastChanged = relativeTimeDifference(request.updatedAt)
-          return {
-            lastChanged,
-            ...request
-          }
-        })
+    requests() {
+      return requestsStore.requests.map(request => {
+        const lastChanged = relativeTimeDifference(request.updatedAt)
+        return {
+          lastChanged,
+          ...request
+        }
+      })
     }
   },
-  created () {
-    requestsStore.fetchAllRequests()
-      .catch(err => notificationsStore.error({ message: 'Fehler beim Laden der Gesuche. Bitte versuche es erneut.', err }))
+  created() {
+    requestsStore.fetchAllRequests().catch(err =>
+      notificationsStore.error({
+        message: 'Fehler beim Laden der Gesuche. Bitte versuche es erneut.',
+        err
+      })
+    )
   },
   methods: {
-    viewRequest (request) {
-      this.$router.push({ path: `/requests/${request.id}`})
+    viewRequest(request) {
+      this.$router.push({ path: `/requests/${request.id}` })
     },
-    createRequest () {
+    createRequest() {
       this.$router.push({ path: '/requests/add' })
     }
   }

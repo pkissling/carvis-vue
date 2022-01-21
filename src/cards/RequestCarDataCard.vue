@@ -1,7 +1,5 @@
 <template>
-  <v-card
-    class="my-12"
-  >
+  <v-card class="my-12">
     <template slot="progress">
       <v-progress-linear indeterminate />
     </template>
@@ -107,9 +105,8 @@
       </v-row>
 
       <v-row>
-        <TextField
-          v-model="value.countryOfOrigin"
-          label="Auslieferungsland"
+        <TextField v-model="value.countryOfOrigin"
+                   label="Auslieferungsland"
         />
         <TextField
           v-model="value.mileage"
@@ -138,27 +135,23 @@
           v-model="value.highlights"
           label="Besonderheiten / Highlights"
         />
-        <TextField
-          v-model="value.vision"
-          label="Ziel / Vision"
+        <TextField v-model="value.vision"
+                   label="Ziel / Vision"
         />
       </v-row>
 
       <v-row>
-        <TextField
-          v-model="value.mustHaves"
-          label="Must-Haves"
+        <TextField v-model="value.mustHaves"
+                   label="Must-Haves"
         />
-        <TextField
-          v-model="value.noGos"
-          label="No-Gos"
+        <TextField v-model="value.noGos"
+                   label="No-Gos"
         />
       </v-row>
 
       <v-row>
-        <TextArea
-          v-model="value.description"
-          label="Detailbeschreibung"
+        <TextArea v-model="value.description"
+                  label="Detailbeschreibung"
         />
       </v-row>
     </v-card-text>
@@ -184,38 +177,40 @@ export default {
   },
   data: () => {
     return {
-       options: {
+      options: {
         colors: [
-          "Beige",
-          "Blau",
-          "Braun",
-          "Gelb",
-          "Gold",
-          "Grau",
-          "Grün",
-          "Orange",
-          "Rot",
-          "Schwarz",
-          "Silber",
-          "Violett",
-          "Weiß",
-          "Andere"
+          'Beige',
+          'Blau',
+          'Braun',
+          'Gelb',
+          'Gold',
+          'Grau',
+          'Grün',
+          'Orange',
+          'Rot',
+          'Schwarz',
+          'Silber',
+          'Violett',
+          'Weiß',
+          'Andere'
         ],
         conditions: [
-          "ursprünglich Original",
-          "Patiniert",
-          "Überwiegend original",
-          "Teilrestauriert",
-          "Restauriert",
-          "Restaurationsobjekt",
-          "Umbau / Backdate"
+          'ursprünglich Original',
+          'Patiniert',
+          'Überwiegend original',
+          'Teilrestauriert',
+          'Restauriert',
+          'Restaurationsobjekt',
+          'Umbau / Backdate'
         ]
       }
     }
   },
   computed: {
     kilowatts() {
-      return this.value.horsePower ? Math.round(this.value.horsePower * 0.73549875) : null
+      return this.value.horsePower
+        ? Math.round(this.value.horsePower * 0.73549875)
+        : null
     }
   },
   methods: {

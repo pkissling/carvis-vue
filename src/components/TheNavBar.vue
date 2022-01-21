@@ -65,25 +65,25 @@ export default {
   },
   data() {
     return {
-        items: [
-          ['mdi-car', 'Fahrzeuge', '/cars'],
-          ['mdi-file-document-multiple', 'Gesuche', '/requests']
-        ]
+      items: [
+        ['mdi-car', 'Fahrzeuge', '/cars'],
+        ['mdi-file-document-multiple', 'Gesuche', '/requests']
+      ]
     }
   },
   computed: {
-    name () {
+    name() {
       return userStore.getName
     },
-    picture () {
+    picture() {
       return userStore.getPicture
     },
-    isMobile () {
+    isMobile() {
       return this.$vuetify.breakpoint.mobile
     }
   },
   methods: {
-    logout () {
+    logout() {
       this.$auth.logout()
     }
   }

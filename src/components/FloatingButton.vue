@@ -1,9 +1,8 @@
 <template>
-  <v-speed-dial
-    fab
-    fixed
-    bottom
-    right
+  <v-speed-dial fab
+                fixed
+                bottom
+                right
   >
     <template v-slot:activator>
       <v-fab-transition>
@@ -13,9 +12,7 @@
           fab
           @click="$emit('create-clicked')"
         >
-          <v-icon>
-            mdi-plus
-          </v-icon>
+          <v-icon> mdi-plus </v-icon>
         </v-btn>
       </v-fab-transition>
     </template>

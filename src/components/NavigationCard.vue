@@ -1,9 +1,8 @@
 <template>
-  <v-card
-    :loading="loading"
-    class="mx-auto mt-4"
-    max-width="374"
-    elevation="5"
+  <v-card :loading="loading"
+          class="mx-auto mt-4"
+          max-width="374"
+          elevation="5"
   >
     <v-card-actions>
       <v-container>
@@ -14,9 +13,8 @@
             :cols="columnCount"
             :align="align(index)"
           >
-            <v-skeleton-loader
-              v-if="loading"
-              type="button"
+            <v-skeleton-loader v-if="loading"
+                               type="button"
             />
             <v-btn
               v-else
@@ -58,7 +56,7 @@ export default {
       if (this.items.length <= 1) {
         return 'center'
       }
-      return index < (this.items.length / 2) ? 'left' : 'right'
+      return index < this.items.length / 2 ? 'left' : 'right'
     }
   }
 }

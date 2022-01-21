@@ -9,9 +9,7 @@
       @create-clicked="createCar"
     >
       <template v-slot="item">
-        <CarThumbnail
-          :image-id="item.proxiedProps.previewImageId"
-        />
+        <CarThumbnail :image-id="item.proxiedProps.previewImageId" />
       </template>
     </OverviewTable>
   </Page>
@@ -30,7 +28,7 @@ export default {
     CarThumbnail,
     Page
   },
-  data () {
+  data() {
     return {
       headers: [
         {
@@ -39,28 +37,28 @@ export default {
         },
         {
           text: 'Marke',
-          value: 'brand',
+          value: 'brand'
         },
         {
           text: 'Typ',
           align: 'start',
-          value: 'type',
+          value: 'type'
         },
         {
           text: 'Modellreihe',
-          value: 'modelSeries',
+          value: 'modelSeries'
         },
         {
           text: 'Modelljahr',
-          value: 'modelYear',
+          value: 'modelYear'
         },
         {
           text: 'Außenfarbe',
-          value: 'colorExterior',
+          value: 'colorExterior'
         },
         {
           text: 'Erstellt durch',
-          value: 'ownerName',
+          value: 'ownerName'
         },
         {
           text: 'Zuletzt aktualisiert',
@@ -71,31 +69,34 @@ export default {
     }
   },
   computed: {
-    loading () {
+    loading() {
       return this.$auth.loading || commonStore.isLoading
     },
-    cars () {
-      return carsStore.cars
-        .map(car => {
-          const lastChanged = relativeTimeDifference(car.updatedAt)
-          const previewImageId = car.images ? car.images[0] : null
-          return {
-            previewImageId,
-            lastChanged,
-            ...car
-          }
-        })
+    cars() {
+      return carsStore.cars.map(car => {
+        const lastChanged = relativeTimeDifference(car.updatedAt)
+        const previewImageId = car.images ? car.images[0] : null
+        return {
+          previewImageId,
+          lastChanged,
+          ...car
+        }
+      })
     }
   },
-  async created () {
-    carsStore.fetchAllCars()
-      .catch(err => notificationsStore.error({ message: 'Fehler beim Laden der Fahrzeug. Bitte versuche es erneut.', err }))
+  async created() {
+    carsStore.fetchAllCars().catch(err =>
+      notificationsStore.error({
+        message: 'Fehler beim Laden der Fahrzeug. Bitte versuche es erneut.',
+        err
+      })
+    )
   },
   methods: {
-    viewCar (car) {
-      this.$router.push({ path: `/cars/${car.id}`})
+    viewCar(car) {
+      this.$router.push({ path: `/cars/${car.id}` })
     },
-    createCar () {
+    createCar() {
       this.$router.push({ path: '/cars/add' })
     }
   }

@@ -1,12 +1,10 @@
 <template>
-  <v-app-bar
-    color="secondary"
-    app
-    clipped-left
+  <v-app-bar color="secondary"
+             app
+             clipped-left
   >
-    <v-app-bar-nav-icon
-      :value="value"
-      @click="$emit('input', !value)"
+    <v-app-bar-nav-icon :value="value"
+                        @click="$emit('input', !value)"
     />
 
     <v-spacer />
@@ -30,10 +28,10 @@ export default {
     value: {
       type: Boolean,
       default: null
-    },
+    }
   },
   computed: {
-    isMobile () {
+    isMobile() {
       return this.$vuetify.breakpoint.mobile
     }
   },

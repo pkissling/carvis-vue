@@ -20,7 +20,7 @@
 export default {
   props: {
     value: {
-      type: [ String, Number ],
+      type: [String, Number],
       default: null
     },
     items: {
@@ -53,19 +53,19 @@ export default {
     }
   },
   computed: {
-    rules () {
-      return this.required ? [ v => !!v || 'Pflichtfeld' ] : []
+    rules() {
+      return this.required ? [v => !!v || 'Pflichtfeld'] : []
     }
   },
   methods: {
-    onInput (input) {
+    onInput(input) {
       if (input === '') {
         this.$emit('input', null)
       } else {
         this.$emit('input', input)
       }
     },
-    onChange (input) {
+    onChange(input) {
       this.$emit('change', input)
     }
   }

@@ -39,9 +39,9 @@ export default {
     }
   },
   computed: {
-    rules () {
-      return this.required ? [ v => !!v || 'Pflichtfeld' ] : []
-    },
+    rules() {
+      return this.required ? [v => !!v || 'Pflichtfeld'] : []
+    }
   }
 }
 </script>

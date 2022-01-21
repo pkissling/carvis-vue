@@ -1,8 +1,7 @@
 <template>
   <Page title="Fahrzeug hinzufügen">
-    <CarDetailForm
-      :car="car"
-      @submit="createCar"
+    <CarDetailForm :car="car"
+                   @submit="createCar"
     />
   </Page>
 </template>
@@ -17,17 +16,26 @@ export default {
     CarDetailForm,
     Page
   },
-  data () {
+  data() {
     return {
       car: {}
     }
   },
   methods: {
     createCar(car) {
-      carsStore.createCar(car)
+      carsStore
+        .createCar(car)
         .then(() => this.$router.push({ path: '/cars' }))
-        .then(() => notificationsStore.success('Fahrzeug erfolgreich erstellt.'))
-        .catch(err => notificationsStore.error({ message: 'Fehler beim Erstellen des Fahrzeugs. Bitte versuche es erneut.', err }))
+        .then(() =>
+          notificationsStore.success('Fahrzeug erfolgreich erstellt.')
+        )
+        .catch(err =>
+          notificationsStore.error({
+            message:
+              'Fehler beim Erstellen des Fahrzeugs. Bitte versuche es erneut.',
+            err
+          })
+        )
     }
   }
 }
