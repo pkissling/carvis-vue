@@ -1,13 +1,12 @@
 <template>
   <v-snackbar
     v-model="show"
-    :color="color"
+    :color="severity"
     :timeout="timeout"
     outlined
     bottom
     transition="scale-transition"
     elevation="24"
-    @click="show = false"
   >
     {{ message }}
 
@@ -15,7 +14,7 @@
       <v-btn
         icon
         v-bind="attrs"
-        :color="color"
+        :color="severity"
         @click="show = false"
       >
         <v-icon>mdi-close</v-icon>
@@ -25,24 +24,38 @@
 </template>
 
 <script>
+import { notificationsStore } from '@/store'
+
 export default {
   data () {
     return {
-      show: false,
-      message: '',
-      color: '',
       timeout: 10000
     }
   },
 
-  created () {
-    this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'notifications/showMessage') {
-        this.message = state.notifications.message
-        this.color = state.notifications.color
-        this.show = true
+  computed: {
+    message() {
+      return notificationsStore.getMessage
+    },
+
+    severity() {
+      return notificationsStore.getSeverity
+    },
+
+    show: {
+      get() {
+        return notificationsStore.isShow
+      },
+      set() {
+        notificationsStore.dismiss()
       }
-    })
+    }
+  },
+
+  methods: {
+    onClick() {
+      notificationsStore.setShow(false)
+    }
   }
 }
 </script>

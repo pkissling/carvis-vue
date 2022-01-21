@@ -21,11 +21,8 @@
 </template>
 
 <script>
-import EditImages from './EditImages.vue'
-import imageService from '../service/image-service'
-import notificationService from '../service/notification-service'
-import sentryService from '../service/sentry-service'
-
+import EditImages from '@/components/EditImages.vue'
+import { imagesStore, sentryStore, notificationsStore } from '@/store'
 
 export default {
   components: {
@@ -107,27 +104,27 @@ export default {
     async uploadImage(previewImage, file, index) {
       const progressCallback = (progress) => previewImage.progress = progress
       try {
-        const uploadedImageId = await imageService.uploadImage(file, progressCallback, index)
-        const imageUrl = await imageService.fetchImageUrl(uploadedImageId, 200)
+        const uploadedImageId = await imagesStore.uploadImage({ file, progressCallback, index })
+        const image = await imagesStore.fetchImage({ imageId: uploadedImageId, height: '200' })
         const lazySrc = previewImage ? previewImage.lazySrc : null
         this.images = this.images.filter(img => img.id !== previewImage.id)
-        this.images.splice(index, 0, { id: uploadedImageId, src: imageUrl, lazySrc, processed: true })
+        this.images.splice(index, 0, { id: uploadedImageId, src: image.url, lazySrc, processed: true })
       } catch (err) {
-        notificationService.error('Fehler beim Hochladen eines Bildes. Bitte versuche es erneut.', err)
-        sentryService.captureError(err, { imageId: previewImage.id })
+        notificationsStore.error({ message: 'Fehler beim Hochladen eines Bildes. Bitte versuche es erneut.', err })
+        sentryStore.captureException({ error: err, extras: { imageId: previewImage.id }})
         this.images = this.images.filter(img => img.id !== previewImage.id)
       }
     },
     async loadExistingImage(imageId, index) {
       this.images.push({ id: imageId, index, processed: true })
-      imageService.fetchImageUrl(imageId, 200)
-        .then(imageUrl => {
+      imagesStore.fetchImage({ imageId, height: '200' })
+        .then(image => {
           this.images = this.images.filter(image => image.id !== imageId)
-          this.images.splice(index, 0, { id: imageId, src: imageUrl, index: index, processed: true })
+          this.images.splice(index, 0, { id: imageId, src: image.url, index: index, processed: true })
         })
         .catch(() => {
           this.images = this.images.filter(image => image.id !== imageId)
-          this.images.splice(index, 0, { id: imageId, src: imageUrl, index: index, processed: true, error: true })
+          this.images.splice(index, 0, { id: imageId, src: image.url, index: index, processed: true, error: true })
         })
     }
   }

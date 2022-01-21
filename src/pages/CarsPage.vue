@@ -19,10 +19,10 @@
 
 <script>
 import Page from '@/pages/Page.vue'
-import notificationService from '@/service/notification-service'
 import CarThumbnail from '@/components/CarThumbnail.vue'
 import OverviewTable from '@/components/OverviewTable.vue'
-import { relativeTimeDifference } from '../utilities/time'
+import { relativeTimeDifference } from '@/utilities/time'
+import { carsStore, commonStore, notificationsStore } from '@/store'
 
 export default {
   components: {
@@ -72,10 +72,10 @@ export default {
   },
   computed: {
     loading () {
-      return this.$auth.loading || this.$store.getters['common/isLoading']
+      return this.$auth.loading || commonStore.isLoading
     },
     cars () {
-      return this.$store.getters['cars/allCars']
+      return carsStore.cars
         .map(car => {
           const lastChanged = relativeTimeDifference(car.updatedAt)
           const previewImageId = car.images ? car.images[0] : null
@@ -87,9 +87,9 @@ export default {
         })
     }
   },
-  created () {
-    this.$store.dispatch('cars/fetchAllCars')
-      .catch(err => notificationService.error('Fehler beim Laden der Fahrzeug. Bitte versuche es erneut.', err))
+  async created () {
+    carsStore.fetchAllCars()
+      .catch(err => notificationsStore.error({ message: 'Fehler beim Laden der Fahrzeug. Bitte versuche es erneut.', err }))
   },
   methods: {
     viewCar (car) {

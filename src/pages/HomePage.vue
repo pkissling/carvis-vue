@@ -31,7 +31,7 @@
 
 <script>
 import NavigationCard from '@/components/NavigationCard'
-import userService from '@/service/user-service'
+import { userStore } from '@/store'
 
 export default {
   components: {
@@ -59,7 +59,7 @@ export default {
     }
   },
   mounted () {
-    if (this.isLoggedin && !userService.hasAccess()) {
+    if (this.isLoggedin && !userStore.hasAccess) {
       this.$router.push({ path: '/forbidden' })
     }
   },

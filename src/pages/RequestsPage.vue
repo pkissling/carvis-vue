@@ -13,9 +13,9 @@
 
 <script>
 import Page from '@/pages/Page.vue'
-import notificationService from '@/service/notification-service'
 import OverviewTable from '@/components/OverviewTable.vue'
-import { relativeTimeDifference } from '../utilities/time'
+import { relativeTimeDifference } from '@/utilities/time'
+import { commonStore, requestsStore, notificationsStore } from '@/store'
 
 export default {
   components: {
@@ -55,10 +55,10 @@ export default {
   },
   computed: {
     loading () {
-      return this.$auth.loading || this.$store.getters['common/isLoading']
+      return this.$auth.loading || commonStore.isLoading
     },
     requests () {
-      return this.$store.getters['requests/allRequests']
+      return requestsStore.requests
         .map(request => {
           const lastChanged = relativeTimeDifference(request.updatedAt)
           return {
@@ -69,8 +69,8 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('requests/fetchAllRequests')
-      .catch(err => notificationService.error('Fehler beim Laden der Gesuche. Bitte versuche es erneut.', err))
+    requestsStore.fetchAllRequests()
+      .catch(err => notificationsStore.error({ message: 'Fehler beim Laden der Gesuche. Bitte versuche es erneut.', err }))
   },
   methods: {
     viewRequest (request) {

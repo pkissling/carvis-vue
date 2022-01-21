@@ -48,10 +48,9 @@
 </template>
 
 <script>
-import FullscreenImageModal from '../modals/FullscreenImageModal.vue'
-import ImagePagination from './ImagePagination.vue'
-import imageService from '../service/image-service'
-import sentryService from '../service/sentry-service'
+import FullscreenImageModal from '@/modals/FullscreenImageModal.vue'
+import ImagePagination from '@/components/ImagePagination.vue'
+import { imagesStore, sentryStore } from '@/store'
 
 export default {
   name: 'PreviewImage',
@@ -170,29 +169,23 @@ export default {
 
       this.$emit('click')
     },
-    async onError(url) {
+    async onError(image) {
       // prevent endless loop
       if (this.internalError) {
-        sentryService.captureError('Won\'t retry. Error is set already.', { url })
+        sentryStore.captureError({ payload: 'Won\'t retry. Error is set already.', extras: { image }})
         return
       }
 
       // if there are no image properties, we can not fetch again
       if (!this.imageId || !this.height) {
-        sentryService.captureError('Can\'t retry. Properties are missing.', {
-          imageId: this.imageId,
-          height: this.height,
-          url
-        })
+        sentryStore.captureError({ payload: 'Can\'t retry. Properties are missing.', extras: { image }})
         this.internalError = true
         return
       }
 
       // try to fetch new image
-      sentryService.captureError('Image could not be loaded. Getting new imageUrl', {
-         url, imageId: this.imageId
-        })
-      imageService.reloadImage(this.imageId, this.height)
+      sentryStore.captureError({ payload: 'Image could not be loaded. Getting new imageUrl', extras: { image }})
+      imagesStore.reloadImage({ imageId: this.imageId, height: this.height })
         .then(url => this.reloadedSrc = url)
         .catch(() => {
           this.internalError = true
