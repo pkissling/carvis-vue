@@ -32,13 +32,13 @@
     </v-form>
   </div>
 </template>
+
 <script>
-import notificationService from '@/service/notification-service'
-import userService from '@/service/user-service'
 import DeleteModal from '@/modals/DeleteModal.vue'
 import ActionsCard from '@/cards/ActionsCard.vue'
 import RequestCarDataCard from '@/cards/RequestCarDataCard.vue'
 import RequestContactDataCard from '@/cards/RequestContactDataCard.vue'
+import { commonStore, requestsStore, notificationsStore, userStore } from '@/store'
 
 export default {
   components: {
@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     loading () {
-      return this.$auth.loading || this.$store.getters['common/isLoading']
+      return this.$auth.loading || commonStore.isLoading
     },
     deleteModalSubject () {
       return `${this.request.brand} ${this.request.type}`
@@ -71,7 +71,7 @@ export default {
         return true
       }
 
-      return userService.isAdmin() || this.request?.createdBy === userService.getUsername()
+      return userStore.isAdmin || this.request?.createdBy === userStore.getUsername
     }
   },
   methods: {
@@ -84,11 +84,11 @@ export default {
       }
     },
     deleteRequest() {
-      this.showDeletionModal = false
-      this.$store.dispatch('requests/deleteRequest', this.request.id)
-        .then(() => notificationService.success('Gesuch erfolgreich gelöscht.'))
+      requestsStore.deleteRequest(this.request.id)
+        .then(() => notificationsStore.success('Gesuch erfolgreich gelöscht.'))
         .then(() => this.$router.push({ path: '/requests' }))
-        .catch(err => notificationService.error('Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.', err))
+        .catch(err => notificationsStore.error({ message: 'Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.', err }))
+        .finally(() => this.showDeletionModal = false)
     }
   }
 }

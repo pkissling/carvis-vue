@@ -6,7 +6,7 @@
     <v-dialog
       v-model="dialog"
       max-width="400"
-      @input="cancel"
+      @input="$emit('cancel')"
     >
       <v-card>
         <v-card-title class="headline">
@@ -16,14 +16,15 @@
           <v-spacer />
           <v-btn
             text
-            @click="cancel"
+            @click="$emit('cancel')"
           >
             Abbrechen
           </v-btn>
           <v-btn
             color="error"
             text
-            @click="submit"
+            :loading="isLoading"
+            @click="$emit('submit')"
           >
             Löschen
           </v-btn>
@@ -33,27 +34,20 @@
   </v-row>
 </template>
 
-<script>
-export default {
-  props: {
-    subject: {
-      type: String,
-      default: null
-    }
-  }
-  ,
-  data () {
-    return {
-      dialog: true,
-    }
-  },
-  methods: {
-    submit() {
-      this.$emit('submit', this.car)
-    },
-    cancel () {
-      this.$emit('cancel')
-    }
+<script lang="ts">
+import { commonStore } from '@/store'
+import { Component, Prop, Vue } from 'vue-property-decorator'
+
+@Component
+export default class DeleteModal extends Vue {
+
+  @Prop({ required: true, default: 'asdas' })
+  subject!: string
+
+  dialog = true
+
+  get isLoading() : boolean {
+    return commonStore.isLoading
   }
 }
 </script>

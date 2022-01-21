@@ -190,9 +190,9 @@
 </template>
 
 <script>
-import TextField from '../fields/TextField.vue'
-import Dropdown from '../fields/Dropdown.vue'
-import TextArea from '../fields/TextArea.vue'
+import TextField from '@/fields/TextField.vue'
+import Dropdown from '@/fields/Dropdown.vue'
+import TextArea from '@/fields/TextArea.vue'
 
 export default {
   components: {

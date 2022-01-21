@@ -10,7 +10,7 @@
 <script>
 import Page from '@/pages/Page.vue'
 import RequestDetailForm from '@/components/RequestDetailForm.vue'
-import notificationService from '@/service/notification-service'
+import { requestsStore, notificationsStore } from '@/store'
 
 export default {
   components: {
@@ -27,10 +27,10 @@ export default {
   },
   methods: {
     createRequest(request) {
-      this.$store.dispatch('requests/createRequest', request)
+      requestsStore.createRequest(request)
         .then(() => this.$router.push({ path: '/requests' }))
-        .then(() => notificationService.success('Gesuch erfolgreich erstellt.'))
-        .catch(err => notificationService.error('Fehler beim Erstellen des Gesuches. Bitte versuche es erneut.', err))
+        .then(() => notificationsStore.success('Gesuch erfolgreich erstellt.'))
+        .catch(err => notificationsStore.error({ message: 'Fehler beim Erstellen des Gesuches. Bitte versuche es erneut.', err }))
     }
   }
 }

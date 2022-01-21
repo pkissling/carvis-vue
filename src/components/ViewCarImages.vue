@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import PreviewImage from './PreviewImage.vue'
-import imageService from '../service/image-service'
+import PreviewImage from '@/components/PreviewImage.vue'
+import { imagesStore } from '@/store'
 
 export default {
   components: {
@@ -117,8 +117,8 @@ export default {
   },
   methods: {
     async resolveImage (imageId) {
-      return imageService.fetchImageUrl(imageId, 500)
-        .then(url => { return { id: imageId, src: url }})
+      return imagesStore.fetchImage({ imageId, height: '500' })
+        .then(image => { return { id: imageId, src: image.url }})
         .catch(() => { return { id: imageId, error: true }})
     },
     onFullscreen(value) {

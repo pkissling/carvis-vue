@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import userService from '@/service/user-service'
+import { userStore } from '@/store'
 export default {
   props: {
     value: {
@@ -73,10 +73,10 @@ export default {
   },
   computed: {
     name () {
-      return userService.getName()
+      return userStore.getName
     },
     picture () {
-      return userService.getPicture()
+      return userStore.getPicture
     },
     isMobile () {
       return this.$vuetify.breakpoint.mobile

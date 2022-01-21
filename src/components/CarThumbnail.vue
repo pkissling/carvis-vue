@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import PreviewImage from './PreviewImage.vue'
-import imageService from '../service/image-service'
+import PreviewImage from '@/components/PreviewImage.vue'
+import { imagesStore } from '@/store'
 
 export default {
   components: {
@@ -42,13 +42,13 @@ export default {
       error: false
     }
   },
-  created() {
+  async created() {
     if (!this.imageId) {
      return
     }
 
-    imageService.fetchImageUrl(this.imageId, 100)
-      .then(url => this.src = url)
+    imagesStore.fetchImage({ imageId: this.imageId, height: '100' })
+      .then(image => this.src = image.url)
       .catch(() => this.error = true)
   }
 }

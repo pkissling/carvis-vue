@@ -32,13 +32,13 @@
     </v-form>
   </div>
 </template>
+
 <script>
-import notificationService from '../service/notification-service'
-import userService from '../service/user-service'
-import DeleteModal from '../modals/DeleteModal.vue'
-import CarPreviewCard from '../cards/CarPreviewCard.vue'
-import CarDataCard from '../cards/CarDataCard.vue'
-import ActionsCard from '../cards/ActionsCard.vue'
+import DeleteModal from '@/modals/DeleteModal.vue'
+import CarPreviewCard from '@/cards/CarPreviewCard.vue'
+import CarDataCard from '@/cards/CarDataCard.vue'
+import ActionsCard from '@/cards/ActionsCard.vue'
+import { carsStore, commonStore, notificationsStore, userStore } from '@/store'
 
 export default {
   components: {
@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     loading () {
-      return this.$auth.loading || this.$store.getters['common/isLoading']
+      return this.$auth.loading || commonStore.isLoading
     },
     deleteModalSubject () {
       return `${this.car.brand} ${this.car.type}`
@@ -71,7 +71,7 @@ export default {
         return true
       }
 
-      return userService.isAdmin() || this.car.createdBy === userService.getUsername()
+      return userStore.isAdmin || this.car.createdBy === userStore.getUsername
     }
   },
   methods: {
@@ -84,11 +84,11 @@ export default {
       }
     },
     deleteCar() {
-      this.showCarDeletionModal = false
-      this.$store.dispatch('cars/deleteCar', this.car.id)
-        .then(() => notificationService.success('Fahrzeug erfolgreich gelöscht.'))
+      carsStore.deleteCar(this.car.id)
+        .then(() => notificationsStore.success('Fahrzeug erfolgreich gelöscht.'))
         .then(() => this.$router.push({ path: '/cars' }))
-        .catch(err => notificationService.error('Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err))
+        .catch(err => notificationsStore.error({ message: 'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err }))
+        .finally(() => this.showCarDeletionModal = false)
     }
   }
 }

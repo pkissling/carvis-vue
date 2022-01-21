@@ -4,6 +4,7 @@
       <v-btn
         color="primary"
         type="submit"
+        :loading="isLoading"
       >
         <span v-if="id">
           Speichern
@@ -19,6 +20,7 @@
         v-if="id"
         color="error"
         text
+        :loading="isLoading"
         @click="$emit('delete')"
       >
         Löschen
@@ -27,13 +29,18 @@
   </v-card>
 </template>
 
-<script>
-export default {
-  props: {
-    id: {
-      type: String,
-      default: null
-    }
+<script lang="ts">
+import { commonStore } from '@/store'
+import { Component, Prop, Vue } from 'vue-property-decorator'
+
+@Component
+export default class ActionsCard extends Vue {
+
+  @Prop()
+  id!: string
+
+  get isLoading() : boolean {
+    return commonStore.isLoading
   }
 }
 </script>
