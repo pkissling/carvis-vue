@@ -1,8 +1,7 @@
 <template>
   <div>
-    <v-skeleton-loader
-      v-if="loading"
-      type="image"
+    <v-skeleton-loader v-if="loading"
+                       type="image"
     />
     <div v-else>
       <PreviewImage
@@ -19,9 +18,8 @@
           height="500"
           hide-delimiters
         >
-          <v-carousel-item
-            v-for="(image, i) in images"
-            :key="image.id"
+          <v-carousel-item v-for="(image, i) in images"
+                           :key="image.id"
           >
             <PreviewImage
               height="500"
@@ -63,7 +61,7 @@ export default {
       fullscreen: false
     }
   },
-   computed: {
+  computed: {
     hasMultipleImages() {
       return this.images && this.images.length > 1
     }
@@ -75,27 +73,49 @@ export default {
         return
       }
 
-      const loadedImageIds = this.images ? this.images.map(image => image.id) : []
-      const removedImages = loadedImageIds.filter(loaded => !newImageIds.includes(loaded))
-      const addedImages = newImageIds.filter(loaded => !loadedImageIds.includes(loaded))
+      const loadedImageIds = this.images
+        ? this.images.map(image => image.id)
+        : []
+      const removedImages = loadedImageIds.filter(
+        loaded => !newImageIds.includes(loaded)
+      )
+      const addedImages = newImageIds.filter(
+        loaded => !loadedImageIds.includes(loaded)
+      )
 
       if (removedImages.length) {
-        this.images = this.images.filter(image => !removedImages.includes(image.id))
+        this.images = this.images.filter(
+          image => !removedImages.includes(image.id)
+        )
       }
 
       if (addedImages.length) {
-        await Promise.allSettled(addedImages.map(imageId => this.resolveImage(imageId)))
-          .then(resolvedImages => resolvedImages.map(image => this.images = [ ...this.images.filter(img => img.id !== image.id), image]))
+        await Promise.allSettled(
+          addedImages.map(imageId => this.resolveImage(imageId))
+        ).then(resolvedImages =>
+          resolvedImages.map(
+            image =>
+              (this.images = [
+                ...this.images.filter(img => img.id !== image.id),
+                image
+              ])
+          )
+        )
       }
 
       // ensure sorting of images
-      this.images = newImageIds.map((imageId, index) => {
-        return { ...this.images.find(image => image.id === imageId), index }
-      }).sort((a,b) => a.index - b.index)
+      this.images = newImageIds
+        .map((imageId, index) => {
+          return {
+            ...this.images.find(image => image.id === imageId),
+            index
+          }
+        })
+        .sort((a, b) => a.index - b.index)
     }
   },
 
-  async created () {
+  async created() {
     if (!this.imageIds || !this.imageIds.length) {
       return
     }
@@ -103,23 +123,32 @@ export default {
     this.$emit('loading', true)
 
     // populate placeholders
-    this.images = this.imageIds.map(imageId => { return { id: imageId }})
+    this.images = this.imageIds.map(imageId => {
+      return { id: imageId }
+    })
     // resolve image urls sequentially
     this.images.reduce(async (previousPromise, image) => {
       await previousPromise
       return this.resolveImage(image.id)
         .then(image => {
-          const index = this.images.indexOf(this.images.find(img => img.id === image.id))
+          const index = this.images.indexOf(
+            this.images.find(img => img.id === image.id)
+          )
           this.images.splice(index, 1, image)
         })
         .finally(() => this.$emit('loading', false)) // stop loading animation after first image url was resolved
     }, Promise.resolve())
   },
   methods: {
-    async resolveImage (imageId) {
-      return imagesStore.fetchImage({ imageId, height: '500' })
-        .then(image => { return { id: imageId, src: image.url }})
-        .catch(() => { return { id: imageId, error: true }})
+    async resolveImage(imageId) {
+      return imagesStore
+        .fetchImage({ imageId, height: '500' })
+        .then(image => {
+          return { id: imageId, src: image.url }
+        })
+        .catch(() => {
+          return { id: imageId, error: true }
+        })
     },
     onFullscreen(value) {
       this.fullscreen = value

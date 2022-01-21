@@ -2,7 +2,9 @@
   <Page title="Kein Zugang">
     Leider fehlt Dir die Berechtigung, um auf diese Seite zuzugreifen.
     <br>
-    Melde dich bei <a href="mailto:dennis@carvis.cloud?subject=Carvis Zugang">Dennis</a>, wenn du Zugang erhalten möchtest.
+    Melde dich bei
+    <a href="mailto:dennis@carvis.cloud?subject=Carvis Zugang">Dennis</a>, wenn
+    du Zugang erhalten möchtest.
   </Page>
 </template>
 
@@ -15,4 +17,3 @@ export default {
   }
 }
 </script>
-

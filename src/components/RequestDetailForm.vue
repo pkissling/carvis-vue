@@ -6,9 +6,8 @@
       :disabled="!canEdit"
       @submit.stop.prevent="onSubmit"
     >
-      <RequestCarDataCard
-        id="request-car-data-card"
-        v-model="request"
+      <RequestCarDataCard id="request-car-data-card"
+                          v-model="request"
       />
 
       <RequestContactDataCard
@@ -38,14 +37,19 @@ import DeleteModal from '@/modals/DeleteModal.vue'
 import ActionsCard from '@/cards/ActionsCard.vue'
 import RequestCarDataCard from '@/cards/RequestCarDataCard.vue'
 import RequestContactDataCard from '@/cards/RequestContactDataCard.vue'
-import { commonStore, requestsStore, notificationsStore, userStore } from '@/store'
+import {
+  commonStore,
+  requestsStore,
+  notificationsStore,
+  userStore
+} from '@/store'
 
 export default {
   components: {
     ActionsCard,
     DeleteModal,
     RequestCarDataCard,
-    RequestContactDataCard,
+    RequestContactDataCard
   },
   props: {
     request: {
@@ -60,22 +64,24 @@ export default {
     }
   },
   computed: {
-    loading () {
+    loading() {
       return this.$auth.loading || commonStore.isLoading
     },
-    deleteModalSubject () {
+    deleteModalSubject() {
       return `${this.request.brand} ${this.request.type}`
     },
-    canEdit () {
+    canEdit() {
       if (!this.request || !this.request.id) {
         return true
       }
 
-      return userStore.isAdmin || this.request?.createdBy === userStore.getUsername
+      return (
+        userStore.isAdmin || this.request?.createdBy === userStore.getUsername
+      )
     }
   },
   methods: {
-    onSubmit () {
+    onSubmit() {
       this.$refs.form.validate()
       if (this.valid) {
         this.$emit('submit', this.request)
@@ -84,13 +90,19 @@ export default {
       }
     },
     deleteRequest() {
-      requestsStore.deleteRequest(this.request.id)
+      requestsStore
+        .deleteRequest(this.request.id)
         .then(() => notificationsStore.success('Gesuch erfolgreich gelöscht.'))
         .then(() => this.$router.push({ path: '/requests' }))
-        .catch(err => notificationsStore.error({ message: 'Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.', err }))
-        .finally(() => this.showDeletionModal = false)
+        .catch(err =>
+          notificationsStore.error({
+            message:
+              'Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.',
+            err
+          })
+        )
+        .finally(() => (this.showDeletionModal = false))
     }
   }
 }
 </script>
-

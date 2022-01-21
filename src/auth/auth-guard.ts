@@ -1,10 +1,10 @@
 import { getInstance } from '@/auth'
-import { NavigationGuard, Route } from 'vue-router'
+import { NavigationGuard, NavigationGuardNext, Route } from 'vue-router'
 
 export const authGuard: NavigationGuard = (
     to: Route,
     from: Route,
-    next: Function
+    next: NavigationGuardNext
 ) => {
     const authService = getInstance()
 

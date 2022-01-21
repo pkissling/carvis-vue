@@ -1,12 +1,10 @@
 <template>
   <WaitingLayer v-if="loading" />
-  <Page
-    v-else
-    :title="title"
+  <Page v-else
+        :title="title"
   >
-    <CarDetailForm
-      :car="car"
-      @submit="updateCar"
+    <CarDetailForm :car="car"
+                   @submit="updateCar"
     />
   </Page>
 </template>
@@ -37,34 +35,48 @@ export default {
     }
   },
   computed: {
-    canEdit () {
+    canEdit() {
       return userStore.isAdmin || this.car?.createdBy === userStore.getUsername
     },
-    title () {
+    title() {
       return this.canEdit ? 'Fahrzeug bearbeiten' : 'Fahrzeug anzeigen'
     }
   },
   methods: {
-    updateCar (car) {
-      carsStore.updateCar(car)
+    updateCar(car) {
+      carsStore
+        .updateCar(car)
         .then(() => this.$router.push({ path: '/cars' }))
-        .then(() => notificationsStore.success('Fahrzeug erfolgreich bearbeitet.'))
-        .catch(err => notificationsStore.error({ message: 'Fehler beim Bearbeiten des Fahrzeugs. Bitte versuche es erneut.', err }))
+        .then(() =>
+          notificationsStore.success('Fahrzeug erfolgreich bearbeitet.')
+        )
+        .catch(err =>
+          notificationsStore.error({
+            message:
+              'Fehler beim Bearbeiten des Fahrzeugs. Bitte versuche es erneut.',
+            err
+          })
+        )
     }
   },
-  async beforeRouteEnter (to, from, next) {
-     next(async vm => {
+  async beforeRouteEnter(to, from, next) {
+    next(async vm => {
       vm.loading = true
       const carId = to.params.carId
-      carsStore.fetchCar(carId)
+      carsStore
+        .fetchCar(carId)
         .then(() => carsStore.cars.find(c => c.id === carId))
-        .then(car => vm.car = car)
+        .then(car => (vm.car = car))
         .catch(err => {
-          notificationsStore.error({ message: 'Fehler beim Laden des Fahrzeugs. Bitte versuche es erneut.', err })
+          notificationsStore.error({
+            message:
+              'Fehler beim Laden des Fahrzeugs. Bitte versuche es erneut.',
+            err
+          })
           // this.$router is not available
           router.push({ name: 'NotFound' })
         })
-        .finally(() => vm.loading = false)
+        .finally(() => (vm.loading = false))
     })
   }
 }

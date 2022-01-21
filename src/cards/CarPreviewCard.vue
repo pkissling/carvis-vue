@@ -1,7 +1,6 @@
 <template>
-  <v-card
-    :loading="loading"
-    class="my-12"
+  <v-card :loading="loading"
+          class="my-12"
   >
     <div class="p-12 d-flex justify-space-between">
       <v-card-title class="text-h4">
@@ -49,7 +48,7 @@ export default {
       type: Array,
       default: () => [],
       immediate: true,
-      handler (val) {
+      handler(val) {
         if (!val) {
           this.imageIds = []
           return
@@ -62,7 +61,7 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
       imageIds: [],
       loading: false,
@@ -76,6 +75,6 @@ export default {
     onLoading(value) {
       this.loading = value
     }
-  },
+  }
 }
 </script>

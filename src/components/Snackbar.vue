@@ -11,11 +11,10 @@
     {{ message }}
 
     <template v-slot:action="{ attrs }">
-      <v-btn
-        icon
-        v-bind="attrs"
-        :color="severity"
-        @click="show = false"
+      <v-btn icon
+             v-bind="attrs"
+             :color="severity"
+             @click="show = false"
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -27,7 +26,7 @@
 import { notificationsStore } from '@/store'
 
 export default {
-  data () {
+  data() {
     return {
       timeout: 10000
     }

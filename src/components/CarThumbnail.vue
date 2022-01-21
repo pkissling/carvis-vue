@@ -10,10 +10,9 @@
       not-clickable
     />
 
-    <v-avatar
-      v-else
-      color="secondary"
-      tile
+    <v-avatar v-else
+              color="secondary"
+              tile
     >
       <v-icon color="primary">
         mdi-car-side
@@ -44,12 +43,13 @@ export default {
   },
   async created() {
     if (!this.imageId) {
-     return
+      return
     }
 
-    imagesStore.fetchImage({ imageId: this.imageId, height: '100' })
-      .then(image => this.src = image.url)
-      .catch(() => this.error = true)
+    imagesStore
+      .fetchImage({ imageId: this.imageId, height: '100' })
+      .then(image => (this.src = image.url))
+      .catch(() => (this.error = true))
   }
 }
 </script>

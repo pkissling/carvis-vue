@@ -131,6 +131,7 @@ export default class ImagesStore extends VuexModule {
 }
 
 const imageLoads = async (url: string): Promise<boolean> => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = await new Promise((resolve) => {
         const image = new Image()
         image.onload = resolve

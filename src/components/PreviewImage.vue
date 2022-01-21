@@ -8,7 +8,7 @@
       :src="_src"
       :lazy-src="_lazySrc"
       :contain="contain"
-      :class="{ 'clickable': _clickable }"
+      :class="{ clickable: _clickable }"
       @click="onClick"
       @error="onError"
     >
@@ -17,10 +17,9 @@
         :images-count="imagesCount"
       />
       <template #placeholder>
-        <v-row
-          class="fill-height ma-0"
-          align="center"
-          justify="center"
+        <v-row class="fill-height ma-0"
+               align="center"
+               justify="center"
         >
           <v-progress-circular
             v-if="progress"
@@ -29,10 +28,9 @@
           >
             {{ progress }}
           </v-progress-circular>
-          <v-progress-circular
-            v-else
-            indeterminate
-            color="primary"
+          <v-progress-circular v-else
+                               indeterminate
+                               color="primary"
           />
         </v-row>
       </template>
@@ -85,11 +83,11 @@ export default {
     },
     maxWidth: {
       type: String,
-      default: null,
+      default: null
     },
     maxHeight: {
       type: String,
-      default: null,
+      default: null
     },
     lazySrc: {
       type: String,
@@ -126,14 +124,14 @@ export default {
       }
 
       if (this._error) {
-        return require("@/assets/images/car_dummy_highres.jpg")
+        return require('@/assets/images/car_dummy_highres.jpg')
       }
 
       return this.src
     },
     _lazySrc() {
       if (this._error) {
-        return require("@/assets/images/car_dummy_lowres.jpg")
+        return require('@/assets/images/car_dummy_lowres.jpg')
       }
 
       return this.lazySrc
@@ -146,7 +144,7 @@ export default {
       return !this.notClickable
     },
     _progress() {
-      return this.progress === 0 ? "0" : this.progress
+      return this.progress === 0 ? '0' : this.progress
     },
     _error() {
       return this.error || this.internalError
@@ -164,7 +162,7 @@ export default {
       }
 
       if (!this.notClickable) {
-           this.fullscreen = true
+        this.fullscreen = true
       }
 
       this.$emit('click')
@@ -172,21 +170,31 @@ export default {
     async onError(image) {
       // prevent endless loop
       if (this.internalError) {
-        sentryStore.captureError({ payload: 'Won\'t retry. Error is set already.', extras: { image }})
+        sentryStore.captureError({
+          payload: "Won't retry. Error is set already.",
+          extras: { image }
+        })
         return
       }
 
       // if there are no image properties, we can not fetch again
       if (!this.imageId || !this.height) {
-        sentryStore.captureError({ payload: 'Can\'t retry. Properties are missing.', extras: { image }})
+        sentryStore.captureError({
+          payload: "Can't retry. Properties are missing.",
+          extras: { image }
+        })
         this.internalError = true
         return
       }
 
       // try to fetch new image
-      sentryStore.captureError({ payload: 'Image could not be loaded. Getting new imageUrl', extras: { image }})
-      imagesStore.reloadImage({ imageId: this.imageId, height: this.height })
-        .then(url => this.reloadedSrc = url)
+      sentryStore.captureError({
+        payload: 'Image could not be loaded. Getting new imageUrl',
+        extras: { image }
+      })
+      imagesStore
+        .reloadImage({ imageId: this.imageId, height: this.height })
+        .then(url => (this.reloadedSrc = url))
         .catch(() => {
           this.internalError = true
           this.reloadedSrc = null
@@ -198,6 +206,6 @@ export default {
 
 <style scoped>
 .clickable {
-  cursor: pointer
+  cursor: pointer;
 }
 </style>

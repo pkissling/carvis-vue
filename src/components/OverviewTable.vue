@@ -25,9 +25,8 @@
       </template>
     </v-data-table>
 
-    <FloatingButton
-      :loading="loading"
-      v-on="$listeners"
+    <FloatingButton :loading="loading"
+                    v-on="$listeners"
     />
   </div>
 </template>
@@ -37,7 +36,7 @@ import FloatingButton from '@/components/FloatingButton'
 
 export default {
   components: {
-    FloatingButton,
+    FloatingButton
   },
   props: {
     searchPlaceholderText: {
@@ -65,7 +64,7 @@ export default {
     }
   },
   computed: {
-    filteredItems () {
+    filteredItems() {
       if (!this.searchTerm?.trim()) {
         return this.items
       }
@@ -87,7 +86,7 @@ export default {
     extractAllAttributes(item) {
       if (item === null || !Object.keys(item).length) return null
       return Object.values(item)
-        .map(v => typeof v == "object" ? this.extractAllAttributes(v) : v)
+        .map(v => (typeof v == 'object' ? this.extractAllAttributes(v) : v))
         .filter(v => v)
         .map(v => v.toString().toLowerCase())
     }

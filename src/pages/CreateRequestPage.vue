@@ -1,8 +1,7 @@
 <template>
   <Page title="Gesuch hinzufügen">
-    <RequestDetailForm
-      :request="request"
-      @submit="createRequest"
+    <RequestDetailForm :request="request"
+                       @submit="createRequest"
     />
   </Page>
 </template>
@@ -17,20 +16,26 @@ export default {
     RequestDetailForm,
     Page
   },
-  data () {
+  data() {
     return {
       request: {
-        contactDetails: {
-        }
+        contactDetails: {}
       }
     }
   },
   methods: {
     createRequest(request) {
-      requestsStore.createRequest(request)
+      requestsStore
+        .createRequest(request)
         .then(() => this.$router.push({ path: '/requests' }))
         .then(() => notificationsStore.success('Gesuch erfolgreich erstellt.'))
-        .catch(err => notificationsStore.error({ message: 'Fehler beim Erstellen des Gesuches. Bitte versuche es erneut.', err }))
+        .catch(err =>
+          notificationsStore.error({
+            message:
+              'Fehler beim Erstellen des Gesuches. Bitte versuche es erneut.',
+            err
+          })
+        )
     }
   }
 }

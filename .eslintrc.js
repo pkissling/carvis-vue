@@ -3,24 +3,26 @@ module.exports = {
   env: {
     node: true
   },
-  extends: [
-    'plugin:vue/recommended',
-  ],
+
+  extends: ['plugin:vue/recommended', '@vue/typescript/recommended'],
+
   rules: {
-    'no-undef': 'off', // <- TODO doesn't find types.d.ts for some reason
+    'no-undef': 'off',
     'no-console': 'warn',
     'no-debugger': 'warn',
-    'vue/max-attributes-per-line': ['warn', {
-      singleline: 1,
-      multiline: {
-        allowFirstLine: true
+    'vue/max-attributes-per-line': [
+      'warn',
+      {
+        singleline: 1,
+        multiline: {
+          allowFirstLine: true
+        }
       }
-    }]
+    ]
   },
-  parser: "vue-eslint-parser",
+
   parserOptions: {
-    parser: 'babel-eslint',
-    sourceType: 'module',
-    allowImportExportEverywhere: true
+    ecmaVersion: 2020,
+    parser: '@typescript-eslint/parser'
   }
 }

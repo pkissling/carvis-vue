@@ -1,8 +1,7 @@
 <template>
   <v-row justify="center">
-    <v-dialog
-      v-model="dialog"
-      @input="$emit('cancel')"
+    <v-dialog v-model="dialog"
+              @input="$emit('cancel')"
     >
       <PreviewImage
         :src="src"
@@ -33,7 +32,7 @@ export default {
       default: null
     }
   },
-  data () {
+  data() {
     return {
       dialog: true,
       src: null,
@@ -41,13 +40,17 @@ export default {
       error: false
     }
   },
-  beforeCreate: function(){
-    this.$options.components.PreviewImage = require("../components/PreviewImage.vue").default;
+  beforeCreate: function () {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    this.$options.components.PreviewImage =
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require('../components/PreviewImage.vue').default
   },
-  async created () {
-    imagesStore.fetchImage({ imageId: this.imageId, height: this.height })
-      .then(image => this.src = image.url)
-      .catch(() => this.error = true)
+  async created() {
+    imagesStore
+      .fetchImage({ imageId: this.imageId, height: this.height })
+      .then(image => (this.src = image.url))
+      .catch(() => (this.error = true))
   }
 }
 </script>

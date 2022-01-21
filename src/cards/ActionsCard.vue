@@ -1,17 +1,12 @@
 <template>
   <v-card class="my-12">
     <v-card-actions class="d-block d-sm-flex">
-      <v-btn
-        color="primary"
-        type="submit"
-        :loading="isLoading"
+      <v-btn color="primary"
+             type="submit"
+             :loading="isLoading"
       >
-        <span v-if="id">
-          Speichern
-        </span>
-        <span v-else>
-          Hinzufügen
-        </span>
+        <span v-if="id"> Speichern </span>
+        <span v-else> Hinzufügen </span>
       </v-btn>
 
       <v-spacer />
@@ -35,11 +30,10 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class ActionsCard extends Vue {
-
   @Prop()
   id!: string
 
-  get isLoading() : boolean {
+  get isLoading(): boolean {
     return commonStore.isLoading
   }
 }

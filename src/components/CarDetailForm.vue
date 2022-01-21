@@ -12,9 +12,8 @@
         :start-in-edit-mode="!car || !car.id"
       />
 
-      <CarDataCard
-        id="car-data-card"
-        v-model="car"
+      <CarDataCard id="car-data-card"
+                   v-model="car"
       />
 
       <ActionsCard
@@ -60,13 +59,13 @@ export default {
     }
   },
   computed: {
-    loading () {
+    loading() {
       return this.$auth.loading || commonStore.isLoading
     },
-    deleteModalSubject () {
+    deleteModalSubject() {
       return `${this.car.brand} ${this.car.type}`
     },
-    canEdit () {
+    canEdit() {
       if (!this.car || !this.car.id) {
         return true
       }
@@ -75,7 +74,7 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
+    onSubmit() {
       this.$refs.form.validate()
       if (this.valid) {
         this.$emit('submit', this.car)
@@ -84,13 +83,21 @@ export default {
       }
     },
     deleteCar() {
-      carsStore.deleteCar(this.car.id)
-        .then(() => notificationsStore.success('Fahrzeug erfolgreich gelöscht.'))
+      carsStore
+        .deleteCar(this.car.id)
+        .then(() =>
+          notificationsStore.success('Fahrzeug erfolgreich gelöscht.')
+        )
         .then(() => this.$router.push({ path: '/cars' }))
-        .catch(err => notificationsStore.error({ message: 'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err }))
-        .finally(() => this.showCarDeletionModal = false)
+        .catch(err =>
+          notificationsStore.error({
+            message:
+              'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.',
+            err
+          })
+        )
+        .finally(() => (this.showCarDeletionModal = false))
     }
   }
 }
 </script>
-

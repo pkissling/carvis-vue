@@ -1,12 +1,10 @@
 <template>
   <WaitingLayer v-if="loading" />
-  <Page
-    v-else
-    :title="title"
+  <Page v-else
+        :title="title"
   >
-    <RequestDetailForm
-      :request="request"
-      @submit="updateRequest"
+    <RequestDetailForm :request="request"
+                       @submit="updateRequest"
     />
   </Page>
 </template>
@@ -38,34 +36,48 @@ export default {
     }
   },
   computed: {
-    canEdit () {
-      return userStore.isAdmin || this.request?.createdBy === userStore.getUsername
+    canEdit() {
+      return (
+        userStore.isAdmin || this.request?.createdBy === userStore.getUsername
+      )
     },
-    title () {
+    title() {
       return this.canEdit ? 'Gesuch bearbeiten' : 'Gesuch anzeigen'
     }
   },
   methods: {
-    updateRequest (request) {
-      requestsStore.updateRequest(request)
+    updateRequest(request) {
+      requestsStore
+        .updateRequest(request)
         .then(() => this.$router.push({ path: '/requests' }))
-        .then(() => notificationsStore.success('Gesuch erfolgreich bearbeitet.'))
-        .catch(err => notificationsStore.error('Fehler beim Bearbeiten des Gesuchs. Bitte versuche es erneut.', err))
+        .then(() =>
+          notificationsStore.success('Gesuch erfolgreich bearbeitet.')
+        )
+        .catch(err =>
+          notificationsStore.error(
+            'Fehler beim Bearbeiten des Gesuchs. Bitte versuche es erneut.',
+            err
+          )
+        )
     }
   },
-  async beforeRouteEnter (to, from, next) {
-     next(vm => {
+  async beforeRouteEnter(to, from, next) {
+    next(vm => {
       vm.loading = true
       const requestId = to.params.requestId
-      requestsStore.fetchRequest(requestId)
+      requestsStore
+        .fetchRequest(requestId)
         .then(() => requestsStore.requests.find(req => req.id === requestId))
-        .then(request => vm.request = request)
+        .then(request => (vm.request = request))
         .catch(err => {
-          notificationsStore.error({ message: 'Fehler beim Laden des Gesuchs. Bitte versuche es erneut.', err })
+          notificationsStore.error({
+            message: 'Fehler beim Laden des Gesuchs. Bitte versuche es erneut.',
+            err
+          })
           // this.$router is not available
           router.push({ name: 'NotFound' })
         })
-        .finally(() => vm.loading = false)
+        .finally(() => (vm.loading = false))
     })
   }
 }
