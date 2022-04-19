@@ -7,9 +7,10 @@ import createAuth0Client, {
     GetTokenSilentlyOptions,
     GetTokenWithPopupOptions,
     LogoutOptions,
+    IdToken,
 } from '@auth0/auth0-spa-js'
 import { User } from '@/auth/user'
-import { userStore } from '@/store'
+import { userStore, sentryStore } from '@/store'
 
 export type Auth0Options = {
     domain: string
@@ -18,7 +19,7 @@ export type Auth0Options = {
     [key: string]: string | undefined
 }
 
-export type RedirectCallback = (appState: unknown) => void
+export type RedirectCallback = (appState: RedirectLoginOptions) => void
 
 @Component({})
 export class Auth0Wrapper extends Vue {
@@ -36,13 +37,14 @@ export class Auth0Wrapper extends Vue {
     }
 
     /** Authenticates the user using a popup window */
-    async loginWithPopup(o: PopupLoginOptions) {
+    async loginWithPopup(o: PopupLoginOptions): Promise<void> {
         this.popupOpen = true
 
         try {
             await this.auth0Client?.loginWithPopup(o)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
-            console.error(e)
+            sentryStore.captureException(e)
             this.error = e
         } finally {
             this.popupOpen = false
@@ -53,27 +55,27 @@ export class Auth0Wrapper extends Vue {
     }
 
     /** Authenticates the user using the redirect method */
-    loginWithRedirect(o?: RedirectLoginOptions) {
+    loginWithRedirect(o?: RedirectLoginOptions): Promise<void> | undefined {
         return this.auth0Client?.loginWithRedirect(o)
     }
 
     /** Returns all the claims present in the ID token */
-    getIdTokenClaims(o?: GetIdTokenClaimsOptions) {
+    getIdTokenClaims(o?: GetIdTokenClaimsOptions): Promise<IdToken | undefined> | undefined {
         return this.auth0Client?.getIdTokenClaims(o)
     }
 
     /** Returns the access token. If the token is invalid or missing, a new one is retrieved */
-    getTokenSilently(o?: GetTokenSilentlyOptions) {
+    getTokenSilently(o?: GetTokenSilentlyOptions): Promise<string> | undefined {
         return this.auth0Client?.getTokenSilently(o)
     }
 
     /** Gets the access token using a popup window */
-    getTokenWithPopup(o?: GetTokenWithPopupOptions) {
+    getTokenWithPopup(o?: GetTokenWithPopupOptions): Promise<string> | undefined {
         return this.auth0Client?.getTokenWithPopup(o)
     }
 
     /** Logs the user out and removes their session on the authorization server */
-    logout(o?: LogoutOptions) {
+    logout(o?: LogoutOptions): Promise<void> | undefined | void {
         userStore.processLogout()
         return this.auth0Client?.logout(o)
     }
@@ -83,7 +85,7 @@ export class Auth0Wrapper extends Vue {
         onRedirectCallback: RedirectCallback,
         redirectUri: string,
         auth0Options: Auth0Options
-    ) {
+    ): Promise<void> {
         // Create a new instance of the SDK client using members of the given options object
         this.auth0Client = await createAuth0Client({
             domain: auth0Options.domain,
@@ -109,8 +111,9 @@ export class Auth0Wrapper extends Vue {
                 // (useful for retrieving any pre-authentication state)
                 onRedirectCallback(appState)
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
-            console.error(e)
+            sentryStore.captureException(e)
             this.error = e
         } finally {
             // Initialize our internal authentication state when the page is reloaded

@@ -1,6 +1,4 @@
-export const relativeTimeDifference = (
-    timestamp: string
-): string | undefined => {
+export const relativeTimeDifference = (timestamp: string): string | undefined => {
     if (!timestamp) {
         return undefined
     }

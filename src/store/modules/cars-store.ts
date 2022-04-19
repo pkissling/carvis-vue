@@ -6,6 +6,7 @@ const backendClient = new BackendClient()
 @Module({ namespaced: false, name: 'cars' })
 export default class CarsStore extends VuexModule {
     cars: CarDto[] = []
+    searchTerm = ''
 
     @Action({ rawError: true, commit: 'putAll' })
     public async fetchAllCars(): Promise<CarDto[]> {
@@ -43,5 +44,10 @@ export default class CarsStore extends VuexModule {
     @Mutation
     public put(car: CarDto): void {
         this.cars = [...this.cars.filter((c) => c.id !== car.id), car]
+    }
+
+    @Mutation
+    public setSearchTerm(searchTerm: string): void {
+        this.searchTerm = searchTerm
     }
 }

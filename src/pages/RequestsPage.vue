@@ -2,86 +2,91 @@
   <Page title="Gesuche">
     <OverviewTable
       search-placeholder-text="Porsche Carrera"
-      :headers="headers"
+      :search-term="searchTerm"
+      :default-headers="headers"
       :items="requests"
       :loading="loading"
       @row-clicked="viewRequest"
       @create-clicked="createRequest"
+      @search-term-changed="onSearchTermChanged"
     />
   </Page>
 </template>
 
-<script>
+<script lang="ts">
 import Page from '@/pages/Page.vue'
 import OverviewTable from '@/components/OverviewTable.vue'
 import { relativeTimeDifference } from '@/utilities/time'
 import { commonStore, requestsStore, notificationsStore } from '@/store'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  components: {
-    OverviewTable,
-    Page
-  },
-  data() {
-    return {
-      headers: [
-        {
-          text: 'Marke',
-          value: 'brand'
-        },
-        {
-          text: 'Typ',
-          value: 'type'
-        },
-        {
-          text: 'Karosserie',
-          value: 'bodyType'
-        },
-        {
-          text: 'Modelljahr',
-          value: 'modelYear'
-        },
-        {
-          text: 'Erstellt durch',
-          value: 'ownerName'
-        },
-        {
-          text: 'Zuletzt aktualisiert',
-          sortable: false,
-          value: 'lastChanged'
-        }
-      ]
-    }
-  },
-  computed: {
-    loading() {
-      return this.$auth.loading || commonStore.isLoading
+@Component({ components: { OverviewTable, Page } })
+export default class RequestsPage extends Vue {
+  headers: HighlightableDataTableHeader[] = [
+    {
+      value: 'brand',
+      priority: 0
     },
-    requests() {
-      return requestsStore.requests.map(request => {
-        const lastChanged = relativeTimeDifference(request.updatedAt)
-        return {
-          lastChanged,
-          ...request
-        }
-      })
+    {
+      value: 'type',
+      priority: 0
+    },
+    {
+      value: 'bodyType',
+      priority: 0
+    },
+    {
+      value: 'modelYear',
+      priority: 0
+    },
+    {
+      value: 'ownerName',
+      priority: 2
+    },
+    {
+      sortable: false,
+      value: 'lastChanged',
+      priority: 2
     }
-  },
-  created() {
+  ]
+
+  get loading(): boolean {
+    return this.$auth.loading || commonStore.isLoading
+  }
+
+  get requests(): RequestDto[] {
+    return requestsStore.requests.map(request => {
+      const lastChanged = relativeTimeDifference(request.updatedAt)
+      return {
+        lastChanged,
+        ...request
+      }
+    })
+  }
+
+  get searchTerm(): string {
+    return requestsStore.searchTerm
+  }
+
+  created(): void {
     requestsStore.fetchAllRequests().catch(err =>
       notificationsStore.error({
         message: 'Fehler beim Laden der Gesuche. Bitte versuche es erneut.',
         err
       })
     )
-  },
-  methods: {
-    viewRequest(request) {
-      this.$router.push({ path: `/requests/${request.id}` })
-    },
-    createRequest() {
-      this.$router.push({ path: '/requests/add' })
-    }
+  }
+
+  viewRequest(request: RequestDto): void {
+    this.$router.push({ path: `/requests/${request.id}` })
+  }
+
+  createRequest(): void {
+    this.$router.push({ path: '/requests/add' })
+  }
+
+  onSearchTermChanged(searchTerm: string): void {
+    requestsStore.setSearchTerm(searchTerm)
   }
 }
 </script>
