@@ -19,7 +19,7 @@ type CarDto = {
     colorExteriorManufacturer: string
     condition: string
     countryOfOrigin?: string
-    createdAt: Date
+    createdAt: string
     createdBy: string
     description?: string
     horsePower: number
@@ -33,7 +33,7 @@ type CarDto = {
     shortDescription: string
     transmission: string
     type: string
-    updatedAt: Date
+    updatedAt: string
     updatedBy: string
     vin?: string
 }
@@ -57,7 +57,7 @@ type RequestDto = {
         name?: string
         phone?: string
     }
-    createdAt: Date
+    createdAt: string
     createdBy: string
     description?: string
     hasHiddenFields: boolean
@@ -72,7 +72,16 @@ type RequestDto = {
     modelDetails?: string
     transmission?: string
     type: string
-    updatedAt: Date
+    updatedAt: string
     updatedBy: string
     vision?: string
+}
+
+
+type HighlightableDataTableHeader = {
+    priority: 0 | 1 | 2
+    sortable?: boolean
+    text?: string
+    value: any
+    forceShow?: boolean
 }

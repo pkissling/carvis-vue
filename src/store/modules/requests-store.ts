@@ -6,6 +6,7 @@ const requestsApi = new RequestsApi()
 @Module({ namespaced: true, name: 'requests' })
 export default class RequestsStore extends VuexModule {
     requests: RequestDto[] = []
+    searchTerm = ''
 
     @Action({ commit: 'putAll' })
     public async fetchAllRequests(): Promise<RequestDto[]> {
@@ -46,5 +47,10 @@ export default class RequestsStore extends VuexModule {
             ...this.requests.filter((c) => c.id !== request.id),
             request,
         ]
+    }
+
+    @Mutation
+    setSearchTerm(searchTerm: string): void {
+        this.searchTerm = searchTerm
     }
 }

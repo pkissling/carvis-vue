@@ -37,7 +37,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class DeleteModal extends Vue {
-  @Prop({ required: true, default: 'asdas' })
+  @Prop({ required: true })
   subject!: string
 
   dialog = true
