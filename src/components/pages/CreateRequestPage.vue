@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Page from '@/pages/Page.vue'
+import Page from '@/components/pages/Page.vue'
 import RequestDetailForm from '@/components/RequestDetailForm.vue'
 import { requestsStore, notificationsStore } from '@/store'
 

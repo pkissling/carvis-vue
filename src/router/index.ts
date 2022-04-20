@@ -7,48 +7,48 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        component: () => import('@/pages/HomePage.vue'),
+        component: () => import('@/components/pages/HomePage.vue'),
         meta: {
             requiresNoAuth: true,
         },
     },
     {
         path: '/cars',
-        component: () => import('@/pages/CarsPage.vue'),
+        component: () => import('@/components/pages/CarsPage.vue'),
     },
     {
         path: '/cars/add',
-        component: () => import('@/pages/CreateCarPage.vue'),
+        component: () => import('@/components/pages/CreateCarPage.vue'),
     },
     {
         path: '/cars/:carId',
-        component: () => import('@/pages/CarDetailPage.vue'),
+        component: () => import('@/components/pages/CarDetailPage.vue'),
         props: true,
     },
     {
         path: '/forbidden',
-        component: () => import('@/pages/ForbiddenPage.vue'),
+        component: () => import('@/components/pages/ForbiddenPage.vue'),
         meta: {
             requiresNoAuth: true,
         },
     },
     {
         path: '/requests',
-        component: () => import('@/pages/RequestsPage.vue'),
+        component: () => import('@/components/pages/RequestsPage.vue'),
     },
     {
         path: '/requests/add',
-        component: () => import('@/pages/CreateRequestPage.vue'),
+        component: () => import('@/components/pages/CreateRequestPage.vue'),
     },
     {
         path: '/requests/:requestId',
-        component: () => import('@/pages/RequestDetailPage.vue'),
+        component: () => import('@/components/pages/RequestDetailPage.vue'),
         props: true,
     },
     {
         path: '/not-found',
         name: 'NotFound',
-        component: () => import('@/pages/NotFoundPage.vue'),
+        component: () => import('@/components/pages/NotFoundPage.vue'),
     },
     {
         path: '*',

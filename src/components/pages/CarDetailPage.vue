@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Page from '@/pages/Page.vue'
+import Page from '@/components/pages/Page.vue'
 import CarDetailForm from '@/components/CarDetailForm.vue'
 import WaitingLayer from '@/components/WaitingLayer.vue'
 import router from '@/router'

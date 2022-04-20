@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import FullscreenImageModal from '@/modals/FullscreenImageModal.vue'
+import FullscreenImageModal from '@/components/modals/FullscreenImageModal.vue'
 import ImagePagination from '@/components/ImagePagination.vue'
 import { imagesStore, sentryStore } from '@/store'
 

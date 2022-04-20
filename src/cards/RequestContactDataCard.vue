@@ -49,8 +49,8 @@
 </template>
 
 <script>
-import TextField from '@/fields/TextField.vue'
-import TextArea from '@/fields/TextArea.vue'
+import TextField from '@/components/fields/TextField.vue'
+import TextArea from '@/components/fields/TextArea.vue'
 
 export default {
   components: {

@@ -44,7 +44,7 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     this.$options.components.PreviewImage =
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('../components/PreviewImage.vue').default
+      require('@/components/PreviewImage.vue').default
   },
   async created() {
     imagesStore

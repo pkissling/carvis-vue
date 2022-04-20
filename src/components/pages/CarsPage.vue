@@ -1,28 +1,34 @@
 <template>
-  <Page title="Gesuche">
+  <Page title="Fahrzeuge">
     <OverviewTable
       search-placeholder-text="Porsche Carrera"
       :search-term="searchTerm"
       :default-headers="headers"
-      :items="requests"
+      :items="cars"
       :loading="loading"
-      @row-clicked="viewRequest"
-      @create-clicked="createRequest"
       @search-term-changed="onSearchTermChanged"
+      @row-clicked="viewCar"
+      @create-clicked="createCar"
     />
   </Page>
 </template>
 
 <script lang="ts">
-import Page from '@/pages/Page.vue'
+import Page from '@/components/pages/Page.vue'
 import OverviewTable from '@/components/OverviewTable.vue'
 import { relativeTimeDifference } from '@/utilities/time'
-import { commonStore, requestsStore, notificationsStore } from '@/store'
+import { carsStore, commonStore, notificationsStore } from '@/store'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({ components: { OverviewTable, Page } })
-export default class RequestsPage extends Vue {
+export default class CarsPage extends Vue {
+
   headers: HighlightableDataTableHeader[] = [
+    {
+      forceShow: true,
+      value: 'previewImageId',
+      priority: 0
+    },
     {
       value: 'brand',
       priority: 0
@@ -32,11 +38,15 @@ export default class RequestsPage extends Vue {
       priority: 0
     },
     {
-      value: 'bodyType',
+      value: 'modelSeries',
       priority: 0
     },
     {
       value: 'modelYear',
+      priority: 0
+    },
+    {
+      value: 'colorExterior',
       priority: 0
     },
     {
@@ -50,43 +60,45 @@ export default class RequestsPage extends Vue {
     }
   ]
 
+  get searchTerm(): string {
+    return carsStore.searchTerm
+  }
+
   get loading(): boolean {
     return this.$auth.loading || commonStore.isLoading
   }
 
-  get requests(): RequestDto[] {
-    return requestsStore.requests.map(request => {
-      const lastChanged = relativeTimeDifference(request.updatedAt)
+  get cars(): CarDto[] {
+    return carsStore.cars.map(car => {
+      const lastChanged = relativeTimeDifference(car.updatedAt)
+      const previewImageId = car.images ? car.images[0] : null
       return {
+        previewImageId,
         lastChanged,
-        ...request
+        ...car
       }
     })
   }
 
-  get searchTerm(): string {
-    return requestsStore.searchTerm
-  }
-
-  created(): void {
-    requestsStore.fetchAllRequests().catch(err =>
+  async created(): Promise<void> {
+    carsStore.fetchAllCars().catch(err =>
       notificationsStore.error({
-        message: 'Fehler beim Laden der Gesuche. Bitte versuche es erneut.',
+        message: 'Fehler beim Laden der Fahrzeug. Bitte versuche es erneut.',
         err
       })
     )
   }
 
-  viewRequest(request: RequestDto): void {
-    this.$router.push({ path: `/requests/${request.id}` })
+  viewCar(car: CarDto): void {
+    this.$router.push({ path: `/cars/${car.id}` })
   }
 
-  createRequest(): void {
-    this.$router.push({ path: '/requests/add' })
+  createCar(): void {
+    this.$router.push({ path: '/cars/add' })
   }
 
   onSearchTermChanged(searchTerm: string): void {
-    requestsStore.setSearchTerm(searchTerm)
+    carsStore.setSearchTerm(searchTerm)
   }
 }
 </script>

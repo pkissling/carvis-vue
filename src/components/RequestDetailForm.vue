@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import DeleteModal from '@/modals/DeleteModal.vue'
+import DeleteModal from '@/components/modals/DeleteModal.vue'
 import ActionsCard from '@/cards/ActionsCard.vue'
 import RequestCarDataCard from '@/cards/RequestCarDataCard.vue'
 import RequestContactDataCard from '@/cards/RequestContactDataCard.vue'
