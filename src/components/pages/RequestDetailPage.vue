@@ -9,76 +9,65 @@
   </Page>
 </template>
 
-<script>
+<script lang="ts">
 import Page from '@/components/pages/Page.vue'
 import RequestDetailForm from '@/components/RequestDetailForm.vue'
 import WaitingLayer from '@/components/WaitingLayer.vue'
 import { userStore } from '@/store'
 import router from '@/router'
 import { requestsStore, notificationsStore } from '@/store'
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import { NavigationGuardNext, Route } from 'vue-router'
 
-export default {
-  components: {
-    RequestDetailForm,
-    WaitingLayer,
-    Page
-  },
-  props: {
-    requestId: {
-      type: String,
-      default: null
-    }
-  },
-  data: () => {
-    return {
-      loading: false,
-      request: null
-    }
-  },
-  computed: {
-    canEdit() {
-      return (
-        userStore.isAdmin || this.request?.createdBy === userStore.getUsername
-      )
-    },
-    title() {
-      return this.canEdit ? 'Gesuch bearbeiten' : 'Gesuch anzeigen'
-    }
-  },
-  methods: {
-    updateRequest(request) {
-      requestsStore
-        .updateRequest(request)
-        .then(() => this.$router.push({ path: '/requests' }))
-        .then(() =>
-          notificationsStore.success('Gesuch erfolgreich bearbeitet.')
-        )
-        .catch(err =>
-          notificationsStore.error(
-            'Fehler beim Bearbeiten des Gesuchs. Bitte versuche es erneut.',
-            err
-          )
-        )
-    }
-  },
-  async beforeRouteEnter(to, from, next) {
-    next(vm => {
+@Component({
+  async beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext<RequestDetailPage>): Promise<void> {
+    next(async vm => {
       vm.loading = true
       const requestId = to.params.requestId
-      requestsStore
-        .fetchRequest(requestId)
-        .then(() => requestsStore.requests.find(req => req.id === requestId))
-        .then(request => (vm.request = request))
-        .catch(err => {
-          notificationsStore.error({
-            message: 'Fehler beim Laden des Gesuchs. Bitte versuche es erneut.',
-            err
-          })
-          // this.$router is not available
-          router.push({ name: 'NotFound' })
+      try {
+        vm.request = await requestsStore.fetchRequest(requestId)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch(err: any) {
+        notificationsStore.error({
+          message: 'Fehler beim Laden des Gesuchs. Bitte versuche es erneut.',
+          err
         })
-        .finally(() => (vm.loading = false))
+        // this.$router is not available
+        router.push({ name: 'NotFound' })
+      } finally {
+        vm.loading = false
+      }
     })
+  },
+  components: { RequestDetailForm, WaitingLayer, Page }
+})
+export default class RequestDetailPage extends Vue {
+  @Prop({ required: true })
+  requestId!: string
+
+  loading = false
+  request: RequestDto | null = null
+
+  get canEdit(): boolean {
+      return userStore.isAdmin || this.request?.createdBy === userStore.getUsername
+  }
+
+  get title(): string {
+    return `${this.request?.brand} ${this.request?.type}`
+  }
+
+  async updateRequest(request: RequestDto): Promise<void> {
+    try {
+      await requestsStore.updateRequest(request)
+      await this.$router.push({ path: '/requests' })
+      await notificationsStore.success('Gesuch erfolgreich bearbeitet.')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      await notificationsStore.error({
+        message: 'Fehler beim Bearbeiten des Gesuchs. Bitte versuche es erneut.',
+        err
+      })
+    }
   }
 }
 </script>

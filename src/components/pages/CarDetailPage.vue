@@ -9,75 +9,62 @@
   </Page>
 </template>
 
-<script>
+<script lang="ts">
 import Page from '@/components/pages/Page.vue'
 import CarDetailForm from '@/components/CarDetailForm.vue'
 import WaitingLayer from '@/components/WaitingLayer.vue'
 import router from '@/router'
 import { carsStore, notificationsStore, userStore } from '@/store'
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import { NavigationGuardNext, Route } from 'vue-router'
 
-export default {
-  components: {
-    CarDetailForm,
-    WaitingLayer,
-    Page
-  },
-  props: {
-    carId: {
-      type: String,
-      default: null
-    }
-  },
-  data: () => {
-    return {
-      loading: false,
-      car: null
-    }
-  },
-  computed: {
-    canEdit() {
-      return userStore.isAdmin || this.car?.createdBy === userStore.getUsername
-    },
-    title() {
-      return this.canEdit ? 'Fahrzeug bearbeiten' : 'Fahrzeug anzeigen'
-    }
-  },
-  methods: {
-    updateCar(car) {
-      carsStore
-        .updateCar(car)
-        .then(() => this.$router.push({ path: '/cars' }))
-        .then(() =>
-          notificationsStore.success('Fahrzeug erfolgreich bearbeitet.')
-        )
-        .catch(err =>
-          notificationsStore.error({
-            message:
-              'Fehler beim Bearbeiten des Fahrzeugs. Bitte versuche es erneut.',
-            err
-          })
-        )
-    }
-  },
-  async beforeRouteEnter(to, from, next) {
+@Component({
+    async beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext<CarDetailPage>): Promise<void> {
     next(async vm => {
       vm.loading = true
       const carId = to.params.carId
-      carsStore
-        .fetchCar(carId)
-        .then(() => carsStore.cars.find(c => c.id === carId))
-        .then(car => (vm.car = car))
-        .catch(err => {
-          notificationsStore.error({
-            message:
-              'Fehler beim Laden des Fahrzeugs. Bitte versuche es erneut.',
-            err
-          })
-          // this.$router is not available
-          router.push({ name: 'NotFound' })
+      try {
+        vm.car = await carsStore.fetchCar(carId)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch(err: any) {
+        notificationsStore.error({
+          message: 'Fehler beim Laden des Fahrzeugs. Bitte versuche es erneut.',
+          err
         })
-        .finally(() => (vm.loading = false))
+        // this.$router is not available
+        router.push({ name: 'NotFound' })
+      } finally {
+        vm.loading = false
+      }
     })
+  },
+  components: { CarDetailForm, WaitingLayer, Page } 
+})
+export default class CarDetailPage extends Vue {
+  @Prop({ required: true })
+  carId!: string
+
+  loading =false
+  car: CarDto | null = null
+
+  get canEdit(): boolean {
+      return userStore.isAdmin || this.car?.createdBy === userStore.getUsername
+  }
+  get title(): string {
+    return `${this.car?.brand} ${this.car?.type}`
+  }
+
+  async updateCar(car: CarDto): Promise<void> {
+    try {
+      await carsStore.updateCar(car)
+      await this.$router.push({ path: '/cars' })
+      await notificationsStore.success('Fahrzeug erfolgreich bearbeitet.')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      await notificationsStore.error({
+        message: 'Fehler beim Bearbeiten des fahrzeugs. Bitte versuche es erneut.',
+        err})
+    }
   }
 }
 </script>
