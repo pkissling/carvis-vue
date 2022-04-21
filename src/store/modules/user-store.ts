@@ -5,8 +5,6 @@ import { config } from 'vuex-module-decorators'
 
 config.rawError = true
 
-type Role = 'admin' | 'user'
-
 @Module({ namespaced: true, name: 'user' })
 export default class UserStore extends VuexModule {
     user: User | undefined = undefined
@@ -63,12 +61,15 @@ export default class UserStore extends VuexModule {
 
 export const hasRole = (
     user: User | undefined,
-    requiredRole: Role
+    requiredRole: Role | undefined
 ): boolean => {
     if (!user) {
         return false
     }
+    if (!requiredRole) {
+        return true
+    }
 
     const roles = user.roles || []
-    return roles.some((role) => role === requiredRole)
+    return roles.some(role => role === requiredRole)
 }

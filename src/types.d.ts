@@ -85,3 +85,5 @@ type HighlightableDataTableHeader = {
     value: any
     forceShow?: boolean
 }
+
+type Role = 'admin' | 'user'

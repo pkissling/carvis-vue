@@ -8,12 +8,11 @@
   </Page>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 import Page from '@/components/pages/Page.vue'
 
-export default {
-  components: {
-    Page
-  }
+@Component({ components: { Page }})
+export default class Forbiddenpage extends Vue {
 }
 </script>

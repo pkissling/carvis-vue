@@ -1,21 +1,19 @@
 import Vue from 'vue'
-import VueRouter, { NavigationGuardNext, Route } from 'vue-router'
+import VueRouter, { NavigationGuardNext, Route, RouteConfig } from 'vue-router'
 import { authGuard } from '@/auth/auth-guard'
 
 Vue.use(VueRouter)
 
-const routes = [
+const routes: RouteConfig[] = [
   {
     path: '/',
     component: () => import('@/components/pages/HomePage.vue'),
-    meta: {
-      requiresNoAuth: true,
-    },
   },
   {
     path: '/cars',
     component: () => import('@/components/pages/CarsPage.vue'),
     meta: {
+      requiresRole: 'user',
       breadcrumbs() {
         return [
           { text: 'Fahrzeuge', href: '/cars' },
@@ -27,6 +25,7 @@ const routes = [
     path: '/cars/add',
     component: () => import('@/components/pages/CreateCarPage.vue'),
     meta: {
+      requiresRole: 'user',
       breadcrumbs() {
         return [
           { text: 'Fahrzeuge', href: '/cars' },
@@ -40,6 +39,7 @@ const routes = [
     component: () => import('@/components/pages/CarDetailPage.vue'),
     props: true,
     meta: {
+      requiresRole: 'user',
       breadcrumbs(route: Route) {
         const carId = route.params.carId
         return [
@@ -52,14 +52,12 @@ const routes = [
   {
     path: '/forbidden',
     component: () => import('@/components/pages/ForbiddenPage.vue'),
-    meta: {
-      requiresNoAuth: true,
-    },
   },
   {
     path: '/requests',
     component: () => import('@/components/pages/RequestsPage.vue'),
     meta: {
+      requiresRole: 'user',
       breadcrumbs() {
         return [
           { text: 'Gesuche', href: '/requests' },
@@ -71,6 +69,7 @@ const routes = [
     path: '/requests/add',
     component: () => import('@/components/pages/CreateRequestPage.vue'),
     meta: {
+      requiresRole: 'user',
       breadcrumbs() {
         return [
           { text: 'Gesuche', href: '/requests' },
@@ -84,6 +83,7 @@ const routes = [
     component: () => import('@/components/pages/RequestDetailPage.vue'),
     props: true,
     meta: {
+      requiresRole: 'user',
       breadcrumbs(route: Route) {
         const requestId = route.params.requestId
         return [
@@ -92,6 +92,10 @@ const routes = [
         ]
       }
     }
+  },
+  {
+    path: '/my-account',
+    component: () => import('@/components/pages/MyAccountPage.vue'),
   },
   {
     path: '/not-found',
@@ -113,7 +117,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to: Route, from: Route, next: NavigationGuardNext) => {
-  if (to.meta?.requiresNoAuth) next()
+  if (!to.meta?.requiresRole) next()
   else authGuard(to, from, next)
 })
 

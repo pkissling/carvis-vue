@@ -1,24 +1,36 @@
 import { getInstance } from '@/auth'
+import { hasRole } from '@/store/modules/user-store'
 import { NavigationGuard, NavigationGuardNext, Route } from 'vue-router'
 
-export const authGuard: NavigationGuard = (
+export const authGuard: NavigationGuard = async (
     to: Route,
     from: Route,
     next: NavigationGuardNext
-) => {
+): Promise<void> => {
     const authService = getInstance()
 
-    const fn = () => {
+    const fn = async () => {
         // Unwatch loading
         unwatch && unwatch()
 
-        // If the user is authenticated, continue with the route
-        if (authService.isAuthenticated) {
+        // If the routes does not require a role, continue with the route
+        const requiredRole = to.meta?.requiresRole
+        if (!requiredRole) {
             return next()
         }
 
-        // Otherwise, log in
-        authService.loginWithRedirect({ appState: { targetUrl: to.fullPath } })
+        // If role is required and user is not logged in, redirect to login
+        if (!authService.isAuthenticated || !authService.user) {
+            await authService.loginWithRedirect({ appState: { targetUrl: to.fullPath } })
+        }
+
+        // If user does not have required role, show forbidden page
+        if (!hasRole(authService.user, requiredRole)) {
+            return next('/forbidden')
+        }
+
+        // otherwise foward
+        return next()
     }
 
     // If loading has already finished, check our auth state using `fn()`
