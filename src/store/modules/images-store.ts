@@ -2,9 +2,12 @@ import ImagesApi from '@/api/images-api'
 import S3Api from '@/api/s3-api'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import { sentryStore, notificationsStore } from '@/store'
+import { config } from 'vuex-module-decorators'
 
 const imagesApi = new ImagesApi()
 const s3Api = new S3Api()
+
+config.rawError = true
 
 @Module({ namespaced: true, name: 'images' })
 export default class ImagesStore extends VuexModule {

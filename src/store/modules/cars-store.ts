@@ -1,5 +1,8 @@
 import BackendClient from '@/api/cars-api'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { config } from 'vuex-module-decorators'
+
+config.rawError = true
 
 const backendClient = new BackendClient()
 
@@ -8,7 +11,7 @@ export default class CarsStore extends VuexModule {
     cars: CarDto[] = []
     searchTerm = ''
 
-    @Action({ rawError: true, commit: 'putAll' })
+    @Action({ commit: 'putAll' })
     public async fetchAllCars(): Promise<CarDto[]> {
         return backendClient.fetchAllCars()
     }

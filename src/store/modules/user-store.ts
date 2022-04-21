@@ -1,6 +1,9 @@
 import { User } from '@/auth/user'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import { sentryStore } from '@/store'
+import { config } from 'vuex-module-decorators'
+
+config.rawError = true
 
 type Role = 'admin' | 'user'
 

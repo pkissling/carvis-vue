@@ -1,4 +1,7 @@
 import { Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { config } from 'vuex-module-decorators'
+
+config.rawError = true
 
 @Module({ namespaced: true, name: 'common' })
 export default class CommonStore extends VuexModule {

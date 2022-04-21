@@ -6,6 +6,9 @@ import {
 import * as Sentry from '@sentry/vue'
 import { Severity } from '@sentry/vue'
 import { User } from '@/auth/user'
+import { config } from 'vuex-module-decorators'
+
+config.rawError = true
 
 type SentryExtra = {
     [key: string]: unknown

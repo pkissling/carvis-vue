@@ -8,15 +8,13 @@ import RequestsStore from '@/store/modules/requests-store'
 import SentryStore from '@/store/modules/sentry-store'
 import UserStore from '@/store/modules/user-store'
 import VuexPersistence from 'vuex-persist'
-import { config, getModule } from 'vuex-module-decorators'
+import { getModule } from 'vuex-module-decorators'
 
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
     storage: window.localStorage,
 })
-
-config.rawError = true
 
 const store = new Vuex.Store({
     modules: {

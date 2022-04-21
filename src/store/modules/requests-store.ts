@@ -1,5 +1,8 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import RequestsApi from '@/api/requests-api'
+import { config } from 'vuex-module-decorators'
+
+config.rawError = true
 
 const requestsApi = new RequestsApi()
 
