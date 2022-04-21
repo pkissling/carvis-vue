@@ -20,61 +20,72 @@
       </v-card-text>
     </v-card>
 
-    <NavigationCard :loading="isLoading"
-                    :items="navigationItems"
-    />
+    <v-card
+      class="mx-auto mt-4"
+      max-width="374"
+      elevation="5"
+    >
+      <v-card-actions>
+        <v-container>
+          <v-row>
+            <v-col
+              cols="6"
+              align="left"
+            >
+              <v-btn
+                :loading="isLoading || isLoggedin"
+                color="primary"
+                @click="$auth.loginWithRedirect()"
+              >
+                Login
+              </v-btn>
+            </v-col>
+            <v-col
+              cols="6"
+              align="right"
+            >
+              <v-btn
+                :loading="isLoading || isLoggedin"
+                text
+                @click="$auth.loginWithRedirect({ screen_hint: 'signup' })"
+              >
+                Registrieren
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
-<script>
-import NavigationCard from '@/components/NavigationCard'
+<script lang="ts">
 import { userStore } from '@/store'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 
-export default {
-  components: {
-    NavigationCard
-  },
-  computed: {
-    isLoading() {
-      return this.$auth.loading
-    },
-    isLoggedin() {
-      return this.$auth.isAuthenticated
-    },
-    navigationItems() {
-      if (!this.isLoggedin) {
-        return [
-          {
-            text: 'Login',
-            color: 'primary',
-            action: () => this.$auth.loginWithRedirect()
-          },
-          {
-            text: 'Registrieren',
-            action: () =>
-              this.$auth.loginWithRedirect({ screen_hint: 'signup' })
-          }
-        ]
-      }
+@Component
+export default class HomePage extends Vue {
 
-      return [
-        {
-          text: 'Fahrzeuge',
-          color: 'primary',
-          action: () => this.$router.push({ path: '/cars' })
-        },
-        {
-          text: 'Gesuche',
-          color: 'primary',
-          action: () => this.$router.push({ path: '/requests' })
-        }
-      ]
+  get isLoading(): boolean {
+    return this.$auth.loading
+  }
+
+  get isLoggedin(): boolean {
+    return this.$auth.isAuthenticated || false
+  }
+
+  get hasAccess(): boolean {
+    return userStore.hasAccess
+  }
+
+  @Watch('isLoading')
+  async redirectIfLoggedIn(): Promise<void> {
+    if (!this.isLoading && !this.isLoggedin) {
+      return
     }
-  },
-  mounted() {
-    if (this.isLoggedin && !userStore.hasAccess) {
-      this.$router.push({ path: '/forbidden' })
-    }
+
+    const path = this.hasAccess ? '/cars' : '/forbidden'
+    await this.$router.push({ path })
   }
 }
 </script>
