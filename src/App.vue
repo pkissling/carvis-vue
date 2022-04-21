@@ -16,26 +16,22 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import TheAppBar from '@/components/TheAppBar.vue'
 import TheNavBar from '@/components/TheNavBar.vue'
 import Snackbar from '@/components/Snackbar.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  components: {
-    TheAppBar,
-    TheNavBar,
-    Snackbar
-  },
-  data() {
-    return {
-      showNavbar: true
-    }
-  },
-  computed: {
-    isHomePage() {
-      return this.$route.path == '/'
-    }
+@Component({ components: { TheAppBar, TheNavBar, Snackbar }})
+export default class App extends Vue {
+  showNavbar = !this.isMobile
+
+  get isHomePage(): boolean {
+    return this.$route.path == '/'
+  }
+
+  get isMobile(): boolean {
+    return this.$vuetify.breakpoint.smAndDown
   }
 }
 </script>

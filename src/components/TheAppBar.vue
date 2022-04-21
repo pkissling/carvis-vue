@@ -22,26 +22,12 @@
   </v-app-bar>
 </template>
 
-<script>
-export default {
-  props: {
-    value: {
-      type: Boolean,
-      default: null
-    }
-  },
-  computed: {
-    isMobile() {
-      return this.$vuetify.breakpoint.mobile
-    }
-  },
-  watch: {
-    isMobile(isMobile) {
-      if (isMobile) {
-        // show navbar
-        this.$emit('input', true)
-      }
-    }
-  }
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator'
+
+@Component
+export default class TheAppBar extends Vue {
+  @Prop({ required: true})
+  value!: boolean
 }
 </script>

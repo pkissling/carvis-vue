@@ -14,7 +14,7 @@ const env = (): string => {
     return 'live'
 }
 
-export default () => {
+export default (): void => {
     Sentry.init({
         Vue,
         dsn: 'https://d6e0397557fd4cefb61c460d0b0e4797@o582664.ingest.sentry.io/5736641',

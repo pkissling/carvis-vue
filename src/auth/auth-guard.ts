@@ -20,8 +20,8 @@ export const authGuard: NavigationGuard = async (
         }
 
         // If role is required and user is not logged in, redirect to login
-        if (!authService.isAuthenticated || !authService.user) {
-            await authService.loginWithRedirect({ appState: { targetUrl: to.fullPath } })
+        if (!authService.user) {
+            return authService.loginWithRedirect({ appState: { targetUrl: to.fullPath } })
         }
 
         // If user does not have required role, show forbidden page
