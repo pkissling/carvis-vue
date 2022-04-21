@@ -23,7 +23,7 @@ export default abstract class BaseApi {
 
         axiosRetry(this.instance, {
             retryDelay: axiosRetry.exponentialDelay,
-            shouldResetTimeout: true,
+            shouldResetTimeout: true
         })
 
         // custom interceptors

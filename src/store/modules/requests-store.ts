@@ -11,9 +11,14 @@ export default class RequestsStore extends VuexModule {
     requests: RequestDto[] = []
     searchTerm = ''
 
-    @Action({ commit: 'putAll' })
+    @Action({ commit: 'setRequests' })
     public async fetchAllRequests(): Promise<RequestDto[]> {
-        return requestsApi.fetchAllRequests()
+        try {
+            return await requestsApi.fetchAllRequests()
+        } catch (err: unknown) {
+            this.setRequests([])
+            throw err
+        }
     }
 
     @Action({ commit: 'put' })
@@ -40,12 +45,12 @@ export default class RequestsStore extends VuexModule {
     }
 
     @Mutation
-    putAll(requests: RequestDto[]): void {
+    public setRequests(requests: RequestDto[]): void {
         this.requests = requests
     }
 
     @Mutation
-    put(request: RequestDto): void {
+    public put(request: RequestDto): void {
         this.requests = [
             ...this.requests.filter((c) => c.id !== request.id),
             request,
@@ -53,7 +58,7 @@ export default class RequestsStore extends VuexModule {
     }
 
     @Mutation
-    setSearchTerm(searchTerm: string): void {
+    public setSearchTerm(searchTerm: string): void {
         this.searchTerm = searchTerm
     }
 }

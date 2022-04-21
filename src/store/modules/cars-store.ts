@@ -11,9 +11,14 @@ export default class CarsStore extends VuexModule {
     cars: CarDto[] = []
     searchTerm = ''
 
-    @Action({ commit: 'putAll' })
+    @Action({ commit: 'setCars' })
     public async fetchAllCars(): Promise<CarDto[]> {
-        return backendClient.fetchAllCars()
+        try {
+            return await backendClient.fetchAllCars()
+        } catch (err: unknown) {
+            this.setCars([])
+            throw err
+        }
     }
 
     @Action({ commit: 'put' })
@@ -40,7 +45,7 @@ export default class CarsStore extends VuexModule {
     }
 
     @Mutation
-    public putAll(cars: CarDto[]): void {
+    public setCars(cars: CarDto[]): void {
         this.cars = cars
     }
 
