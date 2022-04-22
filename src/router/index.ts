@@ -96,6 +96,14 @@ const routes: RouteConfig[] = [
   {
     path: '/my-account',
     component: () => import('@/components/pages/MyAccountPage.vue'),
+    meta: {
+      requiresRole: 'user',
+      breadcrumbs() {
+        return [
+          { text: 'Mein Profil', href: '/my-account' },
+        ]
+      }
+    }
   },
   {
     path: '/not-found',

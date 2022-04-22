@@ -1,4 +1,4 @@
-export class User {
+export class Auth0User {
     sub?: string
     name?: string
     nickname?: string

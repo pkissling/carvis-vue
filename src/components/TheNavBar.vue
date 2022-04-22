@@ -15,35 +15,27 @@
           <v-list-item-title>{{ name }}</v-list-item-title>
           <v-list-item-subtitle>{{ company }}</v-list-item-subtitle>
         </v-list-item-content>
-        <v-menu
-          left
-          offset-y
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-list-item-action>
-              <v-icon
-                v-bind="attrs"
-                v-on="on"
-              >
-                mdi-menu-down
-              </v-icon>
-            </v-list-item-action>
-          </template>
-
-          <v-list>
-            <v-list-item link>
-              <v-list-item-title @click="$router.push('my-account')">
-                Mein Profil
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
       </v-list-item>
     </template>
 
     <v-divider />
 
     <v-list nav>
+      <v-list-item
+        to="/my-account"
+        link
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-account</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title>Mein Profil</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider />
+
       <v-list-item
         v-for="item in filteredItems"
         :key="item.route"
@@ -78,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { userStore } from '@/store'
+import { commonStore, notificationsStore, userStore } from '@/store'
 import { hasRole } from '@/store/modules/user-store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { RouteConfig } from 'vue-router'
@@ -102,7 +94,7 @@ export default class TheNavBar extends Vue {
   }
 
   private canAccess(route: RouteConfig): boolean {
-    return hasRole(this.$auth.user, route.meta?.requiresRole)
+    return hasRole(this.$auth.user || null, route.meta?.requiresRole)
   }
 
   get name(): string | undefined {
@@ -113,8 +105,23 @@ export default class TheNavBar extends Vue {
     return userStore.getPicture
   }
 
-  get company(): string {
-    return 'Eingeloggt' // TODO
+  get company(): string | undefined {
+    return userStore.getCompany
+  }
+
+  async mounted(): Promise<void> {
+    commonStore.setLoading(true)
+    if (!userStore.getUserId) return
+    try {
+      await userStore.fetchCarvisUser(userStore.getUserId)
+    } catch (err: any) {
+      notificationsStore.error({
+        message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.',
+        err
+      })
+    } finally {
+      commonStore.setLoading(true)
+    }
   }
 }
 </script>

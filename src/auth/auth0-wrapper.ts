@@ -9,7 +9,7 @@ import createAuth0Client, {
     LogoutOptions,
     IdToken,
 } from '@auth0/auth0-spa-js'
-import { User } from '@/auth/user'
+import { Auth0User } from '@/auth/user'
 import { userStore, sentryStore } from '@/store'
 
 export type Auth0Options = {
@@ -25,15 +25,15 @@ export type RedirectCallback = (appState: RedirectLoginOptions) => void
 export class Auth0Wrapper extends Vue {
     loading = true
     isAuthenticated? = false
-    user?: User
+    user?: Auth0User
     auth0Client?: Auth0Client
     popupOpen = false
     error?: Error
 
-    async getUser(): Promise<User | undefined> {
+    async getUser(): Promise<Auth0User | undefined> {
         const user = await this.auth0Client?.getUser()
         if (!user) return undefined
-        return new User(user)
+        return new Auth0User(user)
     }
 
     /** Authenticates the user using a popup window */

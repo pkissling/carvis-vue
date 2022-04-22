@@ -5,7 +5,7 @@ import {
 } from 'vuex-module-decorators'
 import * as Sentry from '@sentry/vue'
 import { Severity } from '@sentry/vue'
-import { User } from '@/auth/user'
+import { Auth0User } from '@/auth/user'
 import { config } from 'vuex-module-decorators'
 
 config.rawError = true
@@ -22,7 +22,7 @@ export default class SentryStore extends VuexModule {
     }
 
     @Action
-    public async addUser(user: User): Promise<void> {
+    public async addUser(user: Auth0User): Promise<void> {
         Sentry.setUser({
             id: user.sub,
             email: user.email,

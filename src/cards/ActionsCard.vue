@@ -4,15 +4,16 @@
       <v-btn color="primary"
              type="submit"
              :loading="isLoading"
+             :disabled="submitDisabled"
       >
-        <span v-if="id"> Speichern </span>
-        <span v-else> Hinzufügen </span>
+        <span v-if="isNewItem"> Hinzufügen </span>
+        <span v-else> Speichern </span>
       </v-btn>
 
       <v-spacer />
 
       <v-btn
-        v-if="id"
+        v-if="showDelete && isNewItem"
         color="error"
         text
         :loading="isLoading"
@@ -30,8 +31,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class ActionsCard extends Vue {
-  @Prop()
-  id!: string
+  @Prop({ required: true })
+  isNewItem!: boolean
+
+  @Prop({ required: false, default: true })
+  showDelete!: boolean
+
+  @Prop({ required: false, default: false })
+  submitDisabled!: boolean
 
   get isLoading(): boolean {
     return commonStore.isLoading

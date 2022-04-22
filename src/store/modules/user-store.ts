@@ -1,66 +1,90 @@
-import { User } from '@/auth/user'
+import { Auth0User } from '@/auth/user'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import { sentryStore } from '@/store'
 import { config } from 'vuex-module-decorators'
+import UsersApi from '@/api/users-api'
 
 config.rawError = true
 
+const usersApi = new UsersApi()
+
 @Module({ namespaced: true, name: 'user' })
 export default class UserStore extends VuexModule {
-    user: User | undefined = undefined
+    auth0User: Auth0User | null = null
+    carvisUser: UserDto | null = null
 
     @Action
-    public async processLogin(user?: User): Promise<void> {
+    public async processLogin(user: Auth0User | null): Promise<void> {
         if (user) {
-            sentryStore.addUser(user)
+            await sentryStore.addUser(user)
         } else {
-            sentryStore.removeUser()
+            await sentryStore.removeUser()
         }
-        this.setUser(user)
+        this.setAuth0User(user)
     }
 
     @Action
     public async processLogout(): Promise<void> {
         sentryStore.removeUser()
-        this.setUser(undefined)
+        this.setAuth0User(null)
     }
 
-    public get getUsername(): string | undefined {
-        return this.user?.sub
+    @Action({ commit: 'setCarvisUser' })
+    public async updateCarvisUser(user: UserDto): Promise<UserDto> {
+        const updatedUser = await usersApi.updateUser(user.userId, user)
+        this.setAuth0User({
+            ...this.auth0User,
+            name: user.name
+        })
+        return updatedUser
+    }
+
+    @Action({ commit: 'setCarvisUser' })
+    public async fetchCarvisUser(userId: string): Promise<UserDto> {
+        return await usersApi.fetchUser(userId)
+    }
+
+    public get getUserId(): string | undefined {
+        return this.auth0User?.sub
     }
 
     public get getName(): string | undefined {
-        return this.user?.name
+        return this.auth0User?.name
     }
 
     public get getPicture(): string | undefined {
-        return this.user?.picture
+        return this.auth0User?.picture
+    }
+
+    public get getCompany(): string | undefined {
+        return this.carvisUser?.company
     }
 
     public get isAdmin(): boolean {
-        return hasRole(this.user, 'admin')
+        return hasRole(this.auth0User, 'admin')
     }
 
     public get isUser(): boolean {
-        return hasRole(this.user, 'user')
+        return hasRole(this.auth0User, 'user')
     }
 
     public get hasAccess(): boolean {
         return this.isAdmin || this.isUser
     }
 
-    public get getUser(): User | undefined {
-        return this.user
+    @Mutation
+    public setAuth0User(auth0User: Auth0User | null): void {
+        this.auth0User = auth0User
     }
 
     @Mutation
-    public setUser(user?: User): void {
-        this.user = user
+    public setCarvisUser(carvisUser: UserDto | null): void {
+        this.carvisUser = carvisUser
     }
 }
 
 export const hasRole = (
-    user: User | undefined,
+    user: Auth0User | null,
     requiredRole: Role | undefined
 ): boolean => {
     if (!user) {

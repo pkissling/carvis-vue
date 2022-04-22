@@ -18,7 +18,7 @@
 
       <ActionsCard
         v-if="canEdit"
-        :id="request.id"
+        :is-new-item="car.id"
         @delete="showDeletionModal = true"
       />
 
@@ -76,7 +76,7 @@ export default {
       }
 
       return (
-        userStore.isAdmin || this.request?.createdBy === userStore.getUsername
+        userStore.isAdmin || this.request?.createdBy === userStore.getUserId
       )
     }
   },

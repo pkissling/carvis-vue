@@ -49,7 +49,7 @@ export default class RequestDetailPage extends Vue {
   request: RequestDto | null = null
 
   get canEdit(): boolean {
-      return userStore.isAdmin || this.request?.createdBy === userStore.getUsername
+      return userStore.isAdmin || this.request?.createdBy === userStore.getUserId
   }
 
   get title(): string {

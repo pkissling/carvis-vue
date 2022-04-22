@@ -87,3 +87,9 @@ type HighlightableDataTableHeader = {
 }
 
 type Role = 'admin' | 'user'
+
+type UserDto = {
+    userId: string
+    name: string
+    company?: string
+}
