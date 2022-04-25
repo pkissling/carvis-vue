@@ -120,7 +120,7 @@ export default class TheNavBar extends Vue {
         err
       })
     } finally {
-      commonStore.setLoading(true)
+      commonStore.setLoading(false)
     }
   }
 }
