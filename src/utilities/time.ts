@@ -24,6 +24,6 @@ export const relativeTimeDifference = (timestamp: string): string | undefined =>
     } else if (elapsed < msPerYear) {
         return rtf.format(-Math.floor(elapsed / msPerMonth), 'months')
     } else {
-        return new Date(timestamp).toLocaleDateString('de')
+        return 'vor mehr als 1 Jahr'
     }
 }
