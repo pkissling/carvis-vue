@@ -44,7 +44,7 @@ export default class CarDetailPage extends Vue {
   @Prop({ required: true })
   carId!: string
 
-  loading =false
+  loading = false
   car: CarDto | null = null
 
   get canEdit(): boolean {

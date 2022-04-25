@@ -32,71 +32,57 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import DeleteModal from '@/components/modals/DeleteModal.vue'
 import CarPreviewCard from '@/cards/CarPreviewCard.vue'
 import CarDataCard from '@/cards/CarDataCard.vue'
 import ActionsCard from '@/cards/ActionsCard.vue'
 import { carsStore, commonStore, notificationsStore, userStore } from '@/store'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
-export default {
-  components: {
-    DeleteModal,
-    CarDataCard,
-    CarPreviewCard,
-    ActionsCard
-  },
-  props: {
-    car: {
-      type: Object,
-      default: null
-    }
-  },
-  data: () => {
-    return {
-      showCarDeletionModal: false,
-      valid: true
-    }
-  },
-  computed: {
-    loading() {
+@Component({ components: { DeleteModal, ActionsCard, CarPreviewCard, CarDataCard }})
+export default class CarDetailForm extends Vue {
+  @Prop({ required: true })
+  car!: CarDto
+
+  showCarDeletionModal = false
+  valid = true
+
+  get loading(): boolean {
       return this.$auth.loading || commonStore.isLoading
-    },
-    deleteModalSubject() {
-      return `${this.car.brand} ${this.car.type}`
-    },
-    canEdit() {
-      if (!this.car || !this.car.id) {
-        return true
-      }
+  }
 
-      return userStore.isAdmin || this.car.createdBy === userStore.getUserId
+  get deleteModalSubject(): string {
+      return `${this.car.brand} ${this.car.type}`
+  }
+
+   get canEdit(): boolean {
+    if (!this.car || !this.car.id) {
+      return true
     }
-  },
-  methods: {
-    onSubmit() {
-      this.$refs.form.validate()
+
+    return userStore.isAdmin || this.car.createdBy === userStore.getUserId
+  }
+  onSubmit(): void {
+      const form = (this.$refs.form as Vue & { validate: () => boolean })
+      form.validate()
       if (this.valid) {
         this.$emit('submit', this.car)
       } else {
         this.$vuetify.goTo('#car-data-card') // TODO go to specific item!
       }
-    },
-    deleteCar() {
-      carsStore
-        .deleteCar(this.car.id)
-        .then(() =>
-          notificationsStore.success('Fahrzeug erfolgreich gelöscht.')
-        )
-        .then(() => this.$router.push({ path: '/cars' }))
-        .catch(err =>
-          notificationsStore.error({
-            message:
-              'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.',
-            err
-          })
-        )
-        .finally(() => (this.showCarDeletionModal = false))
+  }
+
+  async deleteCar(): Promise<void> {
+    try {
+      await carsStore.deleteCar(this.car.id)
+      await notificationsStore.success('Fahrzeug erfolgreich gelöscht.')
+      await this.$router.push({ path: '/cars' })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      await notificationsStore.error({ message: 'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err })
+    } finally {
+      this.showCarDeletionModal = false
     }
   }
 }

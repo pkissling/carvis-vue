@@ -32,76 +32,62 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import DeleteModal from '@/components/modals/DeleteModal.vue'
 import ActionsCard from '@/cards/ActionsCard.vue'
 import RequestCarDataCard from '@/cards/RequestCarDataCard.vue'
 import RequestContactDataCard from '@/cards/RequestContactDataCard.vue'
-import {
-  commonStore,
-  requestsStore,
-  notificationsStore,
-  userStore
-} from '@/store'
+import { Component, Vue, Prop} from 'vue-property-decorator'
+import { commonStore, requestsStore, notificationsStore, userStore } from '@/store'
 
-export default {
-  components: {
-    ActionsCard,
-    DeleteModal,
-    RequestCarDataCard,
-    RequestContactDataCard
-  },
-  props: {
-    request: {
-      type: Object,
-      default: null
-    }
-  },
-  data: () => {
-    return {
-      showDeletionModal: false,
-      valid: true
-    }
-  },
-  computed: {
-    loading() {
-      return this.$auth.loading || commonStore.isLoading
-    },
-    deleteModalSubject() {
-      return `${this.request.brand} ${this.request.type}`
-    },
-    canEdit() {
-      if (!this.request || !this.request.id) {
-        return true
-      }
+@Component({ components: { DeleteModal, ActionsCard, RequestCarDataCard, RequestContactDataCard }})
 
-      return (
-        userStore.isAdmin || this.request?.createdBy === userStore.getUserId
-      )
+
+export default class RequestDetailForm extends Vue {
+  @Prop({ required: true })
+  request!: RequestDto
+
+  showDeletionModal = false
+  valid = true
+
+  get loading(): boolean {
+    return this.$auth.loading || commonStore.isLoading
+  }
+
+  get deleteModalSubject(): string {
+    return `${this.request.brand} ${this.request.type}`
+  }
+
+  get canEdit(): boolean {
+    if (!this.request || !this.request.id) {
+      return true
     }
-  },
-  methods: {
-    onSubmit() {
-      this.$refs.form.validate()
-      if (this.valid) {
-        this.$emit('submit', this.request)
-      } else {
-        this.$vuetify.goTo('#request-car-data-card') // TODO go to specific item!
-      }
-    },
-    deleteRequest() {
-      requestsStore
-        .deleteRequest(this.request.id)
-        .then(() => notificationsStore.success('Gesuch erfolgreich gelöscht.'))
-        .then(() => this.$router.push({ path: '/requests' }))
-        .catch(err =>
-          notificationsStore.error({
-            message:
-              'Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.',
-            err
-          })
-        )
-        .finally(() => (this.showDeletionModal = false))
+
+    return (
+      userStore.isAdmin || this.request?.createdBy === userStore.getUserId
+    )
+  }
+
+  onSubmit(): void {
+    const form = (this.$refs.form as Vue & { validate: () => boolean })
+    form.validate()
+    if (this.valid) {
+      this.$emit('submit', this.request)
+    } else {
+      this.$vuetify.goTo('#request-car-data-card') // TODO go to specific item!
+    }
+  }
+
+  async deleteRequest(): Promise<void> {
+    try {
+      await requestsStore.deleteRequest(this.request.id)
+      await notificationsStore.success('Gesuch erfolgreich gelöscht.')
+      await this.$router.push({ path: '/requests' })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      await notificationsStore.error({ message: 'Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.', err })
+    } finally {
+      this.showDeletionModal = false
     }
   }
 }
