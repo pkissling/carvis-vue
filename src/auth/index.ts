@@ -1,9 +1,5 @@
 import { VueConstructor } from 'vue'
-import {
-    Auth0Wrapper,
-    Auth0Options,
-    RedirectCallback,
-} from '@/auth/auth0-wrapper'
+import { Auth0Wrapper, Auth0Options, RedirectCallback } from '@/auth/auth0-wrapper'
 
 type Auth0PluginOptions = {
     onRedirectCallback: RedirectCallback
@@ -20,11 +16,7 @@ let instance: Auth0Wrapper
 export const getInstance = (): Auth0Wrapper => instance
 
 /** Creates an instance of the Auth0 SDK. If one has already been created, it returns that instance */
-export const useAuth0 = ({
-    onRedirectCallback,
-    redirectUri = window.location.origin,
-    ...options
-}: Auth0PluginOptions): Auth0Wrapper => {
+export const useAuth0 = ({ onRedirectCallback, redirectUri = window.location.origin, ...options}: Auth0PluginOptions): Auth0Wrapper => {
     if (instance) return instance
 
     // The 'instance' is simply a Vue object
@@ -34,7 +26,6 @@ export const useAuth0 = ({
 }
 
 // Create a simple Vue plugin to expose the wrapper object throughout the application
-
 export const Auth0Plugin = {
     install(Vue: VueConstructor, options: Auth0PluginOptions): void {
         Vue.prototype.$auth = useAuth0(options)

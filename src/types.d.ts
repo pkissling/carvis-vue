@@ -7,8 +7,16 @@ type ImageDto = {
 
 type ImageHeight = 'ORIGINAL' | '48' | '100' | '200' | '500' | '1080'
 
-type CarDto = {
+type BaseDto = {
     id: string
+    createdAt: string
+    createdBy: string
+    ownerName?: string
+    updatedAt: string
+    updatedBy: string
+}
+
+type CarDto = BaseDto & {
     ads: string[]
     additionalEquipment?: string
     brand: string
@@ -19,8 +27,6 @@ type CarDto = {
     colorExteriorManufacturer: string
     condition: string
     countryOfOrigin?: string
-    createdAt: string
-    createdBy: string
     description?: string
     horsePower: number
     images: string[]
@@ -28,18 +34,14 @@ type CarDto = {
     modelDetails: string
     modelSeries: string
     modelYear: string
-    ownerName?: string
     price?: Float32Array
     shortDescription: string
     transmission: string
     type: string
-    updatedAt: string
-    updatedBy: string
     vin?: string
 }
 
-type RequestDto = {
-    id: string
+type RequestDto = BaseDto & {
     additionalEquipment?: string
     bodyType?: string
     brand: string
@@ -57,8 +59,6 @@ type RequestDto = {
         name?: string
         phone?: string
     }
-    createdAt: string
-    createdBy: string
     description?: string
     hasHiddenFields: boolean
     highlights?: string
@@ -66,14 +66,11 @@ type RequestDto = {
     mileage?: number
     mustHaves?: string
     noGos?: string
-    ownerName?: string
     modelSeries?: string
     modelYear?: string
     modelDetails?: string
     transmission?: string
     type: string
-    updatedAt: string
-    updatedBy: string
     vision?: string
 }
 
