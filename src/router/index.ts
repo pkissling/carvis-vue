@@ -40,11 +40,11 @@ const routes: RouteConfig[] = [
     props: true,
     meta: {
       requiresRole: 'user',
-      breadcrumbs(route: Route) {
+      breadcrumbs(route: Route, title: string) {
         const carId = route.params.carId
         return [
           { text: 'Fahrzeuge', href: '/cars' },
-          { text: carId, href: `/cars/${carId}` },
+          { text: title, href: `/cars/${carId}` },
         ]
       }
     }
@@ -84,11 +84,11 @@ const routes: RouteConfig[] = [
     props: true,
     meta: {
       requiresRole: 'user',
-      breadcrumbs(route: Route) {
+      breadcrumbs(route: Route, title: string) {
         const requestId = route.params.requestId
         return [
           { text: 'Gesuche', href: '/requests' },
-          { text: requestId, href: `/requests/${requestId}` },
+          { text: title, href: `/requests/${requestId}` },
         ]
       }
     }

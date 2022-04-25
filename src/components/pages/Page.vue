@@ -38,16 +38,12 @@ export default class Page extends Vue {
   title!: string
 
   get breadcrumbs(): { text: string, disabled: boolean, href: string }[] {
-    const breadcrumbs = this.$route?.meta?.breadcrumbs?.call(this, this.$route)
+    const breadcrumbs = this.$route?.meta?.breadcrumbs?.call(this, this.$route, this.title)
     if (!breadcrumbs?.length) {
       return []
     }
-    return breadcrumbs.map((item: { text: string, href: string}, i: number) => {
-      return {
-        text: item.text,
-        href: item.href,
-        disabled: breadcrumbs.length -1 === i
-      }
+    return breadcrumbs.map((item: { text: string, href: string}) => {
+      return { text: item.text, href: item.href }
     })
   }
 
