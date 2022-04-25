@@ -50,8 +50,9 @@ export default class CarDetailPage extends Vue {
   get canEdit(): boolean {
       return userStore.isAdmin || this.car?.createdBy === userStore.getUserId
   }
+
   get title(): string {
-    return `${this.car?.brand} ${this.car?.type}`
+    return `${this.car?.brand} ${this.car?.type || ''}`
   }
 
   async updateCar(car: CarDto): Promise<void> {

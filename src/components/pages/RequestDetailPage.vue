@@ -53,7 +53,7 @@ export default class RequestDetailPage extends Vue {
   }
 
   get title(): string {
-    return `${this.request?.brand} ${this.request?.type}`
+    return `${this.request?.brand} ${this.request?.type || ''}`
   }
 
   async updateRequest(request: RequestDto): Promise<void> {
