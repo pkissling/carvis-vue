@@ -27,7 +27,8 @@ export default class CarsPage extends Vue {
     {
       forceShow: true,
       value: 'previewImageId',
-      priority: 0
+      priority: 0,
+      sortable: false
     },
     {
       value: 'brand',
