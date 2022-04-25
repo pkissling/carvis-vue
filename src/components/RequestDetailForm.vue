@@ -1,5 +1,11 @@
 <template>
   <div v-if="request">
+    <OwnerCaption
+      :owner="request.ownerName"
+      :created-at="request.createdAt"
+      :updated-at="request.updatedAt"
+    />
+
     <v-form
       ref="form"
       v-model="valid"
@@ -34,15 +40,14 @@
 
 <script lang="ts">
 import DeleteModal from '@/components/modals/DeleteModal.vue'
-import ActionsCard from '@/cards/ActionsCard.vue'
-import RequestCarDataCard from '@/cards/RequestCarDataCard.vue'
-import RequestContactDataCard from '@/cards/RequestContactDataCard.vue'
+import ActionsCard from '@/components/cards/ActionsCard.vue'
+import RequestCarDataCard from '@/components/cards/RequestCarDataCard.vue'
+import RequestContactDataCard from '@/components/cards/RequestContactDataCard.vue'
 import { Component, Vue, Prop} from 'vue-property-decorator'
 import { commonStore, requestsStore, notificationsStore, userStore } from '@/store'
+import OwnerCaption from '@/components/OwnerCaption.vue'
 
-@Component({ components: { DeleteModal, ActionsCard, RequestCarDataCard, RequestContactDataCard }})
-
-
+@Component({ components: { DeleteModal, ActionsCard, RequestCarDataCard, RequestContactDataCard, OwnerCaption }})
 export default class RequestDetailForm extends Vue {
   @Prop({ required: true })
   request!: RequestDto

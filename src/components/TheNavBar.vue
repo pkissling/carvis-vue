@@ -13,7 +13,7 @@
 
         <v-list-item-content>
           <v-list-item-title>{{ name }}</v-list-item-title>
-          <v-list-item-subtitle>{{ company }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ company || 'Eingeloggt' }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </template>

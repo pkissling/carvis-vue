@@ -46,7 +46,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import Page from '@/components/pages/Page.vue'
 import { notificationsStore, userStore } from '@/store'
-import ActionsCard from '@/cards/ActionsCard.vue'
+import ActionsCard from '@/components/cards/ActionsCard.vue'
 
 @Component({ components: { Page, ActionsCard }})
 export default class MyAccountPage extends Vue {
