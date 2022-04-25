@@ -4,7 +4,6 @@ import {
     Auth0Options,
     RedirectCallback,
 } from '@/auth/auth0-wrapper'
-import { RedirectLoginOptions } from '@auth0/auth0-spa-js'
 
 type Auth0PluginOptions = {
     onRedirectCallback: RedirectCallback
@@ -15,12 +14,6 @@ type Auth0PluginOptions = {
     [key: string]: string | RedirectCallback | undefined
 }
 
-/** Define a default action to perform after authentication */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const DEFAULT_REDIRECT_CALLBACK: RedirectCallback = (appState: RedirectLoginOptions): void => {
-    window.history.replaceState({}, document.title, window.location.pathname)
-}
-
 let instance: Auth0Wrapper
 
 /** Returns the current instance of the SDK */
@@ -28,7 +21,7 @@ export const getInstance = (): Auth0Wrapper => instance
 
 /** Creates an instance of the Auth0 SDK. If one has already been created, it returns that instance */
 export const useAuth0 = ({
-    onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
+    onRedirectCallback,
     redirectUri = window.location.origin,
     ...options
 }: Auth0PluginOptions): Auth0Wrapper => {

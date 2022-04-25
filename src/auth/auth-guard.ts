@@ -13,18 +13,13 @@ export const authGuard: NavigationGuard = async (
         // Unwatch loading
         unwatch && unwatch()
 
-        // If the routes does not require a role, continue with the route
-        const requiredRole = to.meta?.requiresRole
-        if (!requiredRole) {
-            return next()
-        }
-
         // If role is required and user is not logged in, redirect to login
         if (!authService.user) {
-            return authService.loginWithRedirect({ appState: { targetUrl: to.fullPath } })
+            return await authService.loginWithRedirect({ appState: { targetUrl: to.fullPath }})
         }
 
-        // If user does not have required role, show forbidden page
+        // Dispatch to 'forbidden' on missing permission
+        const requiredRole = to.meta?.requiresRole
         if (!hasRole(authService.user, requiredRole)) {
             return next('/forbidden')
         }

@@ -28,5 +28,5 @@ const onLoaded = async () => {
     }
 
     // otherwise login
-    authService.loginWithRedirect({})
+    await authService.loginWithRedirect({})
 }

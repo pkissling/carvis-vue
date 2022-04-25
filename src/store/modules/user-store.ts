@@ -40,8 +40,8 @@ export default class UserStore extends VuexModule {
     }
 
     @Action({ commit: 'setCarvisUser' })
-    public async fetchCarvisUser(userId: string): Promise<UserDto> {
-        return await usersApi.fetchUser(userId)
+    public async fetchCarvisUser(): Promise<UserDto> {
+        return await usersApi.fetchMyUser()
     }
 
     public get getUserId(): string | undefined {

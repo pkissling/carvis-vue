@@ -24,7 +24,7 @@ export type RedirectCallback = (appState: RedirectLoginOptions) => void
 @Component({})
 export class Auth0Wrapper extends Vue {
     loading = true
-    isAuthenticated? = false
+    isAuthenticated = false
     user?: Auth0User
     auth0Client?: Auth0Client
     popupOpen = false
@@ -103,7 +103,7 @@ export class Auth0Wrapper extends Vue {
             ) {
                 // handle the redirect and retrieve tokens
                 const { appState } =
-                    (await this.auth0Client?.handleRedirectCallback()) ?? {
+                    (await this.auth0Client.handleRedirectCallback()) ?? {
                         appState: undefined,
                     }
 
@@ -117,7 +117,7 @@ export class Auth0Wrapper extends Vue {
             this.error = e
         } finally {
             // Initialize our internal authentication state when the page is reloaded
-            this.isAuthenticated = await this.auth0Client?.isAuthenticated()
+            this.isAuthenticated = await this.auth0Client.isAuthenticated()
             this.user = await this.getUser()
             this.loading = false
 

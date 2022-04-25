@@ -56,14 +56,9 @@ export default class MyAccountPage extends Vue {
   formValid = false
 
   async mounted(): Promise<void> {
-    if (!userStore.getUserId) {
-      notificationsStore.error({ message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.'})
-      return
-    }
-
     try {
       this.loading = true
-      const { name, company } = await userStore.fetchCarvisUser(userStore.getUserId)
+      const { name, company } = await userStore.fetchCarvisUser()
       this.name = name
       this.company = company || null
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

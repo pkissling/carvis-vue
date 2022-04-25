@@ -22,24 +22,9 @@
 
     <v-list nav>
       <v-list-item
-        to="/my-account"
-        link
-      >
-        <v-list-item-icon>
-          <v-icon>mdi-account</v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>Mein Profil</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider />
-
-      <v-list-item
         v-for="item in filteredItems"
-        :key="item.route"
-        :to="item.route"
+        :key="item.path"
+        :to="item.path"
         link
       >
         <v-list-item-icon>
@@ -73,7 +58,6 @@
 import { commonStore, notificationsStore, userStore } from '@/store'
 import { hasRole } from '@/store/modules/user-store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { RouteConfig } from 'vue-router'
 
 @Component
 export default class TheNavBar extends Vue {
@@ -81,19 +65,18 @@ export default class TheNavBar extends Vue {
   value! :boolean
 
   items = [
-    { icon: 'mdi-car', text: 'Fahrzeuge', route: '/cars' },
-    { icon: 'mdi-file-document-multiple', text: 'Gesuche', route: '/requests' },
+    { icon: 'mdi-account', text: 'Mein Profil', path: '/my-account' },
+    { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
+    { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests' }
   ]
 
-  get filteredItems(): ({ icon: string, text: string, route: string })[] {
-    const declaredRoutes = this.items.map(item => item.route)
-    return this.$router.options.routes
-      ?.filter(route => declaredRoutes.includes(route.path))
-      .filter(route => this.canAccess(route))
-      .map(route => this.items.find(r => r.route === route.path)) as ({ icon: string, text: string, route: string })[]
+  get filteredItems(): ({ icon: string, text: string, path: string })[] {
+    return this.items.filter(item => this.canAccess(item.path))
   }
 
-  private canAccess(route: RouteConfig): boolean {
+  private canAccess(path: string): boolean {
+    const route = this.$router.options.routes?.find(r => r.path === path)
+    if (!route) return false
     return hasRole(this.$auth.user || null, route.meta?.requiresRole)
   }
 
@@ -111,9 +94,9 @@ export default class TheNavBar extends Vue {
 
   async mounted(): Promise<void> {
     commonStore.setLoading(true)
-    if (!userStore.getUserId) return
     try {
-      await userStore.fetchCarvisUser(userStore.getUserId)
+      await userStore.fetchCarvisUser()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       notificationsStore.error({
         message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.',

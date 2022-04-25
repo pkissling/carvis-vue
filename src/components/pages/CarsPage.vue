@@ -83,7 +83,7 @@ export default class CarsPage extends Vue {
   async created(): Promise<void> {
     carsStore.fetchAllCars().catch(err =>
       notificationsStore.error({
-        message: 'Fehler beim Laden der Fahrzeug. Bitte versuche es erneut.',
+        message: 'Fehler beim Laden der Fahrzeuge. Bitte versuche es erneut.',
         err
       })
     )
