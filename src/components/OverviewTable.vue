@@ -14,7 +14,7 @@
     <v-data-table
       :headers="filteredHeaders"
       :items="filteredItems"
-      :items-per-page="20"
+      :items-per-page="-1"
       :loading="loading"
       :mobile-breakpoint="0"
       :sort-by.sync="sortColumn"
@@ -30,7 +30,7 @@
           :name="header.value"
           :item="item"
         >
-          <p
+          <span
             :key="header.value"
             v-html="highlightSearchTerm(item[header.value])"
           />
