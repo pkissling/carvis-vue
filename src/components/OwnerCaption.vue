@@ -1,16 +1,23 @@
 <template>
   <v-row v-if="owner && creationDate">
     <v-col class="caption">
-      Erstellt von
-      <span class="font-weight-bold">
-        {{ owner }}
-      </span>
-      am
-      <span class="font-weight-bold">{{ creationDate }}</span>
-      <p v-if="createdAt !== updatedAt">
-        Zuletzt aktualisiert
+      <p class="mb-1">
+        Erstellt von
+        <UserContact
+          :name="owner"
+          :user-id="createdBy"
+        />
+        am
         <span class="font-weight-bold">
-          {{ updatedDate }}
+          {{ creationDate }}
+        </span>
+      </p>
+      <p>
+        <span v-if="createdAt !== updatedAt">
+          Zuletzt aktualisiert
+          <span class="font-weight-bold">
+            {{ updatedDate }}
+          </span>
         </span>
       </p>
     </v-col>
@@ -20,10 +27,11 @@
 <script lang="ts">
 import { relativeTimeDifference } from '@/utilities/time'
 import { Component, Vue, Prop } from 'vue-property-decorator'
+import UserContact from '@/components/OwnerChip.vue'
 
-@Component
+@Component({ components: { UserContact }})
 export default class OwnerCaption extends Vue {
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: '' })
   owner!: string
 
   @Prop({ required: false, default: '' })
@@ -31,6 +39,9 @@ export default class OwnerCaption extends Vue {
 
   @Prop({ required: false, default: '' })
   updatedAt!: string
+
+  @Prop({ required: false, default: '' })
+  createdBy!: string
 
   get creationDate(): string {
     const date = new Date(this.createdAt)

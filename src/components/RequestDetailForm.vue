@@ -4,6 +4,7 @@
       :owner="request.ownerName"
       :created-at="request.createdAt"
       :updated-at="request.updatedAt"
+      :created-by="request.createdBy"
     />
 
     <v-form

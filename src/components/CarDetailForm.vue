@@ -4,6 +4,7 @@
       :owner="car.ownerName"
       :created-at="car.createdAt"
       :updated-at="car.updatedAt"
+      :created-by="car.createdBy"
     />
 
     <v-form

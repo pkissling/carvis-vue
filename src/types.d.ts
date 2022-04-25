@@ -88,5 +88,7 @@ type Role = 'admin' | 'user'
 type UserDto = {
     userId: string
     name: string
+    email?: string
     company?: string
+    phone?: string
 }

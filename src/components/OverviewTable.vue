@@ -39,6 +39,12 @@
       <template #[`item.previewImageId`]="{ item }">
         <CarThumbnail :image-id="item.previewImageId" />
       </template>
+      <template #[`item.ownerName`]="{ item }">
+        <OwnerChip
+          :user-id="item.createdBy"
+          :name="item.ownerName"
+        />
+      </template>
     </v-data-table>
 
     <FloatingButton :loading="loading"
@@ -52,8 +58,9 @@ import FloatingButton from '@/components/FloatingButton.vue';
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { mappedAttributes } from '@/utilities/mapping'
 import CarThumbnail from '@/components/CarThumbnail.vue'
+import OwnerChip from '@/components/OwnerChip.vue'
 
-@Component({ components: { FloatingButton, CarThumbnail} })
+@Component({ components: { FloatingButton, CarThumbnail, OwnerChip} })
 export default class OverviewTable<T> extends Vue {
 
   @Prop({ required: true })

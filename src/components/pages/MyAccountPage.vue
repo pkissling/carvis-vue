@@ -30,6 +30,24 @@
               />
             </v-col>
           </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="phone"
+                label="Telefon"
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="email"
+                label="E-Mail"
+                hint="Die E-Mail-Adresse kann nicht geändert werden."
+                persistent-hint
+                required
+                disabled
+              />
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
 
@@ -53,13 +71,17 @@ export default class MyAccountPage extends Vue {
   loading = false
   name = ''
   company: string | null = null
+  phone: string | null = null
+  email: string | null = null
   formValid = false
 
   async mounted(): Promise<void> {
     try {
       this.loading = true
-      const { name, company } = await userStore.fetchCarvisUser()
+      const { name, company, phone, email } = await userStore.fetchCarvisUser()
       this.name = name
+      this.email = email || null
+      this.phone = phone || null
       this.company = company || null
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -79,7 +101,8 @@ export default class MyAccountPage extends Vue {
       await userStore.updateCarvisUser({
         userId: userStore.getUserId,
         name: this.name,
-        company: this.company || undefined
+        company: this.company || undefined,
+        phone: this.phone || undefined
       })
       notificationsStore.success('Profil erfolgreich bearbeitet.')
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
