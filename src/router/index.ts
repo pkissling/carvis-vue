@@ -16,7 +16,7 @@ const routes: RouteConfig[] = [
       requiresRole: 'user',
       breadcrumbs() {
         return [
-          { text: 'Fahrzeuge', href: '/cars' },
+          { text: 'Fahrzeuge', to: '/cars' },
         ]
       }
     }
@@ -28,8 +28,8 @@ const routes: RouteConfig[] = [
       requiresRole: 'user',
       breadcrumbs() {
         return [
-          { text: 'Fahrzeuge', href: '/cars' },
-          { text: 'Fahrzeug hinzufügen', href: '/cars/add' }
+          { text: 'Fahrzeuge', to: '/cars' },
+          { text: 'Fahrzeug hinzufügen', to: '/cars/add' }
         ]
       }
     }
@@ -43,8 +43,8 @@ const routes: RouteConfig[] = [
       breadcrumbs(route: Route, title: string) {
         const carId = route.params.carId
         return [
-          { text: 'Fahrzeuge', href: '/cars' },
-          { text: title, href: `/cars/${carId}` },
+          { text: 'Fahrzeuge', to: '/cars' },
+          { text: title, to: `/cars/${carId}` },
         ]
       }
     }
@@ -60,7 +60,7 @@ const routes: RouteConfig[] = [
       requiresRole: 'user',
       breadcrumbs() {
         return [
-          { text: 'Gesuche', href: '/requests' },
+          { text: 'Gesuche', to: '/requests' },
         ]
       }
     }
@@ -72,8 +72,8 @@ const routes: RouteConfig[] = [
       requiresRole: 'user',
       breadcrumbs() {
         return [
-          { text: 'Gesuche', href: '/requests' },
-          { text: 'Gesuche hinzufügen', href: '/requests/add' },
+          { text: 'Gesuche', to: '/requests' },
+          { text: 'Gesuche hinzufügen', to: '/requests/add' },
         ]
       }
     }
@@ -87,8 +87,8 @@ const routes: RouteConfig[] = [
       breadcrumbs(route: Route, title: string) {
         const requestId = route.params.requestId
         return [
-          { text: 'Gesuche', href: '/requests' },
-          { text: title, href: `/requests/${requestId}` },
+          { text: 'Gesuche', to: '/requests' },
+          { text: title, to: `/requests/${requestId}` },
         ]
       }
     }
@@ -100,7 +100,7 @@ const routes: RouteConfig[] = [
       requiresRole: 'user',
       breadcrumbs() {
         return [
-          { text: 'Mein Profil', href: '/my-account' },
+          { text: 'Mein Profil', to: '/my-account' },
         ]
       }
     }
@@ -112,7 +112,7 @@ const routes: RouteConfig[] = [
   },
   {
     path: '*',
-    beforeEnter: (href: Route, from: Route, next: NavigationGuardNext) => {
+    beforeEnter: (to: Route, from: Route, next: NavigationGuardNext) => {
       next('/not-found')
     },
   },

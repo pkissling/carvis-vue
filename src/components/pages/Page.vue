@@ -37,13 +37,13 @@ export default class Page extends Vue {
   @Prop({ required: true })
   title!: string
 
-  get breadcrumbs(): { text: string, disabled: boolean, href: string }[] {
+  get breadcrumbs(): { text: string, disabled: boolean, to: { path: string }, exact: boolean }[] {
     const breadcrumbs = this.$route?.meta?.breadcrumbs?.call(this, this.$route, this.title)
     if (!breadcrumbs?.length) {
       return []
     }
-    return breadcrumbs.map((item: { text: string, href: string}) => {
-      return { text: item.text, href: item.href }
+    return breadcrumbs.map((item: { text: string, to: { path: string }}) => {
+      return { text: item.text, to: { path: item.to }, exact: true }
     })
   }
 
