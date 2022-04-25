@@ -7,14 +7,9 @@ import NotificationsStore from '@/store/modules/notifications-store'
 import RequestsStore from '@/store/modules/requests-store'
 import SentryStore from '@/store/modules/sentry-store'
 import UserStore from '@/store/modules/user-store'
-import VuexPersistence from 'vuex-persist'
 import { getModule } from 'vuex-module-decorators'
 
 Vue.use(Vuex)
-
-const vuexLocal = new VuexPersistence({
-    storage: window.localStorage,
-})
 
 const store = new Vuex.Store({
     modules: {
@@ -25,8 +20,7 @@ const store = new Vuex.Store({
         requests: RequestsStore,
         sentry: SentryStore,
         user: UserStore,
-    },
-    plugins: [vuexLocal.plugin],
+    }
 })
 
 export const carsStore = getModule(CarsStore, store)
