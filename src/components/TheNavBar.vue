@@ -6,7 +6,14 @@
     @input="$emit('input', $event)"
   >
     <template v-slot:prepend>
-      <v-list-item two-line>
+      <v-skeleton-loader
+        v-if="loading"
+        type="list-item-avatar-two-line"
+      />
+      <v-list-item
+        v-else
+        two-line
+      >
         <v-list-item-avatar>
           <img :src="picture">
         </v-list-item-avatar>
@@ -55,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { commonStore, notificationsStore, userStore } from '@/store'
+import { notificationsStore, userStore } from '@/store'
 import { hasRole } from '@/store/modules/user-store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
@@ -64,6 +71,7 @@ export default class TheNavBar extends Vue {
   @Prop({ required: true })
   value! :boolean
 
+  loading = false
   items = [
     { icon: 'mdi-account', text: 'Mein Profil', path: '/my-account' },
     { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
@@ -93,17 +101,15 @@ export default class TheNavBar extends Vue {
   }
 
   async mounted(): Promise<void> {
-    commonStore.setLoading(true)
     try {
+      this.loading = true
       await userStore.fetchCarvisUser()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      notificationsStore.error({
-        message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.',
-        err
-      })
+      notificationsStore.error({ message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.', err })
     } finally {
-      commonStore.setLoading(false)
+      // commonStore.setLoading(false)
+      this.loading = false // TODO
     }
   }
 }

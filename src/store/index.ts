@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import CarsStore from '@/store/modules/cars-store'
-import CommonStore from '@/store/modules/common-store'
 import ImagesStore from '@/store/modules/images-store'
 import NotificationsStore from '@/store/modules/notifications-store'
 import RequestsStore from '@/store/modules/requests-store'
@@ -14,7 +13,6 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     modules: {
         cars: CarsStore,
-        common: CommonStore,
         images: ImagesStore,
         notifications: NotificationsStore,
         requests: RequestsStore,
@@ -24,7 +22,6 @@ const store = new Vuex.Store({
 })
 
 export const carsStore = getModule(CarsStore, store)
-export const commonStore = getModule(CommonStore, store)
 export const imagesStore = getModule(ImagesStore, store)
 export const notificationsStore = getModule(NotificationsStore, store)
 export const requestsStore = getModule(RequestsStore, store)

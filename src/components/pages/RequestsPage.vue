@@ -17,11 +17,13 @@
 import Page from '@/components/pages/Page.vue'
 import OverviewTable from '@/components/OverviewTable.vue'
 import { relativeTimeDifference } from '@/utilities/time'
-import { commonStore, requestsStore, notificationsStore } from '@/store'
+import { requestsStore, notificationsStore } from '@/store'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({ components: { OverviewTable, Page } })
 export default class RequestsPage extends Vue {
+
+  loading = false
   headers: HighlightableDataTableHeader[] = [
     {
       value: 'brand',
@@ -50,10 +52,6 @@ export default class RequestsPage extends Vue {
     }
   ]
 
-  get loading(): boolean {
-    return this.$auth.loading || commonStore.isLoading
-  }
-
   get requests(): RequestDto[] {
     return requestsStore.requests.map(request => {
       const lastChanged = relativeTimeDifference(request.updatedAt)
@@ -68,13 +66,16 @@ export default class RequestsPage extends Vue {
     return requestsStore.searchTerm
   }
 
-  created(): void {
-    requestsStore.fetchAllRequests().catch(err =>
-      notificationsStore.error({
-        message: 'Fehler beim Laden der Gesuche. Bitte versuche es erneut.',
-        err
-      })
-    )
+  async created(): Promise<void> {
+    try {
+      this.loading = true
+      await requestsStore.fetchAllRequests()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      await notificationsStore.error({message: 'Fehler beim Laden der Gesuche. Bitte versuche es erneut.', err })
+    } finally {
+      this.loading = false
+    }
   }
 
   viewRequest(request: RequestDto): void {

@@ -32,6 +32,7 @@
       <DeleteModal
         v-if="showDeletionModal"
         :subject="deleteModalSubject"
+        :loading="loading"
         @submit="deleteRequest"
         @cancel="showDeletionModal = false"
       />
@@ -45,7 +46,7 @@ import ActionsCard from '@/components/cards/ActionsCard.vue'
 import RequestCarDataCard from '@/components/cards/RequestCarDataCard.vue'
 import RequestContactDataCard from '@/components/cards/RequestContactDataCard.vue'
 import { Component, Vue, Prop} from 'vue-property-decorator'
-import { commonStore, requestsStore, notificationsStore, userStore } from '@/store'
+import { requestsStore, notificationsStore, userStore } from '@/store'
 import OwnerCaption from '@/components/OwnerCaption.vue'
 
 @Component({ components: { DeleteModal, ActionsCard, RequestCarDataCard, RequestContactDataCard, OwnerCaption }})
@@ -55,10 +56,7 @@ export default class RequestDetailForm extends Vue {
 
   showDeletionModal = false
   valid = true
-
-  get loading(): boolean {
-    return this.$auth.loading || commonStore.isLoading
-  }
+  loading = false
 
   get deleteModalSubject(): string {
     return `${this.request.brand} ${this.request.type}`
@@ -69,9 +67,7 @@ export default class RequestDetailForm extends Vue {
       return true
     }
 
-    return (
-      userStore.isAdmin || this.request?.createdBy === userStore.getUserId
-    )
+    return userStore.isAdmin || this.request?.createdBy === userStore.getUserId
   }
 
   onSubmit(): void {
@@ -86,6 +82,7 @@ export default class RequestDetailForm extends Vue {
 
   async deleteRequest(): Promise<void> {
     try {
+      this.loading = true
       await requestsStore.deleteRequest(this.request.id)
       await notificationsStore.success('Gesuch erfolgreich gelöscht.')
       await this.$router.push({ path: '/requests' })
@@ -94,6 +91,7 @@ export default class RequestDetailForm extends Vue {
       await notificationsStore.error({ message: 'Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.', err })
     } finally {
       this.showDeletionModal = false
+      this.loading = false
     }
   }
 }

@@ -53,6 +53,7 @@
 
       <ActionsCard
         :is-new-item="false"
+        :loading="loading"
         :submit-disabled="!formValid"
         :show-delete="false"
       />

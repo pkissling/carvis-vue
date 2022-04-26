@@ -32,6 +32,7 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({ components: { NavigationCard }})
 export default class HomePage extends Vue {
+
   get isLoading(): boolean {
     return this.$auth.loading
   }

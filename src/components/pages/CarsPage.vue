@@ -17,12 +17,13 @@
 import Page from '@/components/pages/Page.vue'
 import OverviewTable from '@/components/OverviewTable.vue'
 import { relativeTimeDifference } from '@/utilities/time'
-import { carsStore, commonStore, notificationsStore } from '@/store'
+import { carsStore, notificationsStore } from '@/store'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({ components: { OverviewTable, Page } })
 export default class CarsPage extends Vue {
 
+  loading = false
   headers: HighlightableDataTableHeader[] = [
     {
       forceShow: true,
@@ -65,10 +66,6 @@ export default class CarsPage extends Vue {
     return carsStore.searchTerm
   }
 
-  get loading(): boolean {
-    return this.$auth.loading || commonStore.isLoading
-  }
-
   get cars(): CarDto[] {
     return carsStore.cars.map(car => {
       const lastChanged = relativeTimeDifference(car.updatedAt)
@@ -82,12 +79,15 @@ export default class CarsPage extends Vue {
   }
 
   async created(): Promise<void> {
-    carsStore.fetchAllCars().catch(err =>
-      notificationsStore.error({
-        message: 'Fehler beim Laden der Fahrzeuge. Bitte versuche es erneut.',
-        err
-      })
-    )
+    try {
+      this.loading = true
+      await carsStore.fetchAllCars()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      await notificationsStore.error({message: 'Fehler beim Laden der Fahrzeuge. Bitte versuche es erneut.', err })
+    } finally {
+      this.loading = false
+    }
   }
 
   viewCar(car: CarDto): void {

@@ -1,5 +1,4 @@
 import { obtainJwtToken } from '@/auth/utils'
-import { commonStore } from '@/store'
 import axios, {
     AxiosInstance,
     AxiosRequestConfig,
@@ -67,13 +66,8 @@ export default abstract class BaseApi {
         config?: AxiosRequestConfig,
         payload?: any
     ): Promise<T> => {
-        commonStore.setLoading(true)
-        try {
-            const req = { method, url, data: payload, ...config }
-            return await this.instance.request(req)
-        } finally {
-            commonStore.setLoading(false)
-        }
+        const req = { method, url, data: payload, ...config }
+        return await this.instance.request(req)
     }
 
     private addAuthHeader = async (

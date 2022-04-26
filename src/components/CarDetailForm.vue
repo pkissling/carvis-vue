@@ -32,6 +32,7 @@
       <DeleteModal
         v-if="showCarDeletionModal"
         :subject="deleteModalSubject"
+        :loading="loading"
         @submit="deleteCar"
         @cancel="showCarDeletionModal = false"
       />
@@ -44,7 +45,7 @@ import DeleteModal from '@/components/modals/DeleteModal.vue'
 import CarPreviewCard from '@/components/cards/CarPreviewCard.vue'
 import CarDataCard from '@/components/cards/CarDataCard.vue'
 import ActionsCard from '@/components/cards/ActionsCard.vue'
-import { carsStore, commonStore, notificationsStore, userStore } from '@/store'
+import { carsStore, notificationsStore, userStore } from '@/store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import OwnerCaption from '@/components/OwnerCaption.vue'
 
@@ -55,10 +56,7 @@ export default class CarDetailForm extends Vue {
 
   showCarDeletionModal = false
   valid = true
-
-  get loading(): boolean {
-      return this.$auth.loading || commonStore.isLoading
-  }
+  loading = false
 
   get deleteModalSubject(): string {
       return `${this.car.brand} ${this.car.type}`
@@ -93,6 +91,7 @@ export default class CarDetailForm extends Vue {
 
   async deleteCar(): Promise<void> {
     try {
+      this.loading = true
       await carsStore.deleteCar(this.car.id)
       await notificationsStore.success('Fahrzeug erfolgreich gelöscht.')
       await this.$router.push({ path: '/cars' })
@@ -101,6 +100,7 @@ export default class CarDetailForm extends Vue {
       await notificationsStore.error({ message: 'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err })
     } finally {
       this.showCarDeletionModal = false
+      this.loading = false
     }
   }
 }

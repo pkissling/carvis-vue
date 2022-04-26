@@ -159,7 +159,7 @@ export default class OverviewTable<T> extends Vue {
       .map(({ key, value }) => { return { key, value: String(value).toLowerCase() }})
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   highlightSearchTerm(value: any): string {
     if (!value) return value
     const stringValue = new String(value)

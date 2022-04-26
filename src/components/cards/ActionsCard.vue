@@ -3,11 +3,15 @@
     <v-card-actions class="d-block d-sm-flex">
       <v-btn color="primary"
              type="submit"
-             :loading="isLoading"
+             :loading="loading"
              :disabled="submitDisabled"
       >
-        <span v-if="isNewItem"> Hinzufügen </span>
-        <span v-else> Speichern </span>
+        <span v-if="isNewItem">
+          Hinzufügen
+        </span>
+        <span v-else>
+          Speichern
+        </span>
       </v-btn>
 
       <v-spacer />
@@ -16,7 +20,7 @@
         v-if="showDelete && isNewItem"
         color="error"
         text
-        :loading="isLoading"
+        :loading="loading"
         @click="$emit('delete')"
       >
         Löschen
@@ -26,7 +30,6 @@
 </template>
 
 <script lang="ts">
-import { commonStore } from '@/store'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
@@ -40,8 +43,8 @@ export default class ActionsCard extends Vue {
   @Prop({ required: false, default: false })
   submitDisabled!: boolean
 
-  get isLoading(): boolean {
-    return commonStore.isLoading
-  }
+  @Prop({ required: false, default: false })
+  loading!: boolean
+
 }
 </script>

@@ -20,7 +20,7 @@
           <v-btn
             color="error"
             text
-            :loading="isLoading"
+            :loading="loading"
             @click="$emit('submit')"
           >
             Löschen
@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts">
-import { commonStore } from '@/store'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
@@ -40,10 +39,10 @@ export default class DeleteModal extends Vue {
   @Prop({ required: true })
   subject!: string
 
+  @Prop({ required: false, default: false })
+  loading!: boolean
+
   dialog = true
 
-  get isLoading(): boolean {
-    return commonStore.isLoading
-  }
 }
 </script>
