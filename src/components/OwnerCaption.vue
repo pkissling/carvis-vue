@@ -3,7 +3,7 @@
     <v-col class="caption">
       <p class="mb-1">
         Erstellt von
-        <UserContact
+        <OwnerChip
           :name="owner"
           :user-id="createdBy"
         />
@@ -27,9 +27,9 @@
 <script lang="ts">
 import { relativeTimeDifference } from '@/utilities/time'
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import UserContact from '@/components/OwnerChip.vue'
+import OwnerChip from '@/components/OwnerChip.vue'
 
-@Component({ components: { UserContact }})
+@Component({ components: { OwnerChip }})
 export default class OwnerCaption extends Vue {
   @Prop({ required: false, default: '' })
   owner!: string
@@ -56,3 +56,10 @@ export default class OwnerCaption extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.col {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+</style>

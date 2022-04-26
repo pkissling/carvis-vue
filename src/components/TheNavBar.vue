@@ -74,6 +74,7 @@ export default class TheNavBar extends Vue {
   loading = false
   items = [
     { icon: 'mdi-account', text: 'Mein Profil', path: '/my-account' },
+    { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management' },
     { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
     { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests' }
   ]

@@ -106,6 +106,18 @@ const routes: RouteConfig[] = [
     }
   },
   {
+    path: '/user-management',
+    component: () => import('@/components/pages/UserManagementPage.vue'),
+    meta: {
+      requiresRole: 'admin',
+      breadcrumbs() {
+        return [
+          { text: 'Benutzerverwaltung', to: '/user-management' },
+        ]
+      }
+    }
+  },
+  {
     path: '/not-found',
     name: 'NotFound',
     component: () => import('@/components/pages/NotFoundPage.vue'),
