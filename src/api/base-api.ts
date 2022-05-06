@@ -45,26 +45,27 @@ export default abstract class BaseApi {
 
     protected post = <T>(
         url: string,
-        payload?: any,
+        payload?: unknown,
         config?: AxiosRequestConfig
     ): Promise<T> => this.send('POST', url, config, payload)
 
     protected put = <T>(
         url: string,
-        payload?: any,
+        payload?: unknown,
         config?: AxiosRequestConfig
     ): Promise<T> => this.send('PUT', url, config, payload)
 
     protected delete = (
         url: string,
-        config?: AxiosRequestConfig
-    ): Promise<void> => this.send('DELETE', url, config)
+        payload?: unknown,
+        config?: AxiosRequestConfig,
+    ): Promise<void> => this.send('DELETE', url, config, payload)
 
     private send = async <T>(
         method: Method,
         url: string,
         config?: AxiosRequestConfig,
-        payload?: any
+        payload?: unknown
     ): Promise<T> => {
         const req = { method, url, data: payload, ...config }
         return await this.instance.request(req)
