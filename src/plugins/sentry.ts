@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import * as Sentry from '@sentry/vue'
-import { Integrations } from '@sentry/tracing'
+import { BrowserTracing } from '@sentry/tracing'
 
 const env = (): string => {
     if (process.env.NODE_ENV === 'development') {
@@ -19,7 +19,7 @@ export default (): void => {
         Vue,
         dsn: 'https://d6e0397557fd4cefb61c460d0b0e4797@o582664.ingest.sentry.io/5736641',
         integrations: [
-            new Integrations.BrowserTracing({
+            new BrowserTracing({
                 tracingOrigins: ['api.carvis.cloud', 'api.dev.carvis.cloud'],
             }),
         ],
