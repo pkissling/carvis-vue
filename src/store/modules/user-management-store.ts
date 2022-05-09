@@ -22,6 +22,12 @@ export default class UserManagementStore extends VuexModule {
     }
 
     @Action({ commit: 'setUsers' })
+    public async updateUser(user: UserDto): Promise<UserDto[]> {
+        await usersApi.updateUser(user.userId, user)
+        return await usersApi.fetchAllUsers()
+    }
+
+    @Action({ commit: 'setUsers' })
     public async addUserRoles({id, roles }: { id: string, roles: Role[] }): Promise<UserDto[]> {
         await usersApi.addUserRoles(id, roles)
         return await usersApi.fetchAllUsers()

@@ -9,19 +9,16 @@
       :sort-by.sync="sortColumn"
       class="elevation-5"
     >
-      <template #[`item.user`]="{ item }">
+      <template v-for="column in roleColumns"
+                #[`item.${column}`]="{ item }"
+      >
         <v-switch
-          :input-value="item.roles.includes('user')"
-          :loading="isRoleLoading('user', item)"
-          @change="updateUserRole(item, 'user', $event)"
-        />
-      </template>
-      <template #[`item.admin`]="{ item }">
-        <v-switch
-          :input-value="item.roles.includes('admin')"
-          :loading="isRoleLoading('admin', item)"
+          :key="column"
+          :input-value="item.roles.includes(column)"
+          :loading="isRoleLoading(item, column)"
           :disabled="isCurrentUser(item)"
-          @change="updateUserRole(item, 'admin', $event)"
+          @change="updateUserRole(item, column, $event)"
+          dense
         />
       </template>
       <template #[`item.actions`]="{ item }">
@@ -31,7 +28,7 @@
               small
               class="mr-2"
               v-on="on"
-              @click="editUser(item)"
+              @click="editUserModal = item"
             >
               mdi-pencil
             </v-icon>
@@ -62,6 +59,12 @@
       @submit="deleteUser"
       @cancel="deleteUserModal = null"
     />
+
+    <EditUserModal
+      v-if="editUserModal"
+      :user-id="editUserModal.userId"
+      @hide="editUserModal = null"
+    />
   </Page>
 </template>
 
@@ -70,12 +73,15 @@ import { Component, Vue } from 'vue-property-decorator'
 import Page from '@/components/pages/Page.vue'
 import { notificationsStore, userManagementStore, userStore } from '@/store'
 import DeleteModal from '@/components/modals/DeleteModal.vue'
+import EditUserModal from '@/components/modals/EditUserModal.vue'
 
-@Component({ components: { Page, DeleteModal }})
+@Component({ components: { Page, DeleteModal, EditUserModal }})
 export default class UserManagementPage extends Vue {
   roleLoading: Map<Role, UserDto[]> = new Map()
   deleteUserModal: UserDto | null = null
+  editUserModal: UserDto | null = null
   sortColumn = 'userId'
+  roleColumns: Role[] = ['admin', 'user']
   loading = false
   headers = [
     { text: 'E-Mail', value: 'email' },
@@ -95,7 +101,7 @@ export default class UserManagementPage extends Vue {
     return user.userId === userStore.getUserId
   }
 
-  isRoleLoading(role: Role, user: UserDto): boolean {
+  isRoleLoading(user: UserDto, role: Role): boolean {
     return this.roleLoading.get(role)?.includes(user) || false
   }
 
@@ -111,10 +117,6 @@ export default class UserManagementPage extends Vue {
     }
   }
 
-  async editUser(user: UserDto): Promise<void> {
-    alert('TODO')
-  }
-
   async updateUserRole(user: UserDto, role: Role, add: boolean): Promise<void> {
     try {
       this.roleLoading.get(role)?.push(user) || this.roleLoading.set(role, [user])
@@ -125,11 +127,10 @@ export default class UserManagementPage extends Vue {
       }
     } finally {
       const index = this.roleLoading.get(role)?.indexOf(user) || -1
-      const users = this.roleLoading.get(role) || []
-      if (index === -1 || users.length === 0) {
-        return
+      if (index !== -1) {
+        this.roleLoading.get(role)?.splice(index, 1)
+
       }
-      users.splice(index, 1)
     }
   }
 
