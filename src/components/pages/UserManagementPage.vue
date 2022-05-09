@@ -6,17 +6,20 @@
       :loading="loading"
       :mobile-breakpoint="0"
       :items="users"
+      :sort-by.sync="sortColumn"
       class="elevation-5"
     >
       <template #[`item.user`]="{ item }">
-        <v-checkbox
+        <v-switch
           :input-value="item.roles.includes('user')"
+          :loading="isRoleLoading('user', item)"
           @change="updateUserRole(item, 'user', $event)"
         />
       </template>
       <template #[`item.admin`]="{ item }">
-        <v-checkbox
+        <v-switch
           :input-value="item.roles.includes('admin')"
+          :loading="isRoleLoading('admin', item)"
           :disabled="isCurrentUser(item)"
           @change="updateUserRole(item, 'admin', $event)"
         />
@@ -38,6 +41,7 @@
         <v-tooltip bottom>
           <template #activator="{ on }">
             <v-icon
+              v-if="!isCurrentUser(item)"
               small
               class="mr-2"
               v-on="on"
@@ -69,7 +73,9 @@ import DeleteModal from '@/components/modals/DeleteModal.vue'
 
 @Component({ components: { Page, DeleteModal }})
 export default class UserManagementPage extends Vue {
+  roleLoading: Map<Role, UserDto[]> = new Map()
   deleteUserModal: UserDto | null = null
+  sortColumn = 'userId'
   loading = false
   headers = [
     { text: 'E-Mail', value: 'email' },
@@ -89,6 +95,10 @@ export default class UserManagementPage extends Vue {
     return user.userId === userStore.getUserId
   }
 
+  isRoleLoading(role: Role, user: UserDto): boolean {
+    return this.roleLoading.get(role)?.includes(user) || false
+  }
+
   async mounted(): Promise<void> {
     try {
       this.loading = true
@@ -106,10 +116,20 @@ export default class UserManagementPage extends Vue {
   }
 
   async updateUserRole(user: UserDto, role: Role, add: boolean): Promise<void> {
-    if (add) {
-      await this.addUserRole(user, role)
-    } else {
-      await this.removeUserRole(user, role)
+    try {
+      this.roleLoading.get(role)?.push(user) || this.roleLoading.set(role, [user])
+      if (add) {
+        await this.addUserRole(user, role)
+      } else {
+        await this.removeUserRole(user, role)
+      }
+    } finally {
+      const index = this.roleLoading.get(role)?.indexOf(user) || -1
+      const users = this.roleLoading.get(role) || []
+      if (index === -1 || users.length === 0) {
+        return
+      }
+      users.splice(index, 1)
     }
   }
 

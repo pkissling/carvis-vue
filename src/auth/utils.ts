@@ -1,22 +1,16 @@
 import { getInstance } from '@/auth'
 
-export const obtainJwtToken = async () => {
+export const obtainJwtToken = async (): Promise<string | undefined> => {
     const authService = getInstance()
 
-    // If loading has already finished, check our auth state using `onLoaded()`
-    if (!authService.loading) {
-        return onLoaded()
+    while (authService.loading) {
+        await new Promise(resolve => setTimeout(resolve, 10))
     }
 
-    // Watch for the loading property to change before we check isAuthenticated
-    authService.$watch('loading', (loading: boolean) => {
-        if (loading === false) {
-            return onLoaded()
-        }
-    })
+    return onLoaded()
 }
 
-const onLoaded = async () => {
+const onLoaded = async (): Promise<string | undefined> => {
     const authService = getInstance()
 
     if (authService.isAuthenticated) {

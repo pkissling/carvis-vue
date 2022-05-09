@@ -84,7 +84,7 @@ export default abstract class BaseApi {
         return request
     }
 
-    private extractPayload = (response?: AxiosResponse): any | undefined => {
+    private extractPayload = (response?: AxiosResponse<unknown>): unknown | undefined => {
         return response?.data
     }
 }

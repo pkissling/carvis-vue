@@ -131,10 +131,6 @@ export default {
             'Fehler beim Hochladen eines Bildes. Bitte versuche es erneut.',
           err
         })
-        sentryStore.captureException({
-          error: err,
-          extras: { imageId: previewImage.id }
-        })
         this.images = this.images.filter(img => img.id !== previewImage.id)
       }
     },
