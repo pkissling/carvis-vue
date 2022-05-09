@@ -43,6 +43,18 @@
               />
             </v-col>
           </v-row>
+          <v-row v-if="showRoles">
+            <v-col v-for="role in allRoles"
+                   :key="role.value"
+            >
+              <v-switch
+                :input-value="roles.includes(role.value)"
+                :label="role.text"
+                :loading="roleLoading.includes(role.value)"
+                @change="updateUserRole(role.value, $event)"
+              />
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -77,26 +89,37 @@ export default class EditUserModal extends Vue {
   @Prop({ required: true })
   userId!: string
 
+  @Prop({ required: false, default: false })
+  showRoles!: boolean
+
+  @Prop({ required: false, default: () => [] })
+  allRoles!: { text: string, value: Role }[]
+
   dialog = true
   loading = false
+  roleLoading: Role[] = []
   name = ''
   company: string | null = null
   phone: string | null = null
   email: string | null = null
+  roles: Role[] = []
 
  async mounted(): Promise<void> {
     try {
       this.loading = true
-      const { name, company, phone, email } = await usersApi.fetchUser(this.userId)
+      this.roleLoading = this.allRoles.map(role => role.value)
+      const { name, company, phone, email, roles } = await usersApi.fetchUser(this.userId)
       this.name = name
       this.email = email || null
       this.phone = phone || null
       this.company = company || null
+      this.roles = roles || []
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       notificationsStore.error({ message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.', err })
     } finally {
       this.loading = false
+      this.roleLoading = []
     }
   }
 
@@ -119,5 +142,22 @@ export default class EditUserModal extends Vue {
       }
   }
 
+  async updateUserRole(role: Role, add: boolean): Promise<void> {
+    try {
+      this.roleLoading.push(role)
+      const action = add
+        ? userManagementStore.addUserRoles({ id: this.userId, roles: [role] })
+        : userManagementStore.removeUserRoles({ id: this.userId, roles: [role] })
+      await action
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      await notificationsStore.error({ message: `Fehler beim Aktualisieren der Rolle '${role}' des Benutzers. Bitte versuche es erneut.`, err })
+    } finally {
+      const index = this.roleLoading.indexOf(role)
+      if (index !== -1) {
+        this.roleLoading.splice(this.roleLoading.indexOf(role), 1)
+      }
+    }
+  }
 }
 </script>

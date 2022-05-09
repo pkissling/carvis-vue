@@ -9,16 +9,16 @@
       :sort-by.sync="sortColumn"
       class="elevation-5"
     >
-      <template v-for="column in roleColumns"
-                #[`item.${column}`]="{ item }"
+      <template v-for="role in allRoles"
+                #[`item.${role.value}`]="{ item }"
       >
         <v-switch
-          :key="column"
-          :input-value="item.roles.includes(column)"
-          :loading="isRoleLoading(item, column)"
+          :key="role.value"
+          :input-value="item.roles.includes(role.value)"
+          :loading="isRoleLoading(item, role.value)"
           :disabled="isCurrentUser(item)"
-          @change="updateUserRole(item, column, $event)"
           dense
+          @change="updateUserRole(item, role.value, $event)"
         />
       </template>
       <template #[`item.actions`]="{ item }">
@@ -62,6 +62,8 @@
 
     <EditUserModal
       v-if="editUserModal"
+      :all-roles="allRoles"
+      :show-roles="!isCurrentUser(editUserModal)"
       :user-id="editUserModal.userId"
       @hide="editUserModal = null"
     />
@@ -81,15 +83,17 @@ export default class UserManagementPage extends Vue {
   deleteUserModal: UserDto | null = null
   editUserModal: UserDto | null = null
   sortColumn = 'userId'
-  roleColumns: Role[] = ['admin', 'user']
+  allRoles: {text: string, value: Role}[] = [
+    {text: 'Administrator', value: 'admin'},
+    {text: 'Benutzer', value: 'user'},
+  ]
   loading = false
   headers = [
     { text: 'E-Mail', value: 'email' },
     { text: 'Firma', value: 'company' },
     { text: 'Name', value: 'name' },
     { text: 'Telefon', value: 'phone' },
-    { text: 'Benutzer', value: 'user'},
-    { text: 'Administrator', value: 'admin'},
+    ...this.allRoles,
     { value: 'actions' }
   ]
 
@@ -97,8 +101,8 @@ export default class UserManagementPage extends Vue {
     return userManagementStore.users
   }
 
-  isCurrentUser(user: UserDto): boolean {
-    return user.userId === userStore.getUserId
+  isCurrentUser(user?: UserDto): boolean {
+    return user?.userId === userStore.getUserId
   }
 
   isRoleLoading(user: UserDto, role: Role): boolean {

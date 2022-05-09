@@ -91,4 +91,5 @@ type UserDto = {
     email?: string
     company?: string
     phone?: string
+    roles?: Role[]
 }
