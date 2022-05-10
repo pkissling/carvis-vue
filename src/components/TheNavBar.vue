@@ -112,18 +112,30 @@ export default class TheNavBar extends Vue {
   }
 
   async mounted(): Promise<void> {
+    await this.loadUserDetails()
+    if (userStore.isAdmin) {
+      await this.loadNewUsersCount()
+    }
+  }
+
+  private async loadUserDetails(): Promise<void> {
     try {
       this.loading = true
       await userStore.fetchCarvisUser()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch(err: any) {
       notificationsStore.error({ message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.', err })
+    } finally {
+      this.loading = false
     }
+  }
 
+  private async loadNewUsersCount(): Promise<void> {
     try {
+      this.loading = true
       await userManagementStore.fetchNewUsersCount()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch(err: any) {
       notificationsStore.error({ message: 'Fehler beim Laden der Benachrichtigungen für neue Nutzer. Bitte versuche es erneut.', err })
     } finally {
       this.loading = false
