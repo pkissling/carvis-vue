@@ -10,6 +10,7 @@ const usersApi = new UsersApi()
 export default class UserManagementStore extends VuexModule {
     users: UserDto[] = []
     newUsersCount = 0
+    backgroundRefresh: number | null = null
 
     @Action({ commit: 'setUsers' })
     public async fetchAllUsers(): Promise<UserDto[]> {
@@ -44,7 +45,9 @@ export default class UserManagementStore extends VuexModule {
 
     @Action({ commit: 'setNewUsersCount' })
     public async fetchNewUsersCount(): Promise<number> {
-        // TODO timer
+        if (!this.backgroundRefresh) {
+            this.setBackgroundRefresh({ timerHandler: this.fetchNewUsersCount, delay: 30000 })
+        }
         return await usersApi.fetchNewUsersCount()
     }
 
@@ -56,5 +59,10 @@ export default class UserManagementStore extends VuexModule {
     @Mutation
     public setNewUsersCount(newUsersCount: number): void {
         this.newUsersCount = newUsersCount
+    }
+
+    @Mutation
+    public setBackgroundRefresh({ timerHandler, delay }: { timerHandler: TimerHandler, delay: number }): void {
+        this.backgroundRefresh = setInterval(timerHandler, delay)
     }
 }
