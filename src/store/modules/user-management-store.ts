@@ -9,6 +9,7 @@ const usersApi = new UsersApi()
 @Module({ namespaced: true, name: 'userManagement' })
 export default class UserManagementStore extends VuexModule {
     users: UserDto[] = []
+    newUsersCount = 0
 
     @Action({ commit: 'setUsers' })
     public async fetchAllUsers(): Promise<UserDto[]> {
@@ -30,7 +31,9 @@ export default class UserManagementStore extends VuexModule {
     @Action({ commit: 'setUsers' })
     public async addUserRoles({id, roles }: { id: string, roles: Role[] }): Promise<UserDto[]> {
         await usersApi.addUserRoles(id, roles)
-        return await usersApi.fetchAllUsers()
+        const users = await usersApi.fetchAllUsers()
+        await this.fetchNewUsersCount()
+        return users
     }
 
     @Action({ commit: 'setUsers' })
@@ -39,8 +42,19 @@ export default class UserManagementStore extends VuexModule {
         return await usersApi.fetchAllUsers()
     }
 
+    @Action({ commit: 'setNewUsersCount' })
+    public async fetchNewUsersCount(): Promise<number> {
+        // TODO timer
+        return await usersApi.fetchNewUsersCount()
+    }
+
     @Mutation
     public setUsers(users: UserDto[]): void {
         this.users = users
+    }
+
+    @Mutation
+    public setNewUsersCount(newUsersCount: number): void {
+        this.newUsersCount = newUsersCount
     }
 }

@@ -11,6 +11,9 @@ export default class UsersApi extends BaseApi {
     public fetchAllUsers = (): Promise<UserDto[]> =>
         this.get('/users')
 
+    public fetchNewUsersCount = (): Promise<number> =>
+        this.get('/users/new-users-count')
+
     public updateUser = (id: string, user: UserDto): Promise<UserDto> =>
         this.put(`/users/${encodeURI(id)}`, user)
 

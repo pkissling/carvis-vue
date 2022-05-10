@@ -35,7 +35,14 @@
         link
       >
         <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
+          <v-badge v-if="item.badge"
+                   :content="item.badge"
+          >
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-badge>
+          <v-icon v-else>
+            {{ item.icon }}
+          </v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -62,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { notificationsStore, userStore } from '@/store'
+import { notificationsStore, userManagementStore, userStore } from '@/store'
 import { hasRole } from '@/store/modules/user-store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
@@ -72,15 +79,18 @@ export default class TheNavBar extends Vue {
   value! :boolean
 
   loading = false
-  items = [
-    { icon: 'mdi-account', text: 'Mein Profil', path: '/my-account' },
-    { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management' },
-    { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
-    { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests' }
-  ]
 
-  get filteredItems(): ({ icon: string, text: string, path: string })[] {
+  get filteredItems(): ({ icon: string, text: string, path: string, badge?: number })[] {
     return this.items.filter(item => this.canAccess(item.path))
+  }
+
+  get items(): ({ icon: string, text: string, path: string, badge?: number })[] {
+    return [
+      { icon: 'mdi-account', text: 'Mein Profil', path: '/my-account' },
+      { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management', badge: userManagementStore.newUsersCount },
+      { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
+      { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests' }
+    ]
   }
 
   private canAccess(path: string): boolean {
@@ -108,9 +118,15 @@ export default class TheNavBar extends Vue {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       notificationsStore.error({ message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.', err })
+    }
+
+    try {
+      await userManagementStore.fetchNewUsersCount()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      notificationsStore.error({ message: 'Fehler beim Laden der Benachrichtigungen für neue Nutzer. Bitte versuche es erneut.', err })
     } finally {
-      // commonStore.setLoading(false)
-      this.loading = false // TODO
+      this.loading = false
     }
   }
 }

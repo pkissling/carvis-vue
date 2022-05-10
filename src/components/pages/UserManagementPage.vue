@@ -84,8 +84,8 @@ export default class UserManagementPage extends Vue {
   editUserModal: UserDto | null = null
   sortColumn = 'userId'
   allRoles: {text: string, value: Role}[] = [
-    {text: 'Administrator', value: 'admin'},
     {text: 'Benutzer', value: 'user'},
+    {text: 'Administrator', value: 'admin'}
   ]
   loading = false
   headers = [
