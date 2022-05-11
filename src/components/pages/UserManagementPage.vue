@@ -1,12 +1,12 @@
 <template>
-  <Page title="Benutzerverwaltung">
+  <Page title="Benutzer">
     <v-data-table
       :headers="headers"
       :items-per-page="-1"
       :loading="loading"
-      :mobile-breakpoint="0"
       :items="users"
       :sort-by.sync="sortColumn"
+      :disable-sort="$vuetify.breakpoint.smAndDown"
       class="elevation-5"
     >
       <template v-for="role in allRoles"
@@ -94,7 +94,7 @@ export default class UserManagementPage extends Vue {
     { text: 'Name', value: 'name' },
     { text: 'Telefon', value: 'phone' },
     ...this.allRoles,
-    { value: 'actions' }
+    { text: 'Aktionen', value: 'actions' }
   ]
 
   get users(): UserDto[] {

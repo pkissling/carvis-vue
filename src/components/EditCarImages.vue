@@ -20,7 +20,7 @@
 
 <script>
 import EditImages from '@/components/EditImages.vue'
-import { imagesStore, sentryStore, notificationsStore } from '@/store'
+import { imagesStore, notificationsStore } from '@/store'
 
 export default {
   components: {
