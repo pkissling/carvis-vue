@@ -20,6 +20,7 @@ export default class UserManagementStore extends VuexModule {
     @Action({ commit: 'setUsers' })
     public async deleteUser(id: string): Promise<UserDto[]> {
         await usersApi.deleteUser(id)
+        await this.fetchNewUsersCount()
         return await usersApi.fetchAllUsers()
     }
 
@@ -54,7 +55,11 @@ export default class UserManagementStore extends VuexModule {
         if (!this.backgroundRefresh) {
             this.setBackgroundRefresh({ timerHandler: this.fetchNewUsersCount, delay: 30000 })
         }
-        return await usersApi.fetchNewUsersCount()
+        const newCount = await usersApi.fetchNewUsersCount()
+        if (newCount !== this.newUsersCount) {
+            await this.fetchAllUsers()
+        }
+        return newCount
     }
 
     @Mutation

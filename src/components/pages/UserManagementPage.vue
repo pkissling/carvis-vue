@@ -9,6 +9,28 @@
       :disable-sort="$vuetify.breakpoint.smAndDown"
       class="elevation-5"
     >
+      <template #[`item.picture`]="{ item }">
+        <v-badge
+          v-if="item.isNewUser"
+          overlap
+        >
+          <v-avatar
+            v-if="item.picture"
+            tile
+          >
+            <img :src="item.picture">
+          </v-avatar>
+        </v-badge>
+        <v-avatar
+          v-else
+          tile
+        >
+          <img
+            v-if="item.picture"
+            :src="item.picture"
+          >
+        </v-avatar>
+      </template>
       <template v-for="role in allRoles"
                 #[`item.${role.value}`]="{ item }"
       >
@@ -73,6 +95,7 @@ export default class UserManagementPage extends Vue {
   ]
   loading = false
   headers = [
+    { value: 'picture' },
     { text: 'Name', value: 'name' },
     { text: 'Firma', value: 'company' },
     { text: 'E-Mail', value: 'email' },

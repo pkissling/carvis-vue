@@ -92,5 +92,6 @@ type UserDto = {
     company?: string
     phone?: string
     roles?: Role[]
-    isNewUser?: boolean
+    isNewUser?: boolean,
+    picture?: string
 }
