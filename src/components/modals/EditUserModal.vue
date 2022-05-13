@@ -1,8 +1,9 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog"
-              max-width="800"
-              @input="$emit('cancel')"
+    <v-dialog
+      :value="show"
+      max-width="800"
+      @input="hideModal"
     >
       <v-card :loading="loading">
         <v-card-title class="headline">
@@ -50,16 +51,16 @@
               <v-switch
                 :input-value="roles.includes(role.value)"
                 :label="role.text"
-                :loading="roleLoading.includes(role.value)"
-                @change="updateUserRole(role.value, $event)"
+                @change="updateRoleMap.set(role.value, $event)"
               />
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn text
-                 @click="$emit('hide')"
+          <v-btn
+            text
+            @click="() => hideModal()"
           >
             Abbrechen
           </v-btn>
@@ -77,17 +78,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
-import UsersApi from '@/api/users-api'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { notificationsStore, userManagementStore } from '@/store'
-
-
-const usersApi = new UsersApi()
 
 @Component
 export default class EditUserModal extends Vue {
   @Prop({ required: true })
-  userId!: string
+  value!: UserDto | null
 
   @Prop({ required: false, default: false })
   showRoles!: boolean
@@ -95,45 +92,45 @@ export default class EditUserModal extends Vue {
   @Prop({ required: false, default: () => [] })
   allRoles!: { text: string, value: Role }[]
 
-  dialog = true
   loading = false
-  roleLoading: Role[] = []
+  updateRoleMap: Map<Role, boolean> = new Map()
   name = ''
   company: string | null = null
   phone: string | null = null
   email: string | null = null
   roles: Role[] = []
 
- async mounted(): Promise<void> {
-    try {
-      this.loading = true
-      this.roleLoading = this.allRoles.map(role => role.value)
-      const { name, company, phone, email, roles } = await usersApi.fetchUser(this.userId)
-      this.name = name
-      this.email = email || null
-      this.phone = phone || null
-      this.company = company || null
-      this.roles = roles || []
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      notificationsStore.error({ message: 'Fehler beim Laden des Benutzers. Bitte versuche es erneut.', err })
-    } finally {
-      this.loading = false
-      this.roleLoading = []
-    }
+  get show(): boolean {
+    return this.value !== null
+  }
+
+  @Watch('show')
+  async showChanged(show: boolean): Promise<void> {
+   if (!this.value?.userId || !show) return
+    this.name = this.value.name
+    this.email = this.value.email || null
+    this.phone = this.value.phone || null
+    this.company = this.value.company || null
+    this.roles = this.value.roles || []
   }
 
   async editUser(): Promise<void> {
+    if (!this.value?.userId) return
+    const userId = this.value.userId
     try {
         this.loading = true
+        const { addRoles, removeRoles } = this.calculateRoles()
         await userManagementStore.updateUser({
-          userId: this.userId,
-          name: this.name,
-          email: this.email || undefined,
-          company: this.company || undefined,
-          phone: this.phone || undefined
+          user: {
+            userId: userId,
+            name: this.name,
+            email: this.email || undefined,
+            company: this.company || undefined,
+            phone: this.phone || undefined
+          }, addRoles, removeRoles
         })
-        this.$emit('hide')
+        await notificationsStore.success('Profil erfolgreich bearbeitet.')
+        this.hideModal()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         await notificationsStore.error({ message: 'Fehler beim Aktualisieren des Benutzers. Bitte versuche es erneut.', err })
@@ -142,21 +139,18 @@ export default class EditUserModal extends Vue {
       }
   }
 
-  async updateUserRole(role: Role, add: boolean): Promise<void> {
-    try {
-      this.roleLoading.push(role)
-      const action = add
-        ? userManagementStore.addUserRoles({ id: this.userId, roles: [role] })
-        : userManagementStore.removeUserRoles({ id: this.userId, roles: [role] })
-      await action
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      await notificationsStore.error({ message: `Fehler beim Aktualisieren der Rolle '${role}' des Benutzers. Bitte versuche es erneut.`, err })
-    } finally {
-      const index = this.roleLoading.indexOf(role)
-      if (index !== -1) {
-        this.roleLoading.splice(this.roleLoading.indexOf(role), 1)
-      }
+  calculateRoles(): { addRoles: Role[], removeRoles: Role[] } {
+    const addRoles: Role[] = []
+    const removeRoles: Role[] = []
+    this.updateRoleMap.forEach((add, role) => add ? addRoles.push(role) : removeRoles.push(role))
+    return { addRoles, removeRoles }
+  }
+
+  hideModal(event?: boolean): void {
+    if (event) {
+      this.$emit('input', this.value)
+    } else {
+      this.$emit('input', null)
     }
   }
 }

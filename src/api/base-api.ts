@@ -1,22 +1,15 @@
 import { obtainJwtToken } from '@/auth/utils'
-import axios, {
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    Method,
-} from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from 'axios'
 import axiosRetry from 'axios-retry'
 import { apiUrl } from '../../carvis.config'
 
-export default abstract class BaseApi {
+export default abstract class BaseApi<T = unknown> {
     private readonly instance: AxiosInstance
 
     constructor(
         timeout = 10000,
-        requestInterceptors: ((data: any) => Promise<any>)[] = [],
-        reponseInterceptors: ((
-            data: AxiosResponse<any>
-        ) => Promise<AxiosResponse<any>>)[] = []
+        requestInterceptors: ((value: AxiosRequestConfig) => Promise<T>)[] = [],
+        reponseInterceptors: ((data: AxiosResponse<T>) => Promise<AxiosResponse<T>>)[] = []
     ) {
         this.instance = axios.create({ baseURL: apiUrl(), timeout })
 
@@ -84,7 +77,7 @@ export default abstract class BaseApi {
         return request
     }
 
-    private extractPayload = (response?: AxiosResponse<unknown>): unknown | undefined => {
+    private extractPayload = (response?: AxiosResponse<T>): T | undefined => {
         return response?.data
     }
 }

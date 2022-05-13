@@ -3,7 +3,7 @@
          justify="center"
   >
     <v-dialog v-model="dialog"
-              max-width="400"
+              max-width="800"
               @input="$emit('cancel')"
     >
       <v-card>

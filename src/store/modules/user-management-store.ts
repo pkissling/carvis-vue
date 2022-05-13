@@ -24,22 +24,28 @@ export default class UserManagementStore extends VuexModule {
     }
 
     @Action({ commit: 'setUsers' })
-    public async updateUser(user: UserDto): Promise<UserDto[]> {
+    public async updateUser({user, addRoles, removeRoles}: { user: UserDto, addRoles?: Role[], removeRoles?: Role[] }): Promise<UserDto[]> {
         await usersApi.updateUser(user.userId, user)
+        if (addRoles?.length) {
+            await usersApi.addUserRoles(user.userId, addRoles)
+        }
+        if (removeRoles?.length) {
+            await usersApi.removeUserRoles(user.userId, removeRoles)
+        }
         return await usersApi.fetchAllUsers()
     }
 
     @Action({ commit: 'setUsers' })
-    public async addUserRoles({id, roles }: { id: string, roles: Role[] }): Promise<UserDto[]> {
-        await usersApi.addUserRoles(id, roles)
+    public async addUserRoles({userId, roles }: { userId: string, roles: Role[] }): Promise<UserDto[]> {
+        await usersApi.addUserRoles(userId, roles)
         const users = await usersApi.fetchAllUsers()
         await this.fetchNewUsersCount()
         return users
     }
 
     @Action({ commit: 'setUsers' })
-    public async removeUserRoles({id, roles }: { id: string, roles: Role[] }): Promise<UserDto[]> {
-        await usersApi.removeUserRoles(id, roles)
+    public async removeUserRoles({userId, roles }: { userId: string, roles: Role[] }): Promise<UserDto[]> {
+        await usersApi.removeUserRoles(userId, roles)
         return await usersApi.fetchAllUsers()
     }
 

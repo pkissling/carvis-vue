@@ -16,39 +16,25 @@
           :key="role.value"
           :input-value="item.roles.includes(role.value)"
           :loading="isRoleLoading(item, role.value)"
-          :disabled="isCurrentUser(item)"
+          :disabled="isCurrentUser(item) || isRoleLoading(item, role.value)"
           dense
           @change="updateUserRole(item, role.value, $event)"
         />
       </template>
       <template #[`item.actions`]="{ item }">
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-icon
-              small
-              class="mr-2"
-              v-on="on"
-              @click="editUserModal = item"
-            >
-              mdi-pencil
-            </v-icon>
-          </template>
-          <span>Benutzer bearbeiten</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-icon
-              v-if="!isCurrentUser(item)"
-              small
-              class="mr-2"
-              v-on="on"
-              @click="deleteUserModal = item"
-            >
-              mdi-delete
-            </v-icon>
-          </template>
-          <span>Benutzer löschen</span>
-        </v-tooltip>
+        <v-icon
+          class="mr-2"
+          :disabled="isCurrentUser(item)"
+          @click="editUserModal = item"
+        >
+          mdi-pencil
+        </v-icon>
+        <v-icon
+          :disabled="isCurrentUser(item)"
+          @click="deleteUserModal = item"
+        >
+          mdi-delete
+        </v-icon>
       </template>
     </v-data-table>
 
@@ -61,11 +47,9 @@
     />
 
     <EditUserModal
-      v-if="editUserModal"
+      v-model="editUserModal"
       :all-roles="allRoles"
       :show-roles="!isCurrentUser(editUserModal)"
-      :user-id="editUserModal.userId"
-      @hide="editUserModal = null"
     />
   </Page>
 </template>
@@ -83,25 +67,25 @@ export default class UserManagementPage extends Vue {
   deleteUserModal: UserDto | null = null
   editUserModal: UserDto | null = null
   sortColumn = 'userId'
-  allRoles: {text: string, value: Role}[] = [
-    {text: 'Benutzer', value: 'user'},
-    {text: 'Administrator', value: 'admin'}
+  allRoles: { text: string, value: Role }[] = [
+    {text: 'Benutzer', value: 'user' },
+    {text: 'Administrator', value: 'admin' }
   ]
   loading = false
   headers = [
-    { text: 'E-Mail', value: 'email' },
-    { text: 'Firma', value: 'company' },
     { text: 'Name', value: 'name' },
+    { text: 'Firma', value: 'company' },
+    { text: 'E-Mail', value: 'email' },
     { text: 'Telefon', value: 'phone' },
     ...this.allRoles,
-    { text: 'Aktionen', value: 'actions' }
+    { text: 'Aktionen', value: 'actions', align: 'center' }
   ]
 
   get users(): UserDto[] {
     return userManagementStore.users
   }
 
-  isCurrentUser(user?: UserDto): boolean {
+  isCurrentUser(user: UserDto | null): boolean {
     return user?.userId === userStore.getUserId
   }
 
@@ -133,7 +117,6 @@ export default class UserManagementPage extends Vue {
       const index = this.roleLoading.get(role)?.indexOf(user) || -1
       if (index !== -1) {
         this.roleLoading.get(role)?.splice(index, 1)
-
       }
     }
   }
@@ -141,7 +124,7 @@ export default class UserManagementPage extends Vue {
   async addUserRole(user: UserDto, role: Role): Promise<void> {
      try {
       this.loading = true
-      await userManagementStore.addUserRoles({ id: user.userId, roles: [role] })
+      await userManagementStore.addUserRoles({ userId: user.userId, roles: [role] })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       await notificationsStore.error({ message: `Fehler beim Hinzufügen der Rolle '${role}' für ${user.name}. Bitte versuche es erneut.`, err })
@@ -153,7 +136,7 @@ export default class UserManagementPage extends Vue {
   async removeUserRole(user: UserDto, role: Role): Promise<void> {
     try {
       this.loading = true
-      await userManagementStore.removeUserRoles({ id: user.userId, roles: [role] })
+      await userManagementStore.removeUserRoles({ userId: user.userId, roles: [role] })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       await notificationsStore.error({ message: `Fehler beim Entfernen der Rolle '${role}' für ${user.name}. Bitte versuche es erneut.`, err })
