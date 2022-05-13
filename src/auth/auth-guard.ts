@@ -24,7 +24,7 @@ export const authGuard: NavigationGuard = async (
             return next('/forbidden')
         }
 
-        // otherwise foward
+        // otherwise forward
         return next()
     }
 

@@ -13,7 +13,7 @@ export default (): void => {
                 appState && appState.targetUrl
                     ? appState.targetUrl
                     : window.location.pathname
-            )
-        },
+            ).catch(() => { /* swallow */ })
+        }
     })
 }
