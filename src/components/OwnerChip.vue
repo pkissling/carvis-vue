@@ -1,9 +1,10 @@
 <template>
   <v-menu
     v-model="isOpen"
+    :close-on-content-click="false"
     open-on-hover
+    tile
     bottom
-    flat
   >
     <template v-slot:activator="{ on, attrs }">
       <v-chip
@@ -15,19 +16,96 @@
         {{ name }}
       </v-chip>
     </template>
-    <v-progress-circular
-      v-if="loading"
-      indeterminate
-      :size="20"
-    />
-    <v-card v-else>
+    <v-card width="300">
       <v-card-text>
-        <table>
-          <tr><td>Name: </td><td>{{ name }}</td></tr>
-          <tr><td>Firma: </td><td>{{ company }}</td></tr>
-          <tr><td>Telefon: </td><td>{{ phone }}</td></tr>
-          <tr><td>E-Mail: </td><td> <a :href="`mailto:${email}`">{{ email }}</a></td></tr>
-        </table>
+        <v-row align="center">
+          <v-col
+            class="py-0"
+            cols="4"
+          >
+            Name
+          </v-col>
+          <v-col
+            class="py-0"
+            cols="8"
+          >
+            <v-skeleton-loader
+              v-if="loading"
+              type="text"
+              :tile="true"
+            />
+            <span v-else>
+              {{ name }}
+            </span>
+          </v-col>
+        </v-row>
+        <v-row align="center">
+          <v-col
+            class="py-0"
+            cols="4"
+          >
+            Firma
+          </v-col>
+          <v-col
+            class="py-0"
+            cols="8"
+          >
+            <v-skeleton-loader
+              v-if="loading"
+              type="text"
+              :tile="true"
+            />
+            <span v-else>
+              {{ company }}
+            </span>
+          </v-col>
+        </v-row>
+        <v-row align="center">
+          <v-col
+            class="py-0"
+            cols="4"
+          >
+            Telefon
+          </v-col>
+          <v-col
+            class="py-0"
+            cols="8"
+          >
+            <v-skeleton-loader
+              v-if="loading"
+              type="text"
+              :tile="true"
+            />
+            <span v-else>
+              {{ phone }}
+            </span>
+          </v-col>
+        </v-row>
+        <v-row align="center">
+          <v-col
+            class="py-0"
+            cols="4"
+          >
+            E-Mail
+          </v-col>
+          <v-col
+            class="py-0"
+            cols="8"
+          >
+            <v-skeleton-loader
+              v-if="loading"
+              type="text"
+              :tile="true"
+            />
+            <a v-if="email"
+               :href="`mailto:${email}`"
+               target="_blank"
+            >
+              {{ email }}
+            </a>
+            <span v-else>-</span>
+          </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
   </v-menu>
@@ -50,7 +128,7 @@ export default class OwnerChip extends Vue {
   loading = false
   usersApi = new UsersApi()
   company = '-'
-  email = '-'
+  email: string | null = null
   phone = '-'
   isOpen = false
   loaded = false
@@ -65,7 +143,7 @@ export default class OwnerChip extends Vue {
       this.loading = true
       const { company, email, phone } = await this.usersApi.fetchUser(this.userId)
       this.company = company || '-'
-      this.email = email || '-'
+      this.email = email || null
       this.phone = phone || '-'
       this.loaded = true
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
