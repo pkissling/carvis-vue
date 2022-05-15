@@ -142,7 +142,7 @@ export default {
   methods: {
     async resolveImage(imageId) {
       return imagesStore
-        .fetchImage({ imageId, height: '500' })
+        .fetchImage({ imageId, height: '1080' })
         .then(image => {
           return { id: imageId, src: image.url }
         })
