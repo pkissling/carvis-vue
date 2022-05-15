@@ -25,7 +25,7 @@
 
       <ActionsCard
         v-if="canEdit"
-        :is-new-item="car.id"
+        :is-new-item="!car.id"
         @delete="showCarDeletionModal = true"
       />
 
