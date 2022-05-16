@@ -11,112 +11,100 @@
         height="500"
         not-clickable
       />
-      <div v-else>
-        <v-carousel
-          :show-arrows="hasMultipleImages"
-          :cycle="!fullscreen"
-          height="500"
-          hide-delimiters
+      <v-carousel
+        v-else
+        v-model="activeImageIndex"
+        :show-arrows="hasMultipleImages"
+        :cycle="!fullscreen"
+        height="500"
+        hide-delimiters
+      >
+        <v-carousel-item v-for="image in images"
+                         :key="image.id"
         >
-          <v-carousel-item v-for="(image, i) in images"
-                           :key="image.id"
-          >
-            <PreviewImage
-              height="500"
-              :image-id="image.id"
-              :src="image.src"
-              :current-image-position="i + 1"
-              :images-count="images.length"
-              :error="image.error"
-              @fullscreen="onFullscreen"
-            />
-          </v-carousel-item>
-        </v-carousel>
-      </div>
+          <PreviewImage
+            height="500"
+            :image-id="image.id"
+            :src="image.src"
+            :current-image-position="activeImageIndex + 1"
+            :images-count="images.length"
+            :error="image.error"
+            @click="fullscreen = !fullscreen"
+          />
+        </v-carousel-item>
+      </v-carousel>
     </div>
+
+    <FsLightbox
+      :toggler="fullscreen"
+      :sources="imageUrls"
+      :source-index="activeImageIndex"
+      type="image"
+    />
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import PreviewImage from '@/components/PreviewImage.vue'
 import { imagesStore } from '@/store'
+import FsLightbox from "fslightbox-vue"
+import { Prop, Vue, Component, Watch } from 'vue-property-decorator'
 
-export default {
-  components: {
-    PreviewImage
-  },
-  props: {
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    imageIds: {
-      type: Array,
-      default: () => []
+@Component({ components: { PreviewImage, FsLightbox } })
+export default class ViewCarImages extends Vue {
+  @Prop({ required: true })
+  loading!: boolean
+
+  @Prop({ required: true })
+  imageIds!: string[]
+
+  images: { id: string, src?: string, error?: boolean, index?: number }[] = []
+  fullscreen = false
+  activeImageIndex = 0
+
+  get hasMultipleImages(): boolean {
+    return this.images?.length > 1
+  }
+
+  get imageUrls(): string[] {
+    return this.images
+      .filter(img => img.src)
+      .map(img => img.src) as string[]
+  }
+
+  @Watch('imageIds')
+  async imageIdsChanged(newImageIds: string[]): Promise<void> {
+    if (!newImageIds) {
+      this.images = []
+      return
     }
-  },
-  data() {
-    return {
-      images: [],
-      fullscreen: false
+
+    const loadedImageIds = this.images ? this.images.map(image => image.id): []
+    const removedImages = loadedImageIds.filter(loaded => !newImageIds.includes(loaded))
+    const addedImages = newImageIds.filter(loaded => !loadedImageIds.includes(loaded))
+
+    if (removedImages.length) {
+      this.images = this.images.filter(image => !removedImages.includes(image.id))
     }
-  },
-  computed: {
-    hasMultipleImages() {
-      return this.images && this.images.length > 1
+
+    if (addedImages.length) {
+      const resolvedImages = await Promise.allSettled(addedImages.map(imageId => this.resolveImage(imageId)))
+      resolvedImages
+        .filter(res => res.status === 'fulfilled')
+        .map(res => res as PromiseFulfilledResult<ImageDto>)
+        .map(res => res.value)
+        .forEach(image => (this.images = [...this.images.filter(img => img.id !== image.id),image]))
     }
-  },
-  watch: {
-    async imageIds(newImageIds) {
-      if (!newImageIds) {
-        this.images = []
-        return
-      }
 
-      const loadedImageIds = this.images
-        ? this.images.map(image => image.id)
-        : []
-      const removedImages = loadedImageIds.filter(
-        loaded => !newImageIds.includes(loaded)
-      )
-      const addedImages = newImageIds.filter(
-        loaded => !loadedImageIds.includes(loaded)
-      )
+    // ensure sorting of images
+    this.images = newImageIds
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .map((imageId, index) => { return { ...this.images.find(image => image.id === imageId)!, index }})
+      .sort((a, b) => a.index - b.index)
+  }
 
-      if (removedImages.length) {
-        this.images = this.images.filter(
-          image => !removedImages.includes(image.id)
-        )
-      }
-
-      if (addedImages.length) {
-        await Promise.allSettled(
-          addedImages.map(imageId => this.resolveImage(imageId))
-        ).then(resolvedImages =>
-          resolvedImages.map(
-            image =>
-              (this.images = [
-                ...this.images.filter(img => img.id !== image.id),
-                image
-              ])
-          )
-        )
-      }
-
-      // ensure sorting of images
-      this.images = newImageIds
-        .map((imageId, index) => {
-          return {
-            ...this.images.find(image => image.id === imageId),
-            index
-          }
-        })
-        .sort((a, b) => a.index - b.index)
-    }
-  },
-
-  async created() {
-    if (!this.imageIds || !this.imageIds.length) {
+  async created(): Promise<void> {
+    if (!this.imageIds?.length) {
       return
     }
 
@@ -131,28 +119,18 @@ export default {
       await previousPromise
       return this.resolveImage(image.id)
         .then(image => {
-          const index = this.images.indexOf(
-            this.images.find(img => img.id === image.id)
-          )
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const index = this.images.indexOf(this.images.find(img => img.id === image.id)!)
           this.images.splice(index, 1, image)
         })
         .finally(() => this.$emit('loading', false)) // stop loading animation after first image url was resolved
     }, Promise.resolve())
-  },
-  methods: {
-    async resolveImage(imageId) {
-      return imagesStore
-        .fetchImage({ imageId, height: '1080' })
-        .then(image => {
-          return { id: imageId, src: image.url }
-        })
-        .catch(() => {
-          return { id: imageId, error: true }
-        })
-    },
-    onFullscreen(value) {
-      this.fullscreen = value
-    }
+  }
+
+  async resolveImage(imageId: string): Promise<{ id: string, src?: string, error?: boolean}> {
+    return imagesStore.fetchImage({ imageId, height: '1080' })
+      .then(image => { return { id: imageId, src: image.url }})
+      .catch(() => { return { id: imageId, error: true }})
   }
 }
 </script>

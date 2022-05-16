@@ -30,51 +30,33 @@
     </v-card-text>
   </v-card>
 </template>
-<script>
+<script lang="ts">
 import ViewCarImages from '@/components/ViewCarImages.vue'
 import EditCarImages from '@/components/EditCarImages.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  components: {
-    ViewCarImages,
-    EditCarImages
-  },
-  props: {
-    startInEditMode: {
-      type: Boolean,
-      value: false
-    },
-    value: {
-      type: Array,
-      default: () => [],
-      immediate: true,
-      handler(val) {
-        if (!val) {
-          this.imageIds = []
-          return
-        }
-        this.imageIds = val
-      }
-    },
-    canEdit: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      imageIds: [],
-      loading: false,
-      editMode: this.startInEditMode
-    }
-  },
-  methods: {
-    onImagesChange(event) {
-      this.$emit('input', event)
-    },
-    onLoading(value) {
+@Component({ components: { ViewCarImages, EditCarImages }})
+export default class CarPreviewCard extends Vue {
+
+  @Prop({ required: true })
+  startInEditMode!: boolean
+
+  @Prop({ required: true })
+  canEdit!: boolean
+
+  @Prop({ required: false, default: [] })
+  value!: string[]
+
+  imageIds = []
+  loading = false
+  editMode = this.startInEditMode
+
+  onImagesChange(imageIds: string[]): void {
+    this.$emit('input', imageIds)
+  }
+
+  onLoading(value: boolean): void {
       this.loading = value
-    }
   }
 }
 </script>

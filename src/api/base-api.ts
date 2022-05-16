@@ -36,44 +36,28 @@ export default abstract class BaseApi<T = unknown> {
     protected get = <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
         this.send('GET', url, config)
 
-    protected post = <T>(
-        url: string,
-        payload?: unknown,
-        config?: AxiosRequestConfig
-    ): Promise<T> => this.send('POST', url, config, payload)
+    protected post = <T>(url: string, payload?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+        this.send('POST', url, config, payload)
 
-    protected put = <T>(
-        url: string,
-        payload?: unknown,
-        config?: AxiosRequestConfig
-    ): Promise<T> => this.send('PUT', url, config, payload)
+    protected put = <T>(url: string, payload?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+        this.send('PUT', url, config, payload)
 
-    protected delete = (
-        url: string,
-        payload?: unknown,
-        config?: AxiosRequestConfig,
-    ): Promise<void> => this.send('DELETE', url, config, payload)
+    protected delete = (url: string, payload?: unknown, config?: AxiosRequestConfig): Promise<void> =>
+        this.send('DELETE', url, config, payload)
 
-    private send = async <T>(
-        method: Method,
-        url: string,
-        config?: AxiosRequestConfig,
-        payload?: unknown
-    ): Promise<T> => {
+    private send = async <T>(method: Method, url: string, config?: AxiosRequestConfig, payload?: unknown): Promise<T> => {
         const req = { method, url, data: payload, ...config }
         return await this.instance.request(req)
     }
 
-    private addAuthHeader = async (
-        request: AxiosRequestConfig
-    ): Promise<AxiosRequestConfig> => {
+    private addAuthHeader = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         const requiresAuth = !request.url?.startsWith('https://')
         if (!requiresAuth) {
             return request
         }
 
         const token = await obtainJwtToken()
-        request.headers.Authorization = `Bearer ${token}`
+        request.headers = { Authorization: `Bearer ${token}`, ...request.headers}
         return request
     }
 

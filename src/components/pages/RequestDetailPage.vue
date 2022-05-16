@@ -13,7 +13,6 @@
 import Page from '@/components/pages/Page.vue'
 import RequestDetailForm from '@/components/RequestDetailForm.vue'
 import WaitingLayer from '@/components/WaitingLayer.vue'
-import { userStore } from '@/store'
 import router from '@/router'
 import { requestsStore, notificationsStore } from '@/store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
@@ -47,10 +46,6 @@ export default class RequestDetailPage extends Vue {
 
   loading = false
   request: RequestDto | null = null
-
-  get canEdit(): boolean {
-      return userStore.isAdmin || this.request?.createdBy === userStore.getUserId
-  }
 
   get title(): string {
     return `${this.request?.brand} ${this.request?.type || ''}`

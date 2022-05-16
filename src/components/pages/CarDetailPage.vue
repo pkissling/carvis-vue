@@ -14,7 +14,7 @@ import Page from '@/components/pages/Page.vue'
 import CarDetailForm from '@/components/CarDetailForm.vue'
 import WaitingLayer from '@/components/WaitingLayer.vue'
 import router from '@/router'
-import { carsStore, notificationsStore, userStore } from '@/store'
+import { carsStore, notificationsStore } from '@/store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router'
 
@@ -38,7 +38,7 @@ import { NavigationGuardNext, Route } from 'vue-router'
       }
     })
   },
-  components: { CarDetailForm, WaitingLayer, Page } 
+  components: { CarDetailForm, WaitingLayer, Page }
 })
 export default class CarDetailPage extends Vue {
   @Prop({ required: true })
@@ -46,10 +46,6 @@ export default class CarDetailPage extends Vue {
 
   loading = false
   car: CarDto | null = null
-
-  get canEdit(): boolean {
-      return userStore.isAdmin || this.car?.createdBy === userStore.getUserId
-  }
 
   get title(): string {
     return `${this.car?.brand} ${this.car?.type || ''}`
