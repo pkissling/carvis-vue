@@ -19,17 +19,17 @@
         height="500"
         hide-delimiters
       >
-        <v-carousel-item v-for="(image, i) in images"
+        <v-carousel-item v-for="image in images"
                          :key="image.id"
         >
           <PreviewImage
             height="500"
             :image-id="image.id"
             :src="image.src"
-            :current-image-position="i + 1"
+            :current-image-position="activeImageIndex + 1"
             :images-count="images.length"
             :error="image.error"
-            @click="fullscreen = true"
+            @click="fullscreen = !fullscreen"
           />
         </v-carousel-item>
       </v-carousel>
@@ -39,7 +39,6 @@
       :toggler="fullscreen"
       :sources="imageUrls"
       :source-index="activeImageIndex"
-      :on-close="() => fullscreen = false"
     />
   </div>
 </template>
@@ -52,7 +51,7 @@ import { Prop, Vue, Component, Watch } from 'vue-property-decorator'
 
 @Component({ components: { PreviewImage, FsLightbox } })
 export default class ViewCarImages extends Vue {
-  @Prop({ required: true})
+  @Prop({ required: true })
   loading!: boolean
 
   @Prop({ required: true })
@@ -60,11 +59,16 @@ export default class ViewCarImages extends Vue {
 
   images: { id: string, src?: string, error?: boolean, index?: number }[] = []
   fullscreen = false
-  imageUrls: string[] = []
   activeImageIndex = 0
 
   get hasMultipleImages(): boolean {
-      return this.images?.length > 1
+    return this.images?.length > 1
+  }
+
+  get imageUrls(): string[] {
+    return this.images
+      .map(image => image.src)
+      .filter(imgSrc => imgSrc !== undefined) as string[]
   }
 
   @Watch('imageIds')
@@ -74,27 +78,21 @@ export default class ViewCarImages extends Vue {
       return
     }
 
-    const loadedImageIds = this.images
-      ? this.images.map(image => image.id)
-      : []
-    const removedImages = loadedImageIds.filter(
-      loaded => !newImageIds.includes(loaded)
-    )
-    const addedImages = newImageIds.filter(
-      loaded => !loadedImageIds.includes(loaded)
-    )
+    const loadedImageIds = this.images ? this.images.map(image => image.id): []
+    const removedImages = loadedImageIds.filter(loaded => !newImageIds.includes(loaded))
+    const addedImages = newImageIds.filter(loaded => !loadedImageIds.includes(loaded))
 
     if (removedImages.length) {
-      this.images = this.images.filter(
-        image => !removedImages.includes(image.id)
-      )
+      this.images = this.images.filter(image => !removedImages.includes(image.id))
     }
 
     if (addedImages.length) {
-      const foo = await Promise.allSettled(addedImages.map(imageId => this.resolveImage(imageId))
-
-        // .then(resolvedImages => resolvedImages.map(image => (this.images = [ ...this.images.filter(img => img.id !== image.id), image]))
-      )
+      const resolvedImages = await Promise.allSettled(addedImages.map(imageId => this.resolveImage(imageId)))
+      resolvedImages
+        .filter(res => res.status === 'fulfilled')
+        .map(res => res as PromiseFulfilledResult<ImageDto>)
+        .map(res => res.value)
+        .forEach(image => (this.images = [...this.images.filter(img => img.id !== image.id),image]))
     }
 
     // ensure sorting of images
@@ -111,15 +109,12 @@ export default class ViewCarImages extends Vue {
 
     this.$emit('loading', true)
 
-    const images = await Promise.allSettled(this.imageIds.map(imageId => imagesStore.fetchImage({ imageId, height: 'ORIGINAL'})))
-    images.filter((images) => res.status === 'fulfilled') as PromiseFulfilledResult<ImageDto>;
-    const a = images[0]
-    a.status === 'fulfilled'
-    a.value.src
-    this.imageUrls = images
-      .filter(promise => promise.v instanceof PromiseFulfilledResult)
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .map(image => image.url)
+    // const images = await Promise.allSettled(this.imageIds.map(imageId => imagesStore.fetchImage({ imageId, height: 'ORIGINAL'}))) // TODO
+    // this.imageUrls = images
+    //   .filter(res => res.status === 'fulfilled')
+    //   .map(res => res as PromiseFulfilledResult<ImageDto>)
+    //   .map(res => res.value)
+    //   .map(image => image.url)
 
     // populate placeholders
     this.images = this.imageIds.map(imageId => {
