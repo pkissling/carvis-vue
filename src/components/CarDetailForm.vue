@@ -70,7 +70,6 @@ export default class CarDetailForm extends Vue {
     return userStore.isAdmin || this.car.createdBy === userStore.getUserId
   }
 
-
   get creationDate(): string {
     const date = new Date(this.car.createdAt)
     const days = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()

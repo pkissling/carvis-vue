@@ -35,25 +35,16 @@
         </v-row>
       </template>
     </v-img>
-
-    <FullscreenImageModal
-      v-if="fullscreen"
-      :image-id="imageId"
-      :lazy-src="src"
-      @cancel="fullscreen = false"
-    />
   </div>
 </template>
 
 <script>
-import FullscreenImageModal from '@/components/modals/FullscreenImageModal.vue'
 import ImagePagination from '@/components/ImagePagination.vue'
 import { imagesStore, sentryStore } from '@/store'
 
 export default {
   name: 'PreviewImage',
   components: {
-    FullscreenImageModal,
     ImagePagination
   },
   props: {
@@ -112,7 +103,6 @@ export default {
   },
   data() {
     return {
-      fullscreen: false,
       internalError: false,
       reloadedSrc: false
     }
@@ -150,19 +140,10 @@ export default {
       return this.error || this.internalError
     }
   },
-  watch: {
-    fullscreen(newVal) {
-      this.$emit('fullscreen', newVal)
-    }
-  },
   methods: {
     onClick() {
       if (this._error) {
         return
-      }
-
-      if (!this.notClickable) {
-        this.fullscreen = true
       }
 
       this.$emit('click')
