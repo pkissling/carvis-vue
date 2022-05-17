@@ -24,6 +24,7 @@
             :image-id="image.id"
             :progress="image.progress"
             :error="image.error"
+            not-clickable
           />
           <v-card-actions>
             <v-btn color="primary"
