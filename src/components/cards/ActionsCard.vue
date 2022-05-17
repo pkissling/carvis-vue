@@ -17,7 +17,7 @@
       <v-spacer />
 
       <v-btn
-        v-if="showDelete && isNewItem"
+        v-if="showDelete && !isNewItem"
         color="error"
         text
         :loading="loading"
@@ -37,7 +37,7 @@ export default class ActionsCard extends Vue {
   @Prop({ required: true })
   isNewItem!: boolean
 
-  @Prop({ required: false, default: true })
+  @Prop({ required: true })
   showDelete!: boolean
 
   @Prop({ required: false, default: false })
