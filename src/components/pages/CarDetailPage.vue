@@ -58,7 +58,7 @@ export default class CarDetailPage extends Vue {
       await notificationsStore.success('Fahrzeug erfolgreich bearbeitet.')
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      await notificationsStore.error({ message: 'Fehler beim Bearbeiten des fahrzeugs. Bitte versuche es erneut.', err})
+      await notificationsStore.error({ message: 'Fehler beim Bearbeiten des Fahrzeugs. Bitte versuche es erneut.', err})
     }
   }
 }

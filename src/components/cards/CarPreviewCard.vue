@@ -49,8 +49,11 @@ export default class CarPreviewCard extends Vue {
 
   imageIds = []
   loading = false
-  editMode = this.startInEditMode
+  editMode = false
 
+  created(): void {
+    this.editMode = this.startInEditMode
+  }
   onImagesChange(imageIds: string[]): void {
     this.$emit('input', imageIds)
   }

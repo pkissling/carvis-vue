@@ -61,30 +61,20 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Prop, Vue, Component } from 'vue-property-decorator'
 import EditImageExpansionSlot from './EditImageExpansionSlot.vue'
 import PreviewImage from './PreviewImage.vue'
 
-export default {
-  components: {
-    EditImageExpansionSlot,
-    PreviewImage
-  },
-  props: {
-    value: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      editImage: false
-    }
-  },
-  methods: {
-    onEditImages(images) {
-      this.$emit('input', images)
-    }
+@Component({ components: { PreviewImage, EditImageExpansionSlot }})
+export default class EditImages extends Vue {
+  @Prop({ required: true})
+  value!: UploadImage[]
+
+  editImage = false
+
+  onEditImages(images: UploadImage[]): void {
+    this.$emit('input', images)
   }
 }
 </script>

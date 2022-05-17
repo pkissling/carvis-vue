@@ -21,33 +21,27 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import ImagesApi from '@/api/images-api'
 import PreviewImage from '@/components/PreviewImage.vue'
-import { imagesStore } from '@/store'
+import { Prop, Vue, Component } from 'vue-property-decorator'
 
-export default {
-  components: {
-    PreviewImage
-  },
-  props: {
-    imageId: {
-      type: String,
-      default: null
-    }
-  },
-  data() {
-    return {
-      src: null,
-      error: false
-    }
-  },
-  async created() {
+const imagesApi = new ImagesApi()
+
+@Component({ components: { PreviewImage } })
+export default class CarThumbnail extends Vue {
+  @Prop({ required: true })
+  imageId!: string
+
+  src: string | null = null
+  error = false
+ 
+  async created(): Promise<void> {
     if (!this.imageId) {
       return
     }
 
-    imagesStore
-      .fetchImage({ imageId: this.imageId, height: '100' })
+    imagesApi.fetchImage(this.imageId, '100')
       .then(image => (this.src = image.url))
       .catch(() => (this.error = true))
   }

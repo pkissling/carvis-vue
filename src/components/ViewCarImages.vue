@@ -45,10 +45,12 @@
 </template>
 
 <script lang="ts">
+import ImagesApi from '@/api/images-api'
 import PreviewImage from '@/components/PreviewImage.vue'
-import { imagesStore } from '@/store'
 import FsLightbox from "fslightbox-vue"
 import { Prop, Vue, Component, Watch } from 'vue-property-decorator'
+
+const imagesApi = new ImagesApi()
 
 @Component({ components: { PreviewImage, FsLightbox } })
 export default class ViewCarImages extends Vue {
@@ -128,7 +130,7 @@ export default class ViewCarImages extends Vue {
   }
 
   async resolveImage(imageId: string): Promise<{ id: string, src?: string, error?: boolean}> {
-    return imagesStore.fetchImage({ imageId, height: '1080' })
+    return imagesApi.fetchImage(imageId, '1080')
       .then(image => { return { id: imageId, src: image.url }})
       .catch(() => { return { id: imageId, error: true }})
   }

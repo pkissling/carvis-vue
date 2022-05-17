@@ -1,3 +1,13 @@
+type UploadImage = {
+    id: string
+    uploading?: boolean
+    processed?: boolean
+    lazySrc?: string | ArrayBuffer
+    progress?: number
+    src?: string
+    error?: boolean
+  }
+
 type ImageDto = {
     id: string
     url: string

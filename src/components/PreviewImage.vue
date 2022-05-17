@@ -40,7 +40,10 @@
 
 <script>
 import ImagePagination from '@/components/ImagePagination.vue'
-import { imagesStore, sentryStore } from '@/store'
+import { sentryStore } from '@/store'
+import ImagesApi from '@/api/images-api'
+
+const imagesApi = new ImagesApi()
 
 export default {
   name: 'PreviewImage',
@@ -173,8 +176,7 @@ export default {
         payload: 'Image could not be loaded. Getting new imageUrl',
         extras: { image }
       })
-      imagesStore
-        .reloadImage({ imageId: this.imageId, height: this.height })
+      imagesApi.fetchImage(this.imageId, this.height)
         .then(url => (this.reloadedSrc = url))
         .catch(() => {
           this.internalError = true

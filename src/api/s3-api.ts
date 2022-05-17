@@ -46,13 +46,7 @@ export default class S3Api extends BaseApi {
         super(60000, [dunno], [reduceQueue])
     }
 
-    public async uploadFile(
-        url: string,
-        contentType: string,
-        file: File,
-        progressCallback: (progress: number) => void,
-        index: number
-    ): Promise<void> {
+    public async uploadFile(url: string, contentType: string, file: File, progressCallback: (progress: number) => void, index: number): Promise<void> {
         uploadQueue.splice(index, 0, { url, uploaded: false })
         try {
             return await this.put(url, file, {

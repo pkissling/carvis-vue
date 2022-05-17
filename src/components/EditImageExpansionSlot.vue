@@ -37,49 +37,48 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    index: {
-      type: Number,
-      default: -1
-    },
-    image: {
-      type: Object,
-      default: null
-    },
-    images: {
-      type: Array,
-      default: () => []
-    },
-    imageCount: {
-      type: Number,
-      default: 0
-    }
-  },
-  methods: {
-    deleteImage(deleteImage) {
-      const images = this.images.filter(image => image !== deleteImage)
-      this.$emit('input', images)
-    },
-    useImageAsThumbnail(image) {
-      const images = [image, ...this.images.filter(i => i !== image)]
-      this.$emit('input', images)
-    },
-    imageUp(image) {
-      const from = this.images.indexOf(image)
-      this.moveImage(image, from, from - 1)
-    },
-    imageDown(image) {
-      const from = this.images.indexOf(image)
-      this.moveImage(image, from, from + 1)
-    },
-    moveImage(image, from, to) {
-      var images = this.images
-      images.splice(from, 1)
-      images.splice(to, 0, image)
-      this.$emit('input', images)
-    }
+<script lang="ts">
+import { Prop, Vue, Component } from 'vue-property-decorator'
+
+@Component
+export default class EditImageExpansionSlot extends Vue {
+  @Prop({ required: true })
+  index!: number
+
+  @Prop({required: true })
+  image!: UploadImage
+
+  @Prop({required: true })
+  images!: UploadImage[]
+
+  @Prop({ required: true })
+  imageCount!: number
+
+  deleteImage(deleteImage: UploadImage): void {
+    const images = this.images.filter(image => image !== deleteImage)
+    this.$emit('input', images)
+  }
+
+  useImageAsThumbnail(image: UploadImage): void {
+    const images = [image, ...this.images.filter(i => i !== image)]
+    this.$emit('input', images)
+  }
+
+  imageUp(image: UploadImage): void {
+    const from = this.images.indexOf(image)
+    this.moveImage(image, from, from - 1)
+  }
+
+  imageDown(image: UploadImage): void {
+    const from = this.images.indexOf(image)
+    this.moveImage(image, from, from + 1)
+  }
+
+  moveImage(image: UploadImage, from: number, to: number): void {
+    var images = this.images
+    images.splice(from, 1)
+    images.splice(to, 0, image)
+    this.$emit('input', images)
   }
 }
 </script>
