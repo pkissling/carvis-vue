@@ -23,7 +23,7 @@ export default (): void => {
                 tracingOrigins: ['api.carvis.cloud', 'api.dev.carvis.cloud'],
             }),
         ],
-        tracesSampleRate: 0.2,
+        tracesSampleRate: 1.0,
         release: process.env.npm_package_version,
         environment: env(),
     })
