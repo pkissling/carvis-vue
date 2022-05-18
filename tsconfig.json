@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "inlineSources": true,
+    "sourceRoot": "/",
     "target": "esnext",
     "module": "esnext",
     "strict": true,

@@ -1,22 +1,32 @@
-name: Sentry Release
+name: Build
 
-on:
-  push:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
-  sentry-release:
-    name: Create Sentry Release
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v2
 
+      - name: yarn install
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
+
+      - name: yarn build
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: build
+
       - name: Create Sentry release
         uses: getsentry/action-release@v1
+        if: github.ref == 'refs/heads/main'
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: carvis
           SENTRY_PROJECT: vue
         with:
           environment: live
+          sourcemaps: dist
