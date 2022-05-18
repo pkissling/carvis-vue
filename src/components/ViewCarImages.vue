@@ -70,8 +70,7 @@ export default class ViewCarImages extends Vue {
 
   get imageUrls(): string[] {
     return this.images
-      .filter(img => img.src)
-      .map(img => img.src) as string[]
+      .map(img => img.src || '')
   }
 
   @Watch('imageIds')
