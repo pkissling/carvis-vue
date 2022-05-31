@@ -1,10 +1,6 @@
-import {
-    Action,
-    Module,
-    VuexModule
-} from 'vuex-module-decorators'
+import { Action, Module, VuexModule } from 'vuex-module-decorators'
 import * as Sentry from '@sentry/vue'
-import { Severity } from '@sentry/vue'
+import { SeverityLevel } from '@sentry/vue'
 import { Auth0User } from '@/auth/user'
 import { config } from 'vuex-module-decorators'
 
@@ -37,7 +33,7 @@ export default class SentryStore extends VuexModule {
         this.captureMessage({
             payload: dto.payload,
             extras: dto.extras,
-            severity: Severity.Info,
+            severity: 'info',
         })
     }
 
@@ -49,7 +45,7 @@ export default class SentryStore extends VuexModule {
         this.captureMessage({
             payload: dto.payload,
             extras: dto.extras,
-            severity: Severity.Error,
+            severity: 'error',
         })
     }
 
@@ -60,7 +56,7 @@ export default class SentryStore extends VuexModule {
     }): Promise<void> {
         send(
             (p) => Sentry.captureException(p),
-            Severity.Error,
+            'error',
             dto.error,
             dto.extras
         )
@@ -70,11 +66,11 @@ export default class SentryStore extends VuexModule {
     public async captureMessage(dto: {
         payload: string
         extras?: SentryExtra
-        severity: Severity
+        severity: SeverityLevel
     }): Promise<void> {
         send(
             (p) => Sentry.captureMessage(p),
-            dto.severity || Severity.Debug,
+            dto.severity || 'debug',
             dto.payload,
             dto.extras
         )
@@ -84,7 +80,7 @@ export default class SentryStore extends VuexModule {
 const send = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sendFn: (payload: any) => void,
-    severity: Severity,
+    severity: SeverityLevel,
     payload: string | Error,
     extras?: SentryExtra
 ): void => {

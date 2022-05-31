@@ -10,15 +10,7 @@ module.exports = {
     'no-undef': 'off',
     'no-console': 'warn',
     'no-debugger': 'warn',
-    'vue/max-attributes-per-line': [
-      'warn',
-      {
-        singleline: 1,
-        multiline: {
-          allowFirstLine: true
-        }
-      }
-    ]
+    'vue/multi-word-component-names': 'off'
   },
 
   parserOptions: {
