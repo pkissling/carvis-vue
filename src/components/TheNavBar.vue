@@ -5,7 +5,7 @@
     :value="value"
     @input="$emit('input', $event)"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <v-skeleton-loader
         v-if="loading"
         type="list-item-avatar-two-line"
@@ -35,8 +35,9 @@
         link
       >
         <v-list-item-icon>
-          <v-badge v-if="item.badge"
-                   :content="item.badge"
+          <v-badge
+            v-if="item.badge"
+            :content="item.badge"
           >
             <v-icon>{{ item.icon }}</v-icon>
           </v-badge>
@@ -51,7 +52,7 @@
       </v-list-item>
     </v-list>
 
-    <template v-slot:append>
+    <template #append>
       <div class="pa-2">
         <v-btn
           dark

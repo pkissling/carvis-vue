@@ -10,38 +10,44 @@
     <v-card-text>
       <v-row>
         <v-col>
-          <v-alert border="left"
-                   dense
-                   outlined
-                   text
-                   color="accent"
-                   type="info"
+          <v-alert
+            border="left"
+            dense
+            outlined
+            text
+            color="accent"
+            type="info"
           >
             Diese Informationen sind nur für Dich sichtbar.
           </v-alert>
         </v-col>
       </v-row>
       <v-row>
-        <TextField v-model="value.contactDetails.name"
-                   label="Name"
+        <TextField
+          v-model="value.contactDetails.name"
+          label="Name"
         />
-        <TextField v-model="value.contactDetails.company"
-                   label="Firma"
-        />
-      </v-row>
-
-      <v-row>
-        <TextField v-model="value.contactDetails.email"
-                   label="E-Mail"
-        />
-        <TextField v-model="value.contactDetails.phone"
-                   label="Telefon"
+        <TextField
+          v-model="value.contactDetails.company"
+          label="Firma"
         />
       </v-row>
 
       <v-row>
-        <TextArea v-model="value.contactDetails.freeText"
-                  label="Freitext"
+        <TextField
+          v-model="value.contactDetails.email"
+          label="E-Mail"
+        />
+        <TextField
+          v-model="value.contactDetails.phone"
+          label="Telefon"
+        />
+      </v-row>
+
+      <v-row>
+        <TextArea
+          v-model="value.contactDetails.freeText"
+          label="Freitext"
         />
       </v-row>
     </v-card-text>

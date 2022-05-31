@@ -8,7 +8,7 @@ export default abstract class BaseApi<T = unknown> {
 
     constructor(
         timeout = 10000,
-        requestInterceptors: ((value: AxiosRequestConfig) => Promise<T>)[] = [],
+        requestInterceptors: ((value: AxiosRequestConfig<T>) => Promise<AxiosRequestConfig<T>>)[] = [],
         reponseInterceptors: ((data: AxiosResponse<T>) => Promise<AxiosResponse<T>>)[] = []
     ) {
         this.instance = axios.create({ baseURL: apiUrl(), timeout })

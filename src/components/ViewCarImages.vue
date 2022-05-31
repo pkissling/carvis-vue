@@ -1,7 +1,8 @@
 <template>
   <div>
-    <v-skeleton-loader v-if="loading"
-                       type="image"
+    <v-skeleton-loader
+      v-if="loading"
+      type="image"
     />
     <div v-else>
       <PreviewImage
@@ -19,8 +20,9 @@
         height="500"
         hide-delimiters
       >
-        <v-carousel-item v-for="image in images"
-                         :key="image.id"
+        <v-carousel-item
+          v-for="image in images"
+          :key="image.id"
         >
           <PreviewImage
             height="500"

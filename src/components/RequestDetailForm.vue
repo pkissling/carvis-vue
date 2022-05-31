@@ -13,8 +13,9 @@
       :disabled="!canEdit"
       @submit.stop.prevent="onSubmit"
     >
-      <RequestCarDataCard id="request-car-data-card"
-                          v-model="request"
+      <RequestCarDataCard
+        id="request-car-data-card"
+        v-model="request"
       />
 
       <RequestContactDataCard

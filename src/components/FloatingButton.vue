@@ -1,10 +1,11 @@
 <template>
-  <v-speed-dial fab
-                fixed
-                bottom
-                right
+  <v-speed-dial
+    fab
+    fixed
+    bottom
+    right
   >
-    <template v-slot:activator>
+    <template #activator>
       <v-fab-transition>
         <v-btn
           :loading="loading"

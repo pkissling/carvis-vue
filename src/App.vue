@@ -1,10 +1,12 @@
 <template>
   <v-app>
-    <TheNavBar v-if="!isHomePage"
-               v-model="showNavbar"
+    <TheNavBar
+      v-if="!isHomePage"
+      v-model="showNavbar"
     />
-    <TheAppBar v-if="!isHomePage"
-               v-model="showNavbar"
+    <TheAppBar
+      v-if="!isHomePage"
+      v-model="showNavbar"
     />
 
     <v-main>

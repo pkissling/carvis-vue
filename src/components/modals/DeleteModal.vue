@@ -1,10 +1,12 @@
 <template>
-  <v-row v-if="subject"
-         justify="center"
+  <v-row
+    v-if="subject"
+    justify="center"
   >
-    <v-dialog v-model="dialog"
-              max-width="800"
-              @input="$emit('cancel')"
+    <v-dialog
+      v-model="dialog"
+      max-width="800"
+      @input="$emit('cancel')"
     >
       <v-card>
         <v-card-title class="headline">
@@ -12,8 +14,9 @@
         </v-card-title>
         <v-card-actions>
           <v-spacer />
-          <v-btn text
-                 @click="$emit('cancel')"
+          <v-btn
+            text
+            @click="$emit('cancel')"
           >
             Abbrechen
           </v-btn>

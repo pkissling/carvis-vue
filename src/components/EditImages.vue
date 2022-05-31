@@ -1,16 +1,19 @@
 <template>
   <div>
-    <v-slide-group class="pa-4"
-                   show-arrows
-                   center-active
+    <v-slide-group
+      class="pa-4"
+      show-arrows
+      center-active
     >
-      <v-slide-item v-for="(image, index) in value"
-                    :key="image.id"
+      <v-slide-item
+        v-for="(image, index) in value"
+        :key="image.id"
       >
-        <v-card class="ma-4"
-                elevation="5"
-                width="200"
-                outlined
+        <v-card
+          class="ma-4"
+          elevation="5"
+          width="200"
+          outlined
         >
           <v-card-title>
             {{ index === 0 ? 'Titelbild' : 'Galleriebild ' + index }}
@@ -27,17 +30,19 @@
             not-clickable
           />
           <v-card-actions>
-            <v-btn color="primary"
-                   text
-                   @click="editImage = !editImage"
+            <v-btn
+              color="primary"
+              text
+              @click="editImage = !editImage"
             >
               Bearbeiten
             </v-btn>
 
             <v-spacer />
 
-            <v-btn icon
-                   @click="editImage = !editImage"
+            <v-btn
+              icon
+              @click="editImage = !editImage"
             >
               <v-icon>
                 {{

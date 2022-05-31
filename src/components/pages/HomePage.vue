@@ -1,8 +1,9 @@
 <template>
   <div>
-    <v-card class="mx-auto mt-12"
-            max-width="374"
-            elevation="5"
+    <v-card
+      class="mx-auto mt-12"
+      max-width="374"
+      elevation="5"
     >
       <v-img
         alt="Carvis"
@@ -20,8 +21,9 @@
       </v-card-text>
     </v-card>
 
-    <NavigationCard :loading="isLoading"
-                    :items="navigationItems"
+    <NavigationCard
+      :loading="isLoading"
+      :items="navigationItems"
     />
   </div>
 </template>

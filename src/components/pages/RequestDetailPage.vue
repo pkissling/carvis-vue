@@ -1,10 +1,12 @@
 <template>
   <WaitingLayer v-if="loading" />
-  <Page v-else
-        :title="title"
+  <Page
+    v-else
+    :title="title"
   >
-    <RequestDetailForm :request="request"
-                       @submit="updateRequest"
+    <RequestDetailForm
+      :request="request"
+      @submit="updateRequest"
     />
   </Page>
 </template>

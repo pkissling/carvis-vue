@@ -1,10 +1,11 @@
 <template>
   <v-card class="my-12">
     <v-card-actions class="d-block d-sm-flex">
-      <v-btn color="primary"
-             type="submit"
-             :loading="loading"
-             :disabled="submitDisabled"
+      <v-btn
+        color="primary"
+        type="submit"
+        :loading="loading"
+        :disabled="submitDisabled"
       >
         <span v-if="isNewItem">
           Hinzufügen

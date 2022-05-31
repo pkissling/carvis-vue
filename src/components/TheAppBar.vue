@@ -1,10 +1,12 @@
 <template>
-  <v-app-bar color="secondary"
-             app
-             clipped-left
+  <v-app-bar
+    color="secondary"
+    app
+    clipped-left
   >
-    <v-app-bar-nav-icon :value="value"
-                        @click="$emit('input', !value)"
+    <v-app-bar-nav-icon
+      :value="value"
+      @click="$emit('input', !value)"
     />
 
     <v-spacer />

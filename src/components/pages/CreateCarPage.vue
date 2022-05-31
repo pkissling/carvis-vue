@@ -1,7 +1,8 @@
 <template>
   <Page title="Fahrzeug hinzufügen">
-    <CarDetailForm :car="car"
-                   @submit="createCar"
+    <CarDetailForm
+      :car="car"
+      @submit="createCar"
     />
   </Page>
 </template>

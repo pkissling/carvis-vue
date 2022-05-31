@@ -8,9 +8,7 @@ type UploadRequest = {
 
 const uploadQueue: UploadRequest[] = []
 
-const reduceQueue = async (
-    res: AxiosResponse<any>
-): Promise<AxiosResponse<any>> => {
+const reduceQueue = async (res: AxiosResponse<void>): Promise<AxiosResponse<void>> => {
     if (!res.config.url) {
         return res
     }
@@ -29,7 +27,7 @@ const reduceQueue = async (
     return res
 }
 
-const dunno = async (req: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+const processQueue = async (req: AxiosRequestConfig<void>): Promise<AxiosRequestConfig<void>> => {
     while (
         req.url !==
         uploadQueue
@@ -41,9 +39,9 @@ const dunno = async (req: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
     return req
 }
 
-export default class S3Api extends BaseApi {
+export default class S3Api extends BaseApi<void> {
     constructor() {
-        super(60000, [dunno], [reduceQueue])
+        super(60000, [processQueue], [reduceQueue])
     }
 
     public async uploadFile(url: string, contentType: string, file: File, progressCallback: (progress: number) => void, index: number): Promise<void> {

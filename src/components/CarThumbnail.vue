@@ -10,9 +10,10 @@
       not-clickable
     />
 
-    <v-avatar v-else
-              color="secondary"
-              tile
+    <v-avatar
+      v-else
+      color="secondary"
+      tile
     >
       <v-icon color="primary">
         mdi-car-side

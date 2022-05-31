@@ -19,8 +19,9 @@
         :start-in-edit-mode="!car || !car.id"
       />
 
-      <CarDataCard id="car-data-card"
-                   v-model="car"
+      <CarDataCard
+        id="car-data-card"
+        v-model="car"
       />
 
       <ActionsCard

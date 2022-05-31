@@ -5,8 +5,9 @@
       v-model="formValid"
       @submit.stop.prevent="onSubmit"
     >
-      <v-card :loading="loading"
-              class="my-12"
+      <v-card
+        :loading="loading"
+        class="my-12"
       >
         <div class="p-12 d-flex justify-space-between">
           <v-card-title class="text-h4">

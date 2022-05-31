@@ -24,7 +24,7 @@
     >
       <template
         v-for="header in filteredHeaders"
-        v-slot:[`item.${header.value}`]="{ item }"
+        #[`item.${header.value}`]="{ item }"
       >
         <slot
           :name="header.value"
@@ -47,8 +47,9 @@
       </template>
     </v-data-table>
 
-    <FloatingButton :loading="loading"
-                    v-on="$listeners"
+    <FloatingButton
+      :loading="loading"
+      v-on="$listeners"
     />
   </div>
 </template>

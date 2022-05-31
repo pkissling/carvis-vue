@@ -31,8 +31,9 @@
           >
         </v-avatar>
       </template>
-      <template v-for="role in allRoles"
-                #[`item.${role.value}`]="{ item }"
+      <template
+        v-for="role in allRoles"
+        #[`item.${role.value}`]="{ item }"
       >
         <v-switch
           :key="role.value"

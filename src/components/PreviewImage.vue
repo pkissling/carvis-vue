@@ -17,9 +17,10 @@
         :images-count="imagesCount"
       />
       <template #placeholder>
-        <v-row class="fill-height ma-0"
-               align="center"
-               justify="center"
+        <v-row
+          class="fill-height ma-0"
+          align="center"
+          justify="center"
         >
           <v-progress-circular
             v-if="progress"
@@ -28,9 +29,10 @@
           >
             {{ progress }}
           </v-progress-circular>
-          <v-progress-circular v-else
-                               indeterminate
-                               color="primary"
+          <v-progress-circular
+            v-else
+            indeterminate
+            color="primary"
           />
         </v-row>
       </template>

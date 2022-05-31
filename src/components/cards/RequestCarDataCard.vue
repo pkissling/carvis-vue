@@ -105,8 +105,9 @@
       </v-row>
 
       <v-row>
-        <TextField v-model="value.countryOfOrigin"
-                   label="Auslieferungsland"
+        <TextField
+          v-model="value.countryOfOrigin"
+          label="Auslieferungsland"
         />
         <TextField
           v-model="value.mileage"
@@ -135,23 +136,27 @@
           v-model="value.highlights"
           label="Besonderheiten / Highlights"
         />
-        <TextField v-model="value.vision"
-                   label="Ziel / Vision"
+        <TextField
+          v-model="value.vision"
+          label="Ziel / Vision"
         />
       </v-row>
 
       <v-row>
-        <TextField v-model="value.mustHaves"
-                   label="Must-Haves"
+        <TextField
+          v-model="value.mustHaves"
+          label="Must-Haves"
         />
-        <TextField v-model="value.noGos"
-                   label="No-Gos"
+        <TextField
+          v-model="value.noGos"
+          label="No-Gos"
         />
       </v-row>
 
       <v-row>
-        <TextArea v-model="value.description"
-                  label="Detailbeschreibung"
+        <TextArea
+          v-model="value.description"
+          label="Detailbeschreibung"
         />
       </v-row>
     </v-card-text>

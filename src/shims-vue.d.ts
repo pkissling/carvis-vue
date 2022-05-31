@@ -1,4 +1,5 @@
 import { Auth0Wrapper } from './auth/auth0-wrapper'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Vue from 'vue'
 import { Route } from 'vue-router';
 

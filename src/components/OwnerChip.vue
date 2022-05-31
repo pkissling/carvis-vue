@@ -6,7 +6,7 @@
     tile
     bottom
   >
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-chip
         small
         label
@@ -97,9 +97,10 @@
               type="text"
               :tile="true"
             />
-            <a v-if="email"
-               :href="`mailto:${email}`"
-               target="_blank"
+            <a
+              v-if="email"
+              :href="`mailto:${email}`"
+              target="_blank"
             >
               {{ email }}
             </a>

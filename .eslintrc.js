@@ -10,7 +10,9 @@ module.exports = {
     'no-undef': 'off',
     'no-console': 'warn',
     'no-debugger': 'warn',
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'vue/no-mutating-props': 'off',
+    'vue/no-v-html': 'off'
   },
 
   parserOptions: {

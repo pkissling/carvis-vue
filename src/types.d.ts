@@ -89,7 +89,7 @@ type HighlightableDataTableHeader = {
     priority: 0 | 1 | 2
     sortable?: boolean
     text?: string
-    value: any
+    value: string
     forceShow?: boolean
 }
 

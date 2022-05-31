@@ -45,8 +45,9 @@
             </v-col>
           </v-row>
           <v-row v-if="showRoles">
-            <v-col v-for="role in allRoles"
-                   :key="role.value"
+            <v-col
+              v-for="role in allRoles"
+              :key="role.value"
             >
               <v-switch
                 :input-value="roles.includes(role.value)"
@@ -64,10 +65,11 @@
           >
             Abbrechen
           </v-btn>
-          <v-btn color="primary"
-                 type="submit"
-                 :loading="loading"
-                 @click="editUser"
+          <v-btn
+            color="primary"
+            type="submit"
+            :loading="loading"
+            @click="editUser"
           >
             Speichern
           </v-btn>

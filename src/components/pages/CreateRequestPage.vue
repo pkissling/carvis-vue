@@ -1,7 +1,8 @@
 <template>
   <Page title="Gesuch hinzufügen">
-    <RequestDetailForm :request="request"
-                       @submit="createRequest"
+    <RequestDetailForm
+      :request="request"
+      @submit="createRequest"
     />
   </Page>
 </template>

@@ -117,8 +117,9 @@
       </v-row>
 
       <v-row>
-        <TextField v-model="value.countryOfOrigin"
-                   label="Auslieferungsland"
+        <TextField
+          v-model="value.countryOfOrigin"
+          label="Auslieferungsland"
         />
         <TextField
           v-model="value.mileage"
@@ -137,8 +138,9 @@
           suffix="Euro"
           outlined
         />
-        <TextField v-model="value.vin"
-                   label="Fahrgestellnummer"
+        <TextField
+          v-model="value.vin"
+          label="Fahrgestellnummer"
         />
       </v-row>
 
@@ -176,8 +178,9 @@
       </v-row>
 
       <v-row>
-        <TextArea v-model="value.description"
-                  label="Detailbeschreibung"
+        <TextArea
+          v-model="value.description"
+          label="Detailbeschreibung"
         />
       </v-row>
     </v-card-text>
