@@ -19,7 +19,7 @@
       :mobile-breakpoint="0"
       :sort-by.sync="sortColumn"
       :sort-desc.sync="descending"
-      class="elevation-5"
+      class="elevation-5 row-pointer"
       @click:row="onRowClicked"
     >
       <template
@@ -172,3 +172,9 @@ export default class OverviewTable<T> extends Vue {
   }
 }
 </script>
+
+<style lang="css" scoped>
+.row-pointer >>> tbody tr :hover {
+  cursor: pointer;
+}
+</style>
