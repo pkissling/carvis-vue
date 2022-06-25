@@ -1,5 +1,5 @@
 <template>
-  <v-card class="my-12">
+  <CarvisCard class="my-12">
     <v-card-actions class="d-block d-sm-flex">
       <v-btn
         color="primary"
@@ -27,7 +27,7 @@
         Löschen
       </v-btn>
     </v-card-actions>
-  </v-card>
+  </CarvisCard>
 </template>
 
 <script lang="ts">

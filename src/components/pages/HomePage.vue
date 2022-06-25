@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card
+    <CarvisCard
       class="mx-auto mt-12"
       max-width="374"
       elevation="5"
@@ -19,7 +19,7 @@
         <br><br>
         Interessiert? Dann registriere Dich!
       </v-card-text>
-    </v-card>
+    </CarvisCard>
 
     <NavigationCard
       :loading="isLoading"

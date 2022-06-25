@@ -9,7 +9,10 @@
       @click="$emit('input', !value)"
     />
 
-    <v-spacer />
+    <v-divider 
+      vertical
+      class="mx-4" 
+    />
 
     <router-link to="/">
       <v-img

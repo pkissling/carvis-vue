@@ -7,7 +7,7 @@
       :items="users"
       :sort-by.sync="sortColumn"
       :disable-sort="$vuetify.breakpoint.smAndDown"
-      class="elevation-5"
+      class="elevation-5 accent"
     >
       <template #[`item.picture`]="{ item }">
         <v-badge

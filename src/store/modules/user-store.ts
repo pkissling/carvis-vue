@@ -14,12 +14,8 @@ export default class UserStore extends VuexModule {
     carvisUser: UserDto | null = null
 
     @Action
-    public async processLogin(user: Auth0User | null): Promise<void> {
-        if (user) {
-            await sentryStore.addUser(user)
-        } else {
-            await sentryStore.removeUser()
-        }
+    public async processLogin(user: Auth0User): Promise<void> {
+        await sentryStore.addUser(user)
         this.setAuth0User(user)
     }
 

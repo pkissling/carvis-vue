@@ -26,7 +26,7 @@ export class Auth0Wrapper extends Vue {
     loading = true
     isAuthenticated = false
     user?: Auth0User
-    auth0Client?: Auth0Client
+    auth0Client!: Auth0Client
     popupOpen = false
     error?: Error
 
@@ -41,7 +41,7 @@ export class Auth0Wrapper extends Vue {
         this.popupOpen = true
 
         try {
-            await this.auth0Client?.loginWithPopup(o)
+            await this.auth0Client.loginWithPopup(o)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
             sentryStore.captureException(e)
@@ -55,29 +55,29 @@ export class Auth0Wrapper extends Vue {
     }
 
     /** Authenticates the user using the redirect method */
-    loginWithRedirect(o?: RedirectLoginOptions): Promise<void> | undefined {
-        return this.auth0Client?.loginWithRedirect(o)
+    loginWithRedirect(o?: RedirectLoginOptions): Promise<void> {
+        return this.auth0Client.loginWithRedirect(o)
     }
 
     /** Returns all the claims present in the ID token */
-    getIdTokenClaims(o?: GetIdTokenClaimsOptions): Promise<IdToken | undefined> | undefined {
-        return this.auth0Client?.getIdTokenClaims(o)
+    getIdTokenClaims(o?: GetIdTokenClaimsOptions): Promise<IdToken | undefined> {
+        return this.auth0Client.getIdTokenClaims(o)
     }
 
     /** Returns the access token. If the token is invalid or missing, a new one is retrieved */
-    getTokenSilently(o?: GetTokenSilentlyOptions): Promise<string> | undefined {
-        return this.auth0Client?.getTokenSilently(o)
+    getTokenSilently(o?: GetTokenSilentlyOptions): Promise<string> {
+        return this.auth0Client.getTokenSilently(o)
     }
 
     /** Gets the access token using a popup window */
-    getTokenWithPopup(o?: GetTokenWithPopupOptions): Promise<string> | undefined {
-        return this.auth0Client?.getTokenWithPopup(o)
+    getTokenWithPopup(o?: GetTokenWithPopupOptions): Promise<string> {
+        return this.auth0Client.getTokenWithPopup(o)
     }
 
     /** Logs the user out and removes their session on the authorization server */
-    logout(o?: LogoutOptions): Promise<void> | undefined | void {
+    logout(o?: LogoutOptions): Promise<void> | void {
         userStore.processLogout()
-        return this.auth0Client?.logout(o)
+        return this.auth0Client.logout(o)
     }
 
     /** Use this lifecycle method to instantiate the SDK client */

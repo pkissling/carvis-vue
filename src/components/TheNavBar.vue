@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    color="secondary"
     app
     clipped
     :value="value"
@@ -10,19 +11,45 @@
         v-if="loading"
         type="list-item-avatar-two-line"
       />
-      <v-list-item
+      <v-list
         v-else
-        two-line
+        nav
       >
-        <v-list-item-avatar>
-          <img :src="picture">
-        </v-list-item-avatar>
+        <v-list-item
+          link
+          two-line
+          @click="expanded = !expanded"
+        >
+          <v-list-item-avatar>
+            <img :src="picture">
+          </v-list-item-avatar>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ name }}</v-list-item-title>
-          <v-list-item-subtitle>{{ company || 'Eingeloggt' }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>{{ name }}</v-list-item-title>
+            <v-list-item-subtitle>{{ company || 'Eingeloggt' }}</v-list-item-subtitle>
+          </v-list-item-content>
+
+          <v-list-item-action>
+            <v-icon>{{ expanded ? 'mdi-menu-up' : 'mdi-menu-down' }}</v-icon>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item
+          v-if="expanded"
+          to="/my-account"
+          link
+          dense
+        >
+          <v-list-item-icon>
+            <v-icon>
+              mdi-account
+            </v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Mein Profil</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </template>
 
     <v-divider />
@@ -80,6 +107,7 @@ export default class TheNavBar extends Vue {
   value! :boolean
 
   loading = false
+  expanded = false
 
   get filteredItems(): ({ icon: string, text: string, path: string, badge?: number })[] {
     return this.items.filter(item => this.canAccess(item.path))
@@ -87,7 +115,6 @@ export default class TheNavBar extends Vue {
 
   get items(): ({ icon: string, text: string, path: string, badge?: number })[] {
     return [
-      { icon: 'mdi-account', text: 'Mein Profil', path: '/my-account' },
       { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management', badge: userManagementStore.newUsersCount },
       { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
       { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests' }

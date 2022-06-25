@@ -19,7 +19,7 @@
       :mobile-breakpoint="0"
       :sort-by.sync="sortColumn"
       :sort-desc.sync="descending"
-      class="elevation-5 row-pointer"
+      class="elevation-5 row-pointer accent"
       @click:row="onRowClicked"
     >
       <template

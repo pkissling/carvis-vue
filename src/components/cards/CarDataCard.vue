@@ -1,5 +1,5 @@
 <template>
-  <v-card class="my-12">
+  <CarvisCard class="my-12">
     <template slot="progress">
       <v-progress-linear indeterminate />
     </template>
@@ -184,7 +184,7 @@
         />
       </v-row>
     </v-card-text>
-  </v-card>
+  </CarvisCard>
 </template>
 
 <script>

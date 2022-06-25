@@ -1,5 +1,5 @@
 <template>
-  <v-card
+  <CarvisCard
     :loading="loading"
     class="my-12"
   >
@@ -29,7 +29,7 @@
         @loading="onLoading"
       />
     </v-card-text>
-  </v-card>
+  </CarvisCard>
 </template>
 <script lang="ts">
 import ViewCarImages from '@/components/ViewCarImages.vue'

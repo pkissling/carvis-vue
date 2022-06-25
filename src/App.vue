@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :style="{ background }">
     <TheNavBar
       v-if="!isHomePage"
       v-model="showNavbar"
@@ -23,6 +23,7 @@ import TheAppBar from '@/components/TheAppBar.vue'
 import TheNavBar from '@/components/TheNavBar.vue'
 import Snackbar from '@/components/Snackbar.vue'
 import { Component, Vue } from 'vue-property-decorator'
+import { VuetifyThemeItem } from 'vuetify/types/services/theme'
 
 @Component({ components: { TheAppBar, TheNavBar, Snackbar }})
 export default class App extends Vue {
@@ -34,6 +35,11 @@ export default class App extends Vue {
 
   get isMobile(): boolean {
     return this.$vuetify.breakpoint.smAndDown
+  }
+
+  get background(): VuetifyThemeItem | undefined {
+    const theme = this.$vuetify.theme.dark ? 'dark' : 'light'
+    return this.$vuetify.theme.themes[theme].background
   }
 }
 </script>

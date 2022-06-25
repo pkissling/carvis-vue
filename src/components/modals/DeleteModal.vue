@@ -8,7 +8,7 @@
       max-width="800"
       @input="$emit('cancel')"
     >
-      <v-card>
+      <CarvisCard>
         <v-card-title class="headline">
           {{ subject }} wirklich löschen?
         </v-card-title>
@@ -29,7 +29,7 @@
             Löschen
           </v-btn>
         </v-card-actions>
-      </v-card>
+      </CarvisCard>
     </v-dialog>
   </v-row>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <v-card
+  <CarvisCard
     :loading="loading"
     class="mx-auto mt-4"
     max-width="374"
@@ -30,7 +30,7 @@
         </v-row>
       </v-container>
     </v-card-actions>
-  </v-card>
+  </CarvisCard>
 </template>
 
 <script lang="ts">

@@ -5,7 +5,7 @@
       max-width="800"
       @input="hideModal"
     >
-      <v-card :loading="loading">
+      <CarvisCard :loading="loading">
         <v-card-title class="headline">
           Benutzer bearbeiten
         </v-card-title>
@@ -74,7 +74,7 @@
             Speichern
           </v-btn>
         </v-card-actions>
-      </v-card>
+      </CarvisCard>
     </v-dialog>
   </v-row>
 </template>

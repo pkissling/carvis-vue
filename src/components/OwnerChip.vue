@@ -16,7 +16,7 @@
         {{ name }}
       </v-chip>
     </template>
-    <v-card width="300">
+    <CarvisCard width="300">
       <v-card-text>
         <v-row align="center">
           <v-col
@@ -108,7 +108,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-    </v-card>
+    </CarvisCard>
   </v-menu>
 </template>
 

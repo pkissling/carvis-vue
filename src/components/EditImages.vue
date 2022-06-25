@@ -9,7 +9,7 @@
         v-for="(image, index) in value"
         :key="image.id"
       >
-        <v-card
+        <CarvisCard
           class="ma-4"
           elevation="5"
           width="200"
@@ -61,7 +61,7 @@
               @input="onEditImages"
             />
           </v-expand-transition>
-        </v-card>
+        </CarvisCard>
       </v-slide-item>
     </v-slide-group>
   </div>

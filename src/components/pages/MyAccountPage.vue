@@ -5,7 +5,7 @@
       v-model="formValid"
       @submit.stop.prevent="onSubmit"
     >
-      <v-card
+      <CarvisCard
         :loading="loading"
         class="my-12"
       >
@@ -50,7 +50,7 @@
             </v-col>
           </v-row>
         </v-card-text>
-      </v-card>
+      </CarvisCard>
 
       <ActionsCard
         :is-new-item="false"
