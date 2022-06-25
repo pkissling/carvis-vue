@@ -28,13 +28,14 @@
         v-if="canEdit"
         :is-new-item="!car.id"
         :show-delete="true"
+        :loading="saveLoading"
         @delete="showCarDeletionModal = true"
       />
 
       <DeleteModal
         v-if="showCarDeletionModal"
         :subject="deleteModalSubject"
-        :loading="loading"
+        :loading="deleteLoading"
         @submit="deleteCar"
         @cancel="showCarDeletionModal = false"
       />
@@ -56,9 +57,13 @@ export default class CarDetailForm extends Vue {
   @Prop({ required: true })
   car!: CarDto
 
+  @Prop({ required: true })
+  saveCarFunction!: (car: CarDto) => Promise<void>
+
   showCarDeletionModal = false
   valid = true
-  loading = false
+  saveLoading = false
+  deleteLoading = false
 
   get deleteModalSubject(): string {
       return `${this.car.brand} ${this.car.type}`
@@ -80,19 +85,25 @@ export default class CarDetailForm extends Vue {
     return `${days}.${months}.${year}`
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
       const form = (this.$refs.form as Vue & { validate: () => boolean })
       form.validate()
-      if (this.valid) {
-        this.$emit('submit', this.car)
-      } else {
+      if (!this.valid) {
         this.$vuetify.goTo('#car-data-card') // TODO go to specific item!
+        return
+      }
+
+      try {
+        this.saveLoading = true
+        await this.saveCarFunction(this.car)
+      } finally {
+        this.saveLoading = false
       }
   }
 
   async deleteCar(): Promise<void> {
     try {
-      this.loading = true
+      this.deleteLoading = true
       await carsStore.deleteCar(this.car.id)
       await notificationsStore.success('Fahrzeug erfolgreich gelöscht.')
       await this.$router.push({ path: '/cars' })
@@ -101,7 +112,7 @@ export default class CarDetailForm extends Vue {
       await notificationsStore.error({ message: 'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err })
     } finally {
       this.showCarDeletionModal = false
-      this.loading = false
+      this.deleteLoading = false
     }
   }
 }

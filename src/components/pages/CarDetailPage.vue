@@ -6,7 +6,7 @@
   >
     <CarDetailForm
       :car="car"
-      @submit="updateCar"
+      :save-car-function="updateCar"
     />
   </Page>
 </template>

@@ -45,7 +45,7 @@ export default class CarPreviewCard extends Vue {
   @Prop({ required: true })
   canEdit!: boolean
 
-  @Prop({ required: false, default: [] })
+  @Prop({ required: false, default: () => [] })
   value!: string[]
 
   imageIds = []

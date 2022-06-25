@@ -21,7 +21,6 @@
         v-if="showDelete && !isNewItem"
         color="error"
         text
-        :loading="loading"
         @click="$emit('delete')"
       >
         Löschen

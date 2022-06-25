@@ -28,13 +28,14 @@
         v-if="canEdit"
         :is-new-item="!request.id"
         :show-delete="true"
+        :loading="saveLoading"
         @delete="showDeletionModal = true"
       />
 
       <DeleteModal
         v-if="showDeletionModal"
         :subject="deleteModalSubject"
-        :loading="loading"
+        :loading="deleteLoading"
         @submit="deleteRequest"
         @cancel="showDeletionModal = false"
       />
@@ -56,9 +57,13 @@ export default class RequestDetailForm extends Vue {
   @Prop({ required: true })
   request!: RequestDto
 
+  @Prop({ required: true })
+  saveRequestFunction!: (request: RequestDto) => Promise<void>
+
   showDeletionModal = false
   valid = true
-  loading = false
+  saveLoading = false
+  deleteLoading = false
 
   get deleteModalSubject(): string {
     return `${this.request.brand} ${this.request.type}`
@@ -72,19 +77,25 @@ export default class RequestDetailForm extends Vue {
     return userStore.isAdmin || this.request?.createdBy === userStore.getUserId
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const form = (this.$refs.form as Vue & { validate: () => boolean })
     form.validate()
-    if (this.valid) {
-      this.$emit('submit', this.request)
-    } else {
+    if (!this.valid) {
       this.$vuetify.goTo('#request-car-data-card') // TODO go to specific item!
+      return
     }
+
+    try {
+      this.saveLoading = true
+      await this.saveRequestFunction(this.request)
+     } finally {
+      this.saveLoading = false
+     }
   }
 
   async deleteRequest(): Promise<void> {
     try {
-      this.loading = true
+      this.deleteLoading = true
       await requestsStore.deleteRequest(this.request.id)
       await notificationsStore.success('Gesuch erfolgreich gelöscht.')
       await this.$router.push({ path: '/requests' })
@@ -93,7 +104,7 @@ export default class RequestDetailForm extends Vue {
       await notificationsStore.error({ message: 'Fehler beim Löschen des Gesuchs. Bitte versuche es erneut.', err })
     } finally {
       this.showDeletionModal = false
-      this.loading = false
+      this.deleteLoading = false
     }
   }
 }

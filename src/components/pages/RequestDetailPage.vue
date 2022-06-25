@@ -6,7 +6,7 @@
   >
     <RequestDetailForm
       :request="request"
-      @submit="updateRequest"
+      :save-request-function="updateRequest"
     />
   </Page>
 </template>
