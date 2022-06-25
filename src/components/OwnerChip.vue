@@ -16,7 +16,10 @@
         {{ name }}
       </v-chip>
     </template>
-    <CarvisCard width="300">
+    <CarvisCard
+      v-click-outside="isOpen = false"
+      width="300"
+    >
       <v-card-text>
         <v-row align="center">
           <v-col
