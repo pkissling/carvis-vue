@@ -20,7 +20,7 @@
         v-if="editMode"
         :image-ids="value"
         @change="onImagesChange"
-        @loading="onLoading"
+        @loading="onUploading"
       />
       <ViewCarImages
         v-else
@@ -61,6 +61,11 @@ export default class CarPreviewCard extends Vue {
 
   onLoading(value: boolean): void {
       this.loading = value
+  }
+
+  onUploading(value: boolean): void {
+    this.onLoading(value)
+    this.$emit('upload', value)
   }
 }
 </script>

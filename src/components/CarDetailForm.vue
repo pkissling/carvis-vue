@@ -17,6 +17,7 @@
         v-model="car.images"
         :can-edit="canEdit"
         :start-in-edit-mode="!car || !car.id"
+        @upload="uploading = $event"
       />
 
       <CarDataCard
@@ -28,7 +29,7 @@
         v-if="canEdit"
         :is-new-item="!car.id"
         :show-delete="true"
-        :loading="saveLoading"
+        :loading="saveLoading || uploading"
         @delete="showCarDeletionModal = true"
       />
 
@@ -64,6 +65,7 @@ export default class CarDetailForm extends Vue {
   valid = true
   saveLoading = false
   deleteLoading = false
+  uploading = false
 
   get deleteModalSubject(): string {
       return `${this.car.brand} ${this.car.type}`
