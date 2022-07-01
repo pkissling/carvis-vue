@@ -50,7 +50,7 @@ export default class RequestDetailPage extends Vue {
   request: RequestDto | null = null
 
   get title(): string {
-    return `${this.request?.brand} ${this.request?.type || ''}`
+    return `${this.request?.brand || ''} ${this.request?.type || ''}`.trim()
   }
 
   async updateRequest(request: RequestDto): Promise<void> {

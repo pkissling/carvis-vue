@@ -1,16 +1,20 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
-import { sentryStore } from '@/store'
+import { sentryStore, userManagementStore } from '@/store'
 import { config } from 'vuex-module-decorators'
+import NotificationsApi from '@/api/notifications-api'
 
 config.rawError = true
 
 type Severity = 'success' | 'info' | 'warning' | 'error'
+const notificationsApi = new NotificationsApi()
 
 @Module({ namespaced: true, name: 'notifications' })
 export default class NotificationsStore extends VuexModule {
     message?: string = undefined
     severity?: Severity = undefined
     show = false
+    newUsersCount = 0
+    backgroundRefresh: number | null = null
 
     @Action
     public async success(message: string): Promise<void> {
@@ -50,6 +54,18 @@ export default class NotificationsStore extends VuexModule {
         this.setShow(false)
     }
 
+    @Action({ commit: 'setNewUsersCount' })
+    public async fetchNewUsersCount(): Promise<number> {
+        if (!this.backgroundRefresh) {
+            this.setBackgroundRefresh({ timerHandler: this.fetchNewUsersCount, delay: 30000 })
+        }
+        const newCount = await notificationsApi.fetchNewUsersCount()
+        if (newCount !== this.newUsersCount) {
+            await userManagementStore.fetchAllUsers()
+        }
+        return newCount
+    }
+
     public get getMessage(): string | undefined {
         return this.message
     }
@@ -75,5 +91,15 @@ export default class NotificationsStore extends VuexModule {
     @Mutation
     public setShow(show: boolean): void {
         this.show = show
+    }
+
+    @Mutation
+    public setNewUsersCount(newUsersCount: number): void {
+        this.newUsersCount = newUsersCount
+    }
+
+    @Mutation
+    public setBackgroundRefresh({ timerHandler, delay }: { timerHandler: TimerHandler, delay: number }): void {
+        this.backgroundRefresh = setInterval(timerHandler, delay)
     }
 }

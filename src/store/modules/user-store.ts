@@ -3,10 +3,12 @@ import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import { sentryStore } from '@/store'
 import { config } from 'vuex-module-decorators'
 import UsersApi from '@/api/users-api'
+import AdminUsersApi from '@/api/admin-users-api'
 
 config.rawError = true
 
 const usersApi = new UsersApi()
+const adminUsersApi = new AdminUsersApi()
 
 @Module({ namespaced: true, name: 'user' })
 export default class UserStore extends VuexModule {
@@ -27,7 +29,7 @@ export default class UserStore extends VuexModule {
 
     @Action({ commit: 'setCarvisUser' })
     public async updateCarvisUser(user: UserDto): Promise<UserDto> {
-        const updatedUser = await usersApi.updateUser(user.userId, user)
+        const updatedUser = await adminUsersApi.updateUser(user.userId, user)
         this.setAuth0User({
             ...this.auth0User,
             name: user.name

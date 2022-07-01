@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { notificationsStore, userManagementStore, userStore } from '@/store'
+import { notificationsStore, userStore } from '@/store'
 import { hasRole } from '@/store/modules/user-store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
@@ -115,7 +115,7 @@ export default class TheNavBar extends Vue {
 
   get items(): ({ icon: string, text: string, path: string, badge?: number })[] {
     return [
-      { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management', badge: userManagementStore.newUsersCount },
+      { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management', badge: notificationsStore.newUsersCount },
       { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
       { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests' }
     ]
@@ -161,7 +161,7 @@ export default class TheNavBar extends Vue {
   private async loadNewUsersCount(): Promise<void> {
     try {
       this.loading = true
-      await userManagementStore.fetchNewUsersCount()
+      await notificationsStore.fetchNewUsersCount()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(err: any) {
       notificationsStore.error({ message: 'Fehler beim Laden der Benachrichtigungen für neue Nutzer. Bitte versuche es erneut.', err })

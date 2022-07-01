@@ -50,7 +50,7 @@ export default class CarDetailPage extends Vue {
   car: CarDto | null = null
 
   get title(): string {
-    return `${this.car?.brand} ${this.car?.type || ''}`
+    return `${this.car?.brand || ''} ${this.car?.type || ''}`.trim()
   }
 
   async updateCar(car: CarDto): Promise<void> {

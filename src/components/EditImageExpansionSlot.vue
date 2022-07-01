@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-divider />
-    <v-list>
+    <v-list color="accent">
       <v-list-item
         v-if="index !== 0"
         @click="useImageAsThumbnail(image)"

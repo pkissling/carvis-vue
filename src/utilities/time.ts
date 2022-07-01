@@ -1,8 +1,4 @@
-export const relativeTimeDifference = (timestamp: string): string | undefined => {
-    if (!timestamp) {
-        return undefined
-    }
-
+export const relativeTimeDifference = (timestamp: string): string => {
     const msPerMinute = 60 * 1000
     const msPerHour = msPerMinute * 60
     const msPerDay = msPerHour * 24
