@@ -45,19 +45,34 @@
         />
       </template>
       <template #[`item.actions`]="{ item }">
-        <v-icon
-          class="mr-2"
-          :disabled="isCurrentUser(item)"
-          @click="editUserModal = item"
-        >
-          mdi-pencil
-        </v-icon>
-        <v-icon
-          :disabled="isCurrentUser(item)"
-          @click="deleteUserModal = item"
-        >
-          mdi-delete
-        </v-icon>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-icon
+              class="mr-2"
+              v-bind="attrs"
+              :disabled="isCurrentUser(item)"
+              @click="editUserModal = item"
+              v-on="on"
+            >
+              mdi-pencil
+            </v-icon>
+          </template>
+          <span>Benutzer bearbeiten</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-icon
+              class="mr-2"
+              v-bind="attrs"
+              :disabled="isCurrentUser(item)"
+              @click="deleteUserModal = item"
+              v-on="on"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>Benutzer löschen</span>
+        </v-tooltip>
       </template>
     </v-data-table>
 

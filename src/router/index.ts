@@ -118,6 +118,18 @@ const routes: RouteConfig[] = [
     }
   },
   {
+    path: '/shareable-links',
+    component: () => import('@/components/pages/ShareableLinksPage.vue'),
+    meta: {
+      requiresRole: 'admin',
+      breadcrumbs() {
+        return [
+          { text: 'Geteilte Links', to: '/shareable-links' },
+        ]
+      }
+    }
+  },
+  {
     path: '/not-found',
     name: 'NotFound',
     component: () => import('@/components/pages/NotFoundPage.vue'),

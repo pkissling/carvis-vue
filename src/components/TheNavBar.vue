@@ -56,7 +56,7 @@
 
     <v-list nav>
       <v-list-item
-        v-for="item in filteredItems"
+        v-for="item in userItems"
         :key="item.path"
         :to="item.path"
         link
@@ -77,6 +77,57 @@
           <v-list-item-title>{{ item.text }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+
+      <template v-if="adminItems.length">
+        <v-divider />
+
+        <v-list-group v-model="adminItemsVisible">
+          <template #activator>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-badge
+                  v-if="adminBadge && !adminItemsVisible"
+                  :content="adminBadge"
+                >
+                  <v-icon>mdi-crown-outline</v-icon>
+                </v-badge>
+                <v-icon v-else>
+                  mdi-crown-outline
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  Admin
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+          <v-list-item
+            v-for="item in adminItems"
+            :key="item.path"
+            :to="item.path"
+            link
+          >
+            <v-list-item-icon>
+              <v-badge
+                v-if="item.badge"
+                :content="item.badge"
+              >
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-badge>
+              <v-icon v-else>
+                {{ item.icon }}
+              </v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ item.text }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+      </template>
     </v-list>
 
     <template #append>
@@ -108,17 +159,29 @@ export default class TheNavBar extends Vue {
 
   loading = false
   expanded = false
+  adminItemsVisible = false
 
-  get filteredItems(): ({ icon: string, text: string, path: string, badge?: number })[] {
-    return this.items.filter(item => this.canAccess(item.path))
+  get adminBadge() : number {
+    return this.adminItems
+      .map(item => item.badge || 0)
+      .reduce((a, b) => a + b, 0)
+  }
+  get adminItems(): ({ icon: string, text: string, path: string, badge?: number })[] {
+    return this.items.filter(item => item.requiresAdmin)
   }
 
-  get items(): ({ icon: string, text: string, path: string, badge?: number })[] {
+  get userItems(): ({ icon: string, text: string, path: string, badge?: number })[] {
+    return this.items.filter(item => !item.requiresAdmin)
+  }
+
+  get items(): ({ icon: string, text: string, path: string, badge?: number, requiresAdmin: boolean })[] {
     return [
-      { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management', badge: notificationsStore.newUsersCount },
-      { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars' },
-      { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests' }
+      { icon: 'mdi-account-group', text: 'Benutzerverwaltung', path: '/user-management', requiresAdmin: true, badge: notificationsStore.newUsersCount },
+      { icon: 'mdi-share-variant-outline', text: 'Geteilte Links', path: '/shareable-links', requiresAdmin: true },
+      { icon: 'mdi-car', text: 'Fahrzeuge', path: '/cars', requiresAdmin: false },
+      { icon: 'mdi-file-document-multiple', text: 'Gesuche', path: '/requests', requiresAdmin: false }
     ]
+      .filter(item => this.canAccess(item.path))
   }
 
   private canAccess(path: string): boolean {

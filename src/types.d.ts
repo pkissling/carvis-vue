@@ -105,3 +105,17 @@ type UserDto = {
     isNewUser?: boolean,
     picture?: string
 }
+
+type ShareableLinkDto = {
+    shareableLinkReference: string,
+    carId: string,
+    carDetails?: {
+        brand?: string,
+        type?: string
+    }
+    visitorCount: number
+    recipientName: string,
+    ownerName?: string,
+    createdBy: string
+    createdAt: string
+}

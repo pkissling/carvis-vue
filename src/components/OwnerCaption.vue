@@ -31,16 +31,16 @@ import OwnerChip from '@/components/OwnerChip.vue'
 
 @Component({ components: { OwnerChip }})
 export default class OwnerCaption extends Vue {
-  @Prop({ required: false, default: '' })
+  @Prop({ required: true })
   owner!: string
 
-  @Prop({ required: false, default: '' })
+  @Prop({ required: true })
   createdAt!: string
 
-  @Prop({ required: false, default: '' })
+  @Prop({ required: true })
   updatedAt!: string
 
-  @Prop({ required: false, default: '' })
+  @Prop({ required: true })
   createdBy!: string
 
   get creationDate(): string {
