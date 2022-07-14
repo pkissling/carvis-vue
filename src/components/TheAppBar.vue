@@ -9,9 +9,9 @@
       @click="$emit('input', !value)"
     />
 
-    <v-divider 
+    <v-divider
       vertical
-      class="mx-4" 
+      class="mx-4"
     />
 
     <router-link to="/">

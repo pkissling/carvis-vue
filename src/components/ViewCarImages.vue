@@ -48,11 +48,14 @@
 
 <script lang="ts">
 import ImagesApi from '@/api/images-api'
+import ShareableLinksApi from '@/api/shareable-links-api'
 import PreviewImage from '@/components/PreviewImage.vue'
+import { sentryStore } from '@/store'
 import FsLightbox from "fslightbox-vue"
 import { Prop, Vue, Component, Watch } from 'vue-property-decorator'
 
 const imagesApi = new ImagesApi()
+const shareableLinksApi = new ShareableLinksApi()
 
 @Component({ components: { PreviewImage, FsLightbox } })
 export default class ViewCarImages extends Vue {
@@ -131,9 +134,18 @@ export default class ViewCarImages extends Vue {
   }
 
   async resolveImage(imageId: string): Promise<{ id: string, src?: string, error?: boolean}> {
-    return imagesApi.fetchImage(imageId, '1080')
-      .then(image => { return { id: imageId, src: image.url }})
-      .catch(() => { return { id: imageId, error: true }})
+    try {
+      const isAnonymous = this.$route.meta?.requiresRole === undefined
+      const shareableLinkReference = this.$route.params.shareableLinkReference
+      const image = isAnonymous && shareableLinkReference
+        ? await shareableLinksApi.fetchImageFromShareableLinkReference(shareableLinkReference, imageId, '1080')
+        : await imagesApi.fetchImage(imageId, '1080')
+      return { id: image.id, src: image.url }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      sentryStore.captureException({ error: err })
+      return { id: imageId, error: true }
+    }
   }
 }
 </script>

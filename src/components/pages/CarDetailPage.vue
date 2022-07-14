@@ -7,6 +7,7 @@
     <CarDetailForm
       :car="car"
       :save-car-function="updateCar"
+      :can-edit="canEdit"
     />
   </Page>
 </template>
@@ -16,7 +17,7 @@ import Page from '@/components/pages/Page.vue'
 import CarDetailForm from '@/components/CarDetailForm.vue'
 import WaitingLayer from '@/components/WaitingLayer.vue'
 import router from '@/router'
-import { carsStore, notificationsStore } from '@/store'
+import { carsStore, notificationsStore, userStore } from '@/store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router'
 
@@ -34,7 +35,7 @@ import { NavigationGuardNext, Route } from 'vue-router'
           err
         })
         // this.$router is not available
-        router.push({ name: 'NotFound' })
+        router.push({ path: '/not-found' })
       } finally {
         vm.loading = false
       }
@@ -51,6 +52,10 @@ export default class CarDetailPage extends Vue {
 
   get title(): string {
     return `${this.car?.brand || ''} ${this.car?.type || ''}`.trim()
+  }
+
+  get canEdit(): boolean {
+    return userStore.isAdmin || this.car?.createdBy === userStore.getUserId
   }
 
   async updateCar(car: CarDto): Promise<void> {

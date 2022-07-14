@@ -1,5 +1,13 @@
 <template>
+  <v-chip
+    v-if="!showDetails"
+    small
+    label
+  >
+    {{ name }}
+  </v-chip>
   <v-menu
+    v-else
     v-model="isOpen"
     :close-on-content-click="false"
     open-on-hover
@@ -129,6 +137,9 @@ export default class OwnerChip extends Vue {
   @Prop({ required: true })
   name!: string
 
+  @Prop({ required: false, default: true })
+  showDetails!: boolean
+
   loading = false
   usersApi = new UsersApi()
   company = '-'
@@ -139,7 +150,7 @@ export default class OwnerChip extends Vue {
 
   @Watch('isOpen')
   async isOpenChanged(isOpen: boolean): Promise<void> {
-    if (!isOpen || this.loaded || !this.userId) {
+    if (!isOpen || this.loaded || !this.userId || !this.showDetails) {
       return
     }
 

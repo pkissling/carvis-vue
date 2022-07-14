@@ -19,9 +19,12 @@
         />
       </template>
       <template #[`item.shareableLinkReference`]="{ item }">
-        <router-link :to="`/s/${item.shareableLinkReference}`">
+        <router-link :to="`/share/${item.shareableLinkReference}`">
           {{ item.shareableLinkReference }}
         </router-link>
+      </template>
+      <template #[`item.createdAt`]="{ item }">
+        {{ relativeTimeDifference(item.createdAt) }}
       </template>
       <template #[`item.actions`]="{ item }">
         <v-tooltip bottom>
@@ -89,12 +92,6 @@ export default class ShareableLinksPage extends Vue {
 
   get shareableLinks(): ShareableLinkDto[] {
     return shareableLinksStore.shareableLinks
-      .map(link => {
-        return {
-          ...link,
-          createdAt: relativeTimeDifference(link.createdAt)
-        }
-      })
   }
 
   get deleteModalSubject(): string | undefined {
@@ -135,7 +132,7 @@ export default class ShareableLinksPage extends Vue {
 
   async addToClipboard(item: ShareableLinkDto): Promise<void> {
     try {
-      const route = this.$router.resolve(`/s/${item.shareableLinkReference}`)
+      const route = this.$router.resolve(`/share/${item.shareableLinkReference}`)
       const url = new URL(route.href, window.location.origin).href;
       await navigator.clipboard.writeText(url)
       const car = item.carDetails ? `${item.carDetails?.brand} ${item.carDetails?.type}` : item.carId
@@ -144,6 +141,10 @@ export default class ShareableLinksPage extends Vue {
     } catch (err: any) {
       await notificationsStore.error({ message: "Fehler beim Generieren des Links. Bitte versuche es erneut.", err })
     }
+  }
+
+  relativeTimeDifference(createdAt: string): string {
+    return relativeTimeDifference(createdAt)
   }
 }
 </script>

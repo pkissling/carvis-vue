@@ -34,7 +34,7 @@ import { NavigationGuardNext, Route } from 'vue-router'
           err
         })
         // this.$router is not available
-        router.push({ name: 'NotFound' })
+        router.push({ path: '/not-found' })
       } finally {
         vm.loading = false
       }

@@ -6,6 +6,7 @@
         <OwnerChip
           :name="owner"
           :user-id="createdBy"
+          :show-details="showDetails"
         />
         am
         <span class="font-weight-bold">
@@ -42,6 +43,9 @@ export default class OwnerCaption extends Vue {
 
   @Prop({ required: true })
   createdBy!: string
+
+  @Prop({ required: false, default: true })
+  showDetails!: boolean
 
   get creationDate(): string {
     const date = new Date(this.createdAt)

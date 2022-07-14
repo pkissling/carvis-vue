@@ -5,6 +5,7 @@
       :created-at="car.createdAt"
       :updated-at="car.updatedAt"
       :created-by="car.createdBy"
+      :show-details="!isAnonymous"
     />
 
     <v-form
@@ -49,7 +50,7 @@ import DeleteModal from '@/components/modals/DeleteModal.vue'
 import CarPreviewCard from '@/components/cards/CarPreviewCard.vue'
 import CarDataCard from '@/components/cards/CarDataCard.vue'
 import ActionsCard from '@/components/cards/ActionsCard.vue'
-import { carsStore, notificationsStore, userStore } from '@/store'
+import { carsStore, notificationsStore } from '@/store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import OwnerCaption from '@/components/OwnerCaption.vue'
 
@@ -58,8 +59,11 @@ export default class CarDetailForm extends Vue {
   @Prop({ required: true })
   car!: CarDto
 
-  @Prop({ required: true })
-  saveCarFunction!: (car: CarDto) => Promise<void>
+  @Prop({ required: true})
+  canEdit!: boolean
+
+  @Prop({ required: false, default: null })
+  saveCarFunction!: ((car: CarDto) => Promise<void>) | null
 
   showCarDeletionModal = false
   valid = true
@@ -71,14 +75,6 @@ export default class CarDetailForm extends Vue {
       return `${this.car.brand} ${this.car.type}`
   }
 
-   get canEdit(): boolean {
-    if (!this.car || !this.car.id) {
-      return true
-    }
-
-    return userStore.isAdmin || this.car.createdBy === userStore.getUserId
-  }
-
   get creationDate(): string {
     const date = new Date(this.car.createdAt)
     const days = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
@@ -87,7 +83,14 @@ export default class CarDetailForm extends Vue {
     return `${days}.${months}.${year}`
   }
 
+  get isAnonymous(): boolean {
+    return this.$route.meta?.requiresRole === undefined
+  }
+
   async onSubmit(): Promise<void> {
+    if (this.saveCarFunction === null) {
+      return
+    }
       const form = (this.$refs.form as Vue & { validate: () => boolean })
       form.validate()
       if (!this.valid) {

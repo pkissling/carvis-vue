@@ -1,7 +1,7 @@
 <template>
   <v-app :style="{ background }">
     <TheNavBar
-      v-if="!isHomePage"
+      v-if="showNavigation"
       v-model="showNavbar"
     />
     <TheAppBar
@@ -35,6 +35,10 @@ export default class App extends Vue {
 
   get isMobile(): boolean {
     return this.$vuetify.breakpoint.smAndDown
+  }
+
+  get showNavigation(): boolean {
+    return this.$route.meta?.requiresRole !== undefined
   }
 
   get background(): VuetifyThemeItem | undefined {

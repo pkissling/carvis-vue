@@ -130,8 +130,19 @@ const routes: RouteConfig[] = [
     }
   },
   {
+    path: '/share/:shareableLinkReference',
+    component: () => import('@/components/pages/AnonymousCarDetailPage.vue'),
+    props: true
+  },
+  {
+    path: '/invalid-link',
+    component: () => import('@/components/pages/ShareableLinkInvalidPage.vue'),
+    props: route => {
+      return ({ reason: route.query.reason })
+    }
+  },
+  {
     path: '/not-found',
-    name: 'NotFound',
     component: () => import('@/components/pages/NotFoundPage.vue'),
   },
   {

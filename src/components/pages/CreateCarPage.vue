@@ -3,6 +3,7 @@
     <CarDetailForm
       :car="car"
       :save-car-function="createCar"
+      :can-edit="true"
     />
   </Page>
 </template>

@@ -9,7 +9,8 @@ export default abstract class BaseApi<T = unknown> {
     constructor(
         timeout = 10000,
         requestInterceptors: ((value: AxiosRequestConfig<T>) => Promise<AxiosRequestConfig<T>>)[] = [],
-        reponseInterceptors: ((data: AxiosResponse<T>) => Promise<AxiosResponse<T>>)[] = []
+        reponseInterceptors: ((data: AxiosResponse<T>) => Promise<AxiosResponse<T>>)[] = [],
+        anonymous = false
     ) {
         this.instance = axios.create({ baseURL: apiUrl(), timeout })
 
@@ -27,7 +28,9 @@ export default abstract class BaseApi<T = unknown> {
         )
 
         // generic request interceptors
-        this.instance.interceptors.request.use(this.addAuthHeader)
+        if (!anonymous) {
+            this.instance.interceptors.request.use(this.addAuthHeader)
+        }
 
         // generic response interceptors
         this.instance.interceptors.response.use(this.extractPayload)
@@ -51,13 +54,11 @@ export default abstract class BaseApi<T = unknown> {
     }
 
     private addAuthHeader = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        const requiresAuth = !request.url?.startsWith('https://')
-        if (!requiresAuth) {
-            return request
+        const token = await obtainJwtToken()
+        if (token && request.headers) {
+            request.headers['Authorization'] = `Bearer ${token}`
         }
 
-        const token = await obtainJwtToken()
-        request.headers = { Authorization: `Bearer ${token}`, ...request.headers}
         return request
     }
 

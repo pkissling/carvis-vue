@@ -2,12 +2,11 @@
   <Page title="Seite nicht gefunden" />
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 import Page from '@/components/pages/Page.vue'
 
-export default {
-  components: {
-    Page
-  }
+@Component({ components: { Page }})
+export default class NotFoundPage extends Vue {
 }
 </script>
