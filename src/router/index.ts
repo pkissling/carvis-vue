@@ -37,6 +37,7 @@ const routes: RouteConfig[] = [
   {
     path: '/cars/:carId',
     component: () => import('@/components/pages/CarDetailPage.vue'),
+    name: 'CarDetailPage',
     props: true,
     meta: {
       requiresRole: 'user',

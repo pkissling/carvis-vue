@@ -5,6 +5,8 @@
       :items-per-page="-1"
       :loading="loading"
       :items="shareableLinks"
+      sort-by="createdAt"
+      sort-desc
       class="elevation-5 accent"
     >
       <template #[`item.carDetails`]="{ item }">
@@ -46,7 +48,7 @@
             <v-icon
               class="mr-2"
               v-bind="attrs"
-              @click="deleteShareableLinkModal = item"
+              @click="openDeleteShareableLinkModal(item)"
               v-on="on"
             >
               mdi-delete
@@ -57,26 +59,17 @@
         <v-icon />
       </template>
     </v-data-table>
-
-    <DeleteModal
-      v-if="deleteShareableLinkModal"
-      :subject="deleteModalSubject"
-      :loading="loading"
-      @submit="deleteShareableLink"
-      @cancel="deleteShareableLinkModal = null"
-    />
   </Page>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Page from '@/components/pages/Page.vue'
-import { notificationsStore, shareableLinksStore } from '@/store'
-import DeleteModal from '@/components/modals/DeleteModal.vue'
+import { modalsStore, notificationsStore, shareableLinksStore } from '@/store'
 import { relativeTimeDifference } from '@/utilities/time'
 import OwnerChip from '@/components/OwnerChip.vue'
 
-@Component({ components: { Page, DeleteModal, OwnerChip }})
+@Component({ components: { Page, OwnerChip }})
 export default class ShareableLinksPage extends Vue {
   loading = false
   headers = [
@@ -88,20 +81,9 @@ export default class ShareableLinksPage extends Vue {
     { text: 'Erstellt am', value: 'createdAt' },
     { text: 'Aktionen', value: 'actions', align: 'center' }
   ]
-  deleteShareableLinkModal: ShareableLinkDto | null = null
 
   get shareableLinks(): ShareableLinkDto[] {
     return shareableLinksStore.shareableLinks
-  }
-
-  get deleteModalSubject(): string | undefined {
-    if (!this.deleteShareableLinkModal) {
-      return
-    }
-    const car = this.deleteShareableLinkModal.carDetails 
-      ? `${this.deleteShareableLinkModal.carDetails?.brand} ${this.deleteShareableLinkModal.carDetails?.type}` 
-      : this.deleteShareableLinkModal.carId
-    return `Link für ${this.deleteShareableLinkModal.ownerName} zu ${car}`
   }
 
   async mounted(): Promise<void> {
@@ -116,31 +98,21 @@ export default class ShareableLinksPage extends Vue {
     }
   }
 
-  async deleteShareableLink(): Promise<void> {
-    if (!this.deleteShareableLinkModal?.shareableLinkReference) return
-    try {
-      this.loading = true
-      await shareableLinksStore.deleteShareableLink(this.deleteShareableLinkModal.shareableLinkReference)
-      this.deleteShareableLinkModal = null
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      await notificationsStore.error({ message: 'Fehler beim Löschen des geteilten Links. Bitte versuche es erneut.', err })
-    } finally {
-      this.loading = false
-    }
-  }
-
   async addToClipboard(item: ShareableLinkDto): Promise<void> {
     try {
       const route = this.$router.resolve(`/share/${item.shareableLinkReference}`)
-      const url = new URL(route.href, window.location.origin).href;
+      const url = new URL(route.href, window.location.origin).href
       await navigator.clipboard.writeText(url)
       const car = item.carDetails ? `${item.carDetails?.brand} ${item.carDetails?.type}` : item.carId
       await notificationsStore.success(`Link für ${car} in die Zwischenablage kopiert.`)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      await notificationsStore.error({ message: "Fehler beim Generieren des Links. Bitte versuche es erneut.", err })
+      await notificationsStore.error({ message: "Fehler beim Kopieren des Links in die Zwischenablage. Bitte versuche es erneut.", err })
     }
+  }
+
+  async openDeleteShareableLinkModal(link: ShareableLinkDto): Promise<void> {
+    await modalsStore.open({ name: 'DeleteShareableLinkModal', context: link })
   }
 
   relativeTimeDifference(createdAt: string): string {

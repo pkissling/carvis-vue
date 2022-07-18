@@ -7,7 +7,6 @@
       :items="requests"
       :loading="loading"
       @row-clicked="viewRequest"
-      @create-clicked="createRequest"
       @search-term-changed="onSearchTermChanged"
     />
   </Page>
@@ -16,7 +15,6 @@
 <script lang="ts">
 import Page from '@/components/pages/Page.vue'
 import OverviewTable from '@/components/OverviewTable.vue'
-import { relativeTimeDifference } from '@/utilities/time'
 import { requestsStore, notificationsStore } from '@/store'
 import { Component, Vue } from 'vue-property-decorator'
 
@@ -46,20 +44,13 @@ export default class RequestsPage extends Vue {
       priority: 2
     },
     {
-      sortable: false,
-      value: 'lastChanged',
+      value: 'updatedAt',
       priority: 2
     }
   ]
 
   get requests(): RequestDto[] {
-    return requestsStore.requests.map(request => {
-      const lastChanged = relativeTimeDifference(request.updatedAt)
-      return {
-        lastChanged,
-        ...request
-      }
-    })
+    return requestsStore.requests
   }
 
   get searchTerm(): string {
@@ -80,10 +71,6 @@ export default class RequestsPage extends Vue {
 
   viewRequest(request: RequestDto): void {
     this.$router.push({ path: `/requests/${request.id}` })
-  }
-
-  createRequest(): void {
-    this.$router.push({ path: '/requests/add' })
   }
 
   onSearchTermChanged(searchTerm: string): void {

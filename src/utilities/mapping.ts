@@ -18,7 +18,6 @@ export const mappedAttributes: Map<string, string> = new Map<string, string>([
   ['description', 'Detailbeschreibung'],
   ['highlights', 'Besonderheiten / Highlights'],
   ['horsePower', 'PS'],
-  ['lastChanged', 'Zuletzt aktualisiert'],
   ['mileage', 'Laufleistung'],
   ['modelDetails', 'Modellspezifikation'],
   ['modelSeries', 'Modellreihe'],
@@ -30,6 +29,7 @@ export const mappedAttributes: Map<string, string> = new Map<string, string>([
   ['shortDescription', 'Kurzbeschreibung'],
   ['transmission', 'Getriebe'],
   ['type', 'Typ'],
+  ['updatedAt', 'Zuletzt aktualisiert'],
   ['vin', 'Fahrgestellnummer'],
   ['vision', 'Vision']
 ])

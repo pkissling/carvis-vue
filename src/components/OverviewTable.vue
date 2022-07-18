@@ -17,8 +17,8 @@
       :items-per-page="-1"
       :loading="loading"
       :mobile-breakpoint="0"
-      :sort-by.sync="sortColumn"
-      :sort-desc.sync="descending"
+      sort-by="updatedAt"
+      sort-desc
       class="elevation-5 row-pointer accent"
       @click:row="onRowClicked"
     >
@@ -39,6 +39,9 @@
       <template #[`item.previewImageId`]="{ item }">
         <CarThumbnail :image-id="item.previewImageId" />
       </template>
+      <template #[`item.updatedAt`]="{ item }">
+        {{ relativeTimeDifference(item.updatedAt) }}
+      </template>
       <template #[`item.ownerName`]="{ item }">
         <OwnerChip
           :user-id="item.createdBy"
@@ -46,11 +49,6 @@
         />
       </template>
     </v-data-table>
-
-    <FloatingButton
-      :loading="loading"
-      v-on="$listeners"
-    />
   </div>
 </template>
 
@@ -60,6 +58,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { mappedAttributes } from '@/utilities/mapping'
 import CarThumbnail from '@/components/CarThumbnail.vue'
 import OwnerChip from '@/components/OwnerChip.vue'
+import { relativeTimeDifference } from '@/utilities/time';
 
 @Component({ components: { FloatingButton, CarThumbnail, OwnerChip} })
 export default class OverviewTable<T> extends Vue {
@@ -78,9 +77,6 @@ export default class OverviewTable<T> extends Vue {
 
   @Prop({ required: true })
   searchTerm!: string | null
-
-  sortColumn = 'updatedAt'
-  descending = true
 
   get searchTerms(): string[] {
     return this.searchTerm
@@ -169,6 +165,10 @@ export default class OverviewTable<T> extends Vue {
       return value
     }
     return stringValue.replace(new RegExp(match, 'gi'), '<mark>$&</mark>')
+  }
+
+  relativeTimeDifference(updatedAt: string): string {
+    return relativeTimeDifference(updatedAt)
   }
 }
 </script>

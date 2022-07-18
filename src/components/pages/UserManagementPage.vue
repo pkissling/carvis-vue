@@ -51,7 +51,7 @@
               class="mr-2"
               v-bind="attrs"
               :disabled="isCurrentUser(item)"
-              @click="editUserModal = item"
+              @click="openEditUserModal(item)"
               v-on="on"
             >
               mdi-pencil
@@ -65,7 +65,7 @@
               class="mr-2"
               v-bind="attrs"
               :disabled="isCurrentUser(item)"
-              @click="deleteUserModal = item"
+              @click="openDeleteUserModal(item)"
               v-on="on"
             >
               mdi-delete
@@ -75,35 +75,17 @@
         </v-tooltip>
       </template>
     </v-data-table>
-
-    <DeleteModal
-      v-if="deleteUserModal"
-      :subject="deleteUserModal.name"
-      :loading="loading"
-      @submit="deleteUser"
-      @cancel="deleteUserModal = null"
-    />
-
-    <EditUserModal
-      v-model="editUserModal"
-      :all-roles="allRoles"
-      :show-roles="!isCurrentUser(editUserModal)"
-    />
   </Page>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Page from '@/components/pages/Page.vue'
-import { notificationsStore, userManagementStore, userStore } from '@/store'
-import DeleteModal from '@/components/modals/DeleteModal.vue'
-import EditUserModal from '@/components/modals/EditUserModal.vue'
+import { modalsStore, notificationsStore, userManagementStore, userStore } from '@/store'
 
-@Component({ components: { Page, DeleteModal, EditUserModal }})
+@Component({ components: { Page }})
 export default class UserManagementPage extends Vue {
   roleLoading: Map<Role, UserDto[]> = new Map()
-  deleteUserModal: UserDto | null = null
-  editUserModal: UserDto | null = null
   sortColumn = 'userId'
   allRoles: { text: string, value: Role }[] = [
     {text: 'Benutzer', value: 'user' },
@@ -184,18 +166,12 @@ export default class UserManagementPage extends Vue {
     }
   }
 
-  async deleteUser(): Promise<void> {
-    if (!this.deleteUserModal?.userId) return
-    try {
-      this.loading = true
-      await userManagementStore.deleteUser(this.deleteUserModal.userId)
-      this.deleteUserModal = null
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      await notificationsStore.error({ message: 'Fehler beim Löschen des Benutzers. Bitte versuche es erneut.', err })
-    } finally {
-      this.loading = false
-    }
+  async openDeleteUserModal(user: UserDto): Promise<void> {
+    await modalsStore.open({ name: 'DeleteUserModal', context: user })
+  }
+
+  async openEditUserModal(user: UserDto): Promise<void> {
+    await modalsStore.open({ name: 'EditUserModal', context: user })
   }
 }
 </script>

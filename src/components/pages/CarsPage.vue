@@ -8,7 +8,6 @@
       :loading="loading"
       @search-term-changed="onSearchTermChanged"
       @row-clicked="viewCar"
-      @create-clicked="createCar"
     />
   </Page>
 </template>
@@ -16,7 +15,6 @@
 <script lang="ts">
 import Page from '@/components/pages/Page.vue'
 import OverviewTable from '@/components/OverviewTable.vue'
-import { relativeTimeDifference } from '@/utilities/time'
 import { carsStore, notificationsStore } from '@/store'
 import { Component, Vue } from 'vue-property-decorator'
 
@@ -56,8 +54,7 @@ export default class CarsPage extends Vue {
       priority: 2
     },
     {
-      sortable: false,
-      value: 'lastChanged',
+      value: 'updatedAt',
       priority: 2
     }
   ]
@@ -68,11 +65,9 @@ export default class CarsPage extends Vue {
 
   get cars(): CarDto[] {
     return carsStore.cars.map(car => {
-      const lastChanged = relativeTimeDifference(car.updatedAt)
       const previewImageId = car.images ? car.images[0] : null
       return {
         previewImageId,
-        lastChanged,
         ...car
       }
     })
@@ -92,10 +87,6 @@ export default class CarsPage extends Vue {
 
   viewCar(car: CarDto): void {
     this.$router.push({ path: `/cars/${car.id}` })
-  }
-
-  createCar(): void {
-    this.$router.push({ path: '/cars/add' })
   }
 
   onSearchTermChanged(searchTerm: string): void {

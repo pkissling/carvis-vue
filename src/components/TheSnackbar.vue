@@ -3,7 +3,7 @@
     v-model="show"
     :color="severity"
     :timeout="timeout"
-    outlined
+    tile
     bottom
     transition="scale-transition"
     elevation="24"
@@ -23,39 +23,28 @@
   </v-snackbar>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 import { notificationsStore } from '@/store'
 
-export default {
-  data() {
-    return {
-      timeout: 10000
-    }
-  },
+@Component
+export default class TheSnackbar extends Vue {
+  timeout = 10000
 
-  computed: {
-    message() {
-      return notificationsStore.getMessage
-    },
+  get message(): string | null {
+    return notificationsStore.message
+  }
 
-    severity() {
-      return notificationsStore.getSeverity
-    },
+  get severity(): string | null {
+      return notificationsStore.severity
+  }
 
-    show: {
-      get() {
-        return notificationsStore.isShow
-      },
-      set() {
-        notificationsStore.dismiss()
-      }
-    }
-  },
+  get show(): boolean{
+    return notificationsStore.show
+  }
 
-  methods: {
-    onClick() {
-      notificationsStore.setShow(false)
-    }
+  set show(_: boolean) {
+    notificationsStore.dismiss()
   }
 }
 </script>

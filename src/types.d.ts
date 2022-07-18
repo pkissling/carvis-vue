@@ -119,3 +119,15 @@ type ShareableLinkDto = {
     createdBy: string
     createdAt: string
 }
+
+type ModalContext = {
+    name:
+        'DeleteUserModal' |
+        'DeleteShareableLinkModal' |
+        'DeleteCarModal' |
+        'DeleteRequestModal' |
+        'EditUserModal' |
+        'CreateShareableLinkModal' |
+        'CreatedShareableLinkModal'
+    context: unknown
+}

@@ -31,30 +31,21 @@
         :is-new-item="!car.id"
         :show-delete="true"
         :loading="saveLoading || uploading"
-        @delete="showCarDeletionModal = true"
-      />
-
-      <DeleteModal
-        v-if="showCarDeletionModal"
-        :subject="deleteModalSubject"
-        :loading="deleteLoading"
-        @submit="deleteCar"
-        @cancel="showCarDeletionModal = false"
+        @delete="openCarDeletionModal"
       />
     </v-form>
   </div>
 </template>
 
 <script lang="ts">
-import DeleteModal from '@/components/modals/DeleteModal.vue'
 import CarPreviewCard from '@/components/cards/CarPreviewCard.vue'
 import CarDataCard from '@/components/cards/CarDataCard.vue'
 import ActionsCard from '@/components/cards/ActionsCard.vue'
-import { carsStore, notificationsStore } from '@/store'
+import { modalsStore } from '@/store'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import OwnerCaption from '@/components/OwnerCaption.vue'
 
-@Component({ components: { DeleteModal, ActionsCard, CarPreviewCard, CarDataCard, OwnerCaption }})
+@Component({ components: { ActionsCard, CarPreviewCard, CarDataCard, OwnerCaption }})
 export default class CarDetailForm extends Vue {
   @Prop({ required: true })
   car!: CarDto
@@ -68,12 +59,7 @@ export default class CarDetailForm extends Vue {
   showCarDeletionModal = false
   valid = true
   saveLoading = false
-  deleteLoading = false
   uploading = false
-
-  get deleteModalSubject(): string {
-      return `${this.car.brand} ${this.car.type}`
-  }
 
   get creationDate(): string {
     const date = new Date(this.car.createdAt)
@@ -106,19 +92,8 @@ export default class CarDetailForm extends Vue {
       }
   }
 
-  async deleteCar(): Promise<void> {
-    try {
-      this.deleteLoading = true
-      await carsStore.deleteCar(this.car.id)
-      await notificationsStore.success('Fahrzeug erfolgreich gelöscht.')
-      await this.$router.push({ path: '/cars' })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      await notificationsStore.error({ message: 'Fehler beim Löschen des Fahrzeugs. Bitte versuche es erneut.', err })
-    } finally {
-      this.showCarDeletionModal = false
-      this.deleteLoading = false
-    }
+  async openCarDeletionModal(): Promise<void> {
+    await modalsStore.open({ name: 'DeleteCarModal', context: this.car })
   }
 }
 </script>

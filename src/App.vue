@@ -13,19 +13,23 @@
       <v-container fluid>
         <router-view />
       </v-container>
-      <Snackbar />
+      <TheSnackbar />
     </v-main>
+    <FloatingButton />
+    <TheModalHome />
   </v-app>
 </template>
 
 <script lang="ts">
 import TheAppBar from '@/components/TheAppBar.vue'
 import TheNavBar from '@/components/TheNavBar.vue'
-import Snackbar from '@/components/Snackbar.vue'
+import TheSnackbar from '@/components/TheSnackbar.vue'
+import TheModalHome from '@/components/modals/TheModalHome.vue'
+import FloatingButton from '@/components/FloatingButton.vue'
 import { Component, Vue } from 'vue-property-decorator'
 import { VuetifyThemeItem } from 'vuetify/types/services/theme'
 
-@Component({ components: { TheAppBar, TheNavBar, Snackbar }})
+@Component({ components: { TheAppBar, TheNavBar, TheSnackbar, FloatingButton, TheModalHome }})
 export default class App extends Vue {
   showNavbar = !this.isMobile
 

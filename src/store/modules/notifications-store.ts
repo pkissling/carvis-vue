@@ -5,13 +5,13 @@ import NotificationsApi from '@/api/notifications-api'
 
 config.rawError = true
 
-type Severity = 'success' | 'info' | 'warning' | 'error'
+type Severity = 'primary' | 'info' | 'warning' | 'error'
 const notificationsApi = new NotificationsApi()
 
 @Module({ namespaced: true, name: 'notifications' })
 export default class NotificationsStore extends VuexModule {
-    message?: string = undefined
-    severity?: Severity = undefined
+    message: string | null = null
+    severity: Severity | null = null
     show = false
     newUsersCount = 0
     backgroundRefresh: number | null = null
@@ -19,7 +19,7 @@ export default class NotificationsStore extends VuexModule {
     @Action
     public async success(message: string): Promise<void> {
         this.setMessage(message)
-        this.setSeverity('success')
+        this.setSeverity('primary')
         this.setShow(true)
     }
 
@@ -49,8 +49,8 @@ export default class NotificationsStore extends VuexModule {
 
     @Action
     public async dismiss(): Promise<void> {
-        this.setMessage(undefined)
-        this.setSeverity(undefined)
+        this.setMessage(null)
+        this.setSeverity(null)
         this.setShow(false)
     }
 
@@ -66,25 +66,13 @@ export default class NotificationsStore extends VuexModule {
         return newCount
     }
 
-    public get getMessage(): string | undefined {
-        return this.message
-    }
-
-    public get getSeverity(): Severity | undefined {
-        return this.severity
-    }
-
-    public get isShow(): boolean {
-        return this.show
-    }
-
     @Mutation
-    public setMessage(message?: string): void {
+    public setMessage(message: string | null): void {
         this.message = message
     }
 
     @Mutation
-    public setSeverity(severity?: Severity): void {
+    public setSeverity(severity: Severity | null): void {
         this.severity = severity
     }
 
