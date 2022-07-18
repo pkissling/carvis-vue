@@ -79,7 +79,7 @@ export default class ShareableLinksPage extends Vue {
     { text: 'Aufrufe', value: 'visitorCount' },
     { text: 'Erstellt von', value: 'ownerName' },
     { text: 'Erstellt am', value: 'createdAt' },
-    { text: 'Aktionen', value: 'actions', align: 'center' }
+    { text: 'Aktionen', value: 'actions', align: 'center', sortable: false}
   ]
 
   get shareableLinks(): ShareableLinkDto[] {

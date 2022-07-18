@@ -98,7 +98,7 @@ export default class UserManagementPage extends Vue {
     { text: 'E-Mail', value: 'email' },
     { text: 'Telefon', value: 'phone' },
     ...this.allRoles,
-    { text: 'Aktionen', value: 'actions', align: 'center' }
+    { text: 'Aktionen', value: 'actions', align: 'center', sortable: false }
   ]
 
   get users(): UserDto[] {
