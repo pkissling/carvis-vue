@@ -5,7 +5,7 @@
       :items-per-page="-1"
       :loading="loading"
       :items="users"
-      :sort-by.sync="sortColumn"
+      sort-by="name"
       :disable-sort="$vuetify.breakpoint.smAndDown"
       class="elevation-5 accent"
     >
@@ -86,7 +86,6 @@ import { modalsStore, notificationsStore, userManagementStore, userStore } from 
 @Component({ components: { Page }})
 export default class UserManagementPage extends Vue {
   roleLoading: Map<Role, UserDto[]> = new Map()
-  sortColumn = 'userId'
   allRoles: { text: string, value: Role }[] = [
     {text: 'Benutzer', value: 'user' },
     {text: 'Administrator', value: 'admin' }
