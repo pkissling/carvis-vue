@@ -1,31 +1,40 @@
 <template>
-  <CarvisModal>
-    <template slot="title-text">
-      Fahrzeug teilen
-    </template>
-    <template
-      slot="default"
-    >
-      Bitte gib den Name des Empfängers an
-      <v-combobox
-        v-model="recipientName"
-        label="Empfänger"
-        :loading="comboboxLoading"
-        :items="recipientNames"
-        hide-selected
-      />
-    </template>
-    <template slot="primary-button">
-      <v-btn
-        color="primary"
-        :loading="loading || comboboxLoading"
-        :disabled="!recipientName"
-        @click="generateLink"
-      >
-        Link erstellen
-      </v-btn>
-    </template>
-  </CarvisModal>
+  <v-form
+    id="form"
+    ref="form"
+    v-model="valid"
+    @submit.prevent="generateLink"
+  >
+    <CarvisModal>
+      <template slot="title-text">
+        Fahrzeug teilen
+      </template>
+      <template slot="default">
+        <p class="my-2">
+          Bitte gib den Name des Link-Empfängers an:
+        </p>
+        <v-combobox
+          v-model="recipientName"
+          label="Empfänger"
+          :loading="comboboxLoading"
+          :items="recipientNames"
+          :rules="[v => !!v || 'Pflichtfeld']"
+          hide-selected
+          autofocus
+        />
+      </template>
+      <template slot="primary-button">
+        <v-btn
+          color="primary"
+          type="submit"
+          form="form"
+          :loading="loading || comboboxLoading"
+        >
+          Link erstellen
+        </v-btn>
+      </template>
+    </CarvisModal>
+  </v-form>
 </template>
 
 <script lang="ts">
@@ -45,6 +54,7 @@ export default class CreateShareableLinkModal extends Vue {
   comboboxLoading = false
   recipientName: string | null = null
   recipientNames: string[] = []
+  valid = true
 
   async mounted(): Promise<void> {
     try {
@@ -63,7 +73,9 @@ export default class CreateShareableLinkModal extends Vue {
     }
   }
   async generateLink(): Promise<void> {
-    if (!this.recipientName || !this.context) {
+    const form = (this.$refs.form as Vue & { validate: () => boolean })
+    form.validate()
+    if (!this.valid || !this.recipientName || !this.context) {
       return
     }
 
