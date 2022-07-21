@@ -32,7 +32,7 @@
         >
           <span
             :key="header.value"
-            v-html="highlightSearchTerm(item[header.value])"
+            v-html="highlightSearchTerm(item[header.value], 60)"
           />
         </slot>
       </template>
@@ -157,14 +157,20 @@ export default class OverviewTable<T> extends Vue {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  highlightSearchTerm(value: any): string {
-    if (!value) return value
-    const stringValue = new String(value)
+  highlightSearchTerm (value: any, maxLength: number): string {
+    const stringValue = new String(value) 
     const match = this.searchTerms.find(term => stringValue.match(new RegExp(term, 'i')))
     if (!match) {
       return value
     }
-    return stringValue.replace(new RegExp(match, 'gi'), '<mark>$&</mark>')
+    const highlightedText = stringValue.replace(new RegExp(match, 'gi'), '<mark>$&</mark>')
+    if (highlightedText.length < maxLength) {
+      return highlightedText
+    }
+    const middle = highlightedText.indexOf('<mark>')
+    const start = Math.max(middle - (maxLength / 2), 0)
+    const end = Math.min(highlightedText.length, middle + (maxLength / 2))
+    return `${start > 0 ? '...' : ''} ${highlightedText.substring(start, end)} ${highlightedText.length > end ? '...' : ''}`.trim()
   }
 
   relativeTimeDifference(updatedAt: string): string {
