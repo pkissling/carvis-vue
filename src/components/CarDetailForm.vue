@@ -77,19 +77,19 @@ export default class CarDetailForm extends Vue {
     if (this.saveCarFunction === null) {
       return
     }
-      const form = (this.$refs.form as Vue & { validate: () => boolean })
-      form.validate()
-      if (!this.valid) {
-        this.$vuetify.goTo('#car-data-card') // TODO go to specific item!
-        return
-      }
+    const form = (this.$refs.form as Vue & { validate: () => boolean })
+    form.validate()
+    if (!this.valid) {
+      this.$vuetify.goTo('#car-data-card') // TODO go to specific item!
+      return
+    }
 
-      try {
-        this.saveLoading = true
-        await this.saveCarFunction(this.car)
-      } finally {
-        this.saveLoading = false
-      }
+    try {
+      this.saveLoading = true
+      await this.saveCarFunction(this.car)
+    } finally {
+      this.saveLoading = false
+    }
   }
 
   async openCarDeletionModal(): Promise<void> {
