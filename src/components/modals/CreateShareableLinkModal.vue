@@ -1,8 +1,6 @@
 <template>
   <v-form
     id="form"
-    ref="form"
-    v-model="valid"
     @submit.prevent="generateLink"
   >
     <CarvisModal>
@@ -14,6 +12,7 @@
           Bitte gib den Name des Link-Empfängers an:
         </p>
         <v-combobox
+          ref="recipientName"
           v-model="recipientName"
           label="Empfänger"
           :loading="comboboxLoading"
@@ -54,7 +53,6 @@ export default class CreateShareableLinkModal extends Vue {
   comboboxLoading = false
   recipientName: string | null = null
   recipientNames: string[] = []
-  valid = true
 
   async mounted(): Promise<void> {
     try {
@@ -73,9 +71,9 @@ export default class CreateShareableLinkModal extends Vue {
     }
   }
   async generateLink(): Promise<void> {
-    const form = (this.$refs.form as Vue & { validate: () => boolean })
-    form.validate()
-    if (!this.valid || !this.recipientName || !this.context) {
+    const recipientNameField = (this.$refs.recipientName as Vue & { blur: () => Promise<void> })
+    await recipientNameField.blur()
+    if (!this.recipientName || !this.context) {
       return
     }
 
