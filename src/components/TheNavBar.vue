@@ -223,14 +223,17 @@ export default class TheNavBar extends Vue {
 
   private async loadNewUsersCount(): Promise<void> {
     try {
-      this.loading = true
       await notificationsStore.fetchNewUsersCount()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(err: any) {
       notificationsStore.error({ message: 'Fehler beim Laden der Benachrichtigungen für neue Nutzer. Bitte versuche es erneut.', err })
-    } finally {
-      this.loading = false
     }
   }
 }
 </script>
+
+<style>
+.v-skeleton-loader__list-item-avatar-two-line {
+  background: none !important;
+}
+</style>
