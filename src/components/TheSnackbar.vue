@@ -3,7 +3,7 @@
     v-model="show"
     :color="severity"
     :timeout="timeout"
-    tile
+    outlined
     bottom
     transition="scale-transition"
     elevation="24"
