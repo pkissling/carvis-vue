@@ -11,8 +11,8 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.22.0",
     "@mdi/font": "^6.7.96",
-    "@sentry/tracing": "^7.0.0",
-    "@sentry/vue": "^7.0.0",
+    "@sentry/tracing": "^7.11.1",
+    "@sentry/vue": "^7.11.1",
     "axios": "^0.27.2",
     "axios-retry": "^3.2.5",
     "core-js": "^3.22.7",
