@@ -29,4 +29,3 @@ jobs:
           SENTRY_PROJECT: vue
         with:
           environment: live
-          sourcemaps: dist
