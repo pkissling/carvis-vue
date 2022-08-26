@@ -8,12 +8,8 @@ export default (): void => {
     Vue.use(Auth0Plugin, {
         domain: auth0Domain,
         clientId: auth0ClientId,
-        onRedirectCallback: (appState: RedirectLoginOptions) => {
-            router.push(
-                appState && appState.targetUrl
-                    ? appState.targetUrl
-                    : window.location.pathname
-            ).catch(() => { /* swallow */ })
+        onRedirectCallback: (appState?: RedirectLoginOptions) => {
+            router.push(appState?.targetUrl || window.location.pathname)
         }
     })
 }

@@ -4,7 +4,7 @@ import { NavigationGuard, NavigationGuardNext, Route } from 'vue-router'
 
 export const authGuard: NavigationGuard = async (
     to: Route,
-    from: Route,
+    _from: Route,
     next: NavigationGuardNext
 ): Promise<void> => {
     const authService = getInstance()

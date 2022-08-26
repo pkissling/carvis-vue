@@ -44,7 +44,7 @@ export class Auth0Wrapper extends Vue {
             await this.auth0Client.loginWithPopup(o)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
-            sentryStore.captureException(e)
+            sentryStore.captureException({ error: e })
             this.error = e
         } finally {
             this.popupOpen = false
@@ -113,7 +113,7 @@ export class Auth0Wrapper extends Vue {
             }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
-            sentryStore.captureException(e)
+            sentryStore.captureException({ error: e })
             this.error = e
         } finally {
             // Initialize our internal authentication state when the page is reloaded

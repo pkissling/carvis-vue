@@ -179,7 +179,7 @@ export default class OverviewTable<T> extends Vue {
 }
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 .row-pointer >>> tbody tr :hover {
   cursor: pointer;
 }

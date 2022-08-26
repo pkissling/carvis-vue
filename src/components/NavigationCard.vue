@@ -6,29 +6,27 @@
     elevation="5"
   >
     <v-card-actions>
-      <v-container>
-        <v-row>
-          <v-col
-            v-for="(item, index) in items"
-            :key="item.text"
-            :cols="columnCount"
-            :align="align(index)"
+      <v-row class="ma-auto">
+        <v-col
+          v-for="(item, index) in items"
+          :key="item.text"
+          :cols="columnCount"
+          :align="align(index)"
+        >
+          <v-skeleton-loader
+            v-if="loading"
+            type="button"
+          />
+          <v-btn
+            v-else
+            :color="item.color"
+            :text="!item.color"
+            @click="item.action"
           >
-            <v-skeleton-loader
-              v-if="loading"
-              type="button"
-            />
-            <v-btn
-              v-else
-              :color="item.color"
-              :text="!item.color"
-              @click="item.action"
-            >
-              {{ item.text }}
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+            {{ item.text }}
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card-actions>
   </CarvisCard>
 </template>
