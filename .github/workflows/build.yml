@@ -29,3 +29,18 @@ jobs:
           SENTRY_PROJECT: vue
         with:
           environment: live
+
+  notify-slack:
+    name: Notify Slack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v2
+
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: GitHub
+          SLACK_ICON: https://github.com/favicon.ico
+          SLACK_FOOTER: ''
