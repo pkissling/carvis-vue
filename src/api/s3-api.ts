@@ -41,7 +41,7 @@ const processQueue = async (req: AxiosRequestConfig<void>): Promise<AxiosRequest
 
 export default class S3Api extends BaseApi<void> {
     constructor() {
-        super(60000, [processQueue], [reduceQueue])
+        super(60000, [processQueue], [reduceQueue], true)
     }
 
     public async uploadFile(url: string, contentType: string, file: File, progressCallback: (progress: number) => void, index: number): Promise<void> {
